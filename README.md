@@ -1,9 +1,17 @@
 ## Project Description
 
+* **Project Type:** IoT Sensor/Monitor Dashboard
+* **Dataset:** Rain in Australia
+
+We are developing a web-based dashboard for Australian weather data. The dataset we are using contains meteorological sensor data from hundreds of weather stations all over Australia, measured between 2007 and 2017. It includes data for rainfall, sunshine, temperature, wind, clouds, humidity and pressure.
+
+This is a student project built for the purpose of learning, and as such our application only “pretends” the data is live, by allowing users to select a date and location, and then giving them “current” information for their selected location. This information is displayed in various interactive forms: a general weather summary, a map with graphic overlays, and two graphs which compare past and current data. The app also predicts whether it will rain the next day based on current weather conditions. 
+
+To access the app, users must register with our login system. They can then also receive optional email alerts about severe weather conditions in their location. 
+
+--- 
 
 ## USER REQUIREMENTS (what will users be able to do with the system?)
-
-
 
 * **Use Dashboard.** Users can access different parts of the system from a dashboard which contains the three visualization modules, the summary, and the location search bar.
 * **Select Location.** Users can use the map or search bar to select any location in Australia, to then view weather data from the closest available weather station. 
@@ -24,7 +32,7 @@
 
 
 * **Dashboard.** Acts as a home/start page for users. Provides access to all other parts of the system: data summary, visualizations, and location search.
-* **Location Selection.** Users can select any location in Australia in one of two ways by searching in the search bar, or by clicking on a point on the map. Data is provided for the closest weather station to the selected location.
+* **Location Selection.** There are two location selection interfaces: the search bar, or clicking on a point on the map. Data is provided for the closest weather station to the selected location.
 * **Date Selection.** Since we are not actually using live IoT data, the system must provide a way for the user to select the “current” date. The system pretends that the data is live.
 * **Data Summary.** This contains an easy-to-read overview of the most current available weather data for the selected location, including temperature, rainfall, humidity, wind direction & speed, pressure and cloud cover. 
     * **Rain forecast.** The system runs a machine learning algorithm on past weather data to predict whether it will rain the next day.
