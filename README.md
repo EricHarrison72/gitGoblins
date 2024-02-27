@@ -25,12 +25,9 @@ To access the app, users must register with our login system. They can then also
 * **Login & Register.** Users must register with a valid email address to be able to log in to the system.
 * **Receive Alerts.** Users can sign up to receive email alerts warning them of current severe weather conditions in their location.
 
-**SYSTEM REQUIREMENTS**
+## SYSTEM REQUIREMENTS
 
-**Functional Requirements (what will the system do to support users?)**
-
-
-
+### Functional Requirements (what will the system do to support users?)
 * **Dashboard.** Acts as a home/start page for users. Provides access to all other parts of the system: data summary, visualizations, and location search.
 * **Location Selection.** There are two location selection interfaces: the search bar, or clicking on a point on the map. Data is provided for the closest weather station to the selected location.
 * **Date Selection.** Since we are not actually using live IoT data, the system must provide a way for the user to select the “current” date. The system pretends that the data is live.
@@ -48,35 +45,23 @@ To access the app, users must register with our login system. They can then also
 * Manually modify faulty data.
 * Manually send notifications through the alert system, regarding regional system issues.
 
-**Non-functional Requirements (Constraints)**
+### Non-functional Requirements (Constraints)
 
 **_Product Requirements_**
-
-
-
 * **Web App.** The system must be a web-application.
 * **Flexible Interface.** The user interface must be flexible (i.e. it must be usable on different devices and window sizes).
 * **Good Performance.** Search results should be returned within a maximum of 3** **seconds.
 
 **_Organizational Requirements_**
-
-
-
 * **Programming Tools.** The system must be developed using Python and Python-adjacent libraries and APIs. This is because TA/instructor support is available for these tools.
 * **Development Tools.** The system must be developed with appropriate reliance on the following team-based tools: Git, Github, and Google Drive.
 * **Due Dates.** The various components of the system must be completed by the milestones specified in COSC 310, with the final due date being April 12.
 
 **_Miscellaneous_**
-
-
-
 * **User Information.** The system will not collect any user information, except for their email for the notification system. 
 * **Data limitations.** The system is limited to Australian weather data from 2007-2017.
 
-**Domain Requirements (Standards)**
-
-
-
+### Domain Requirements (Standards)
 * **Accessibility.** The system will implement at least basic web accessibility features, as specified in WCAG2 ([Web Content Accessibility Guidelines](https://www.w3.org/WAI/WCAG22/quickref/?versions=2.1)). Most relevant:
     * 1. Perceivable. Especially:
         * 1.1 Text alternatives
