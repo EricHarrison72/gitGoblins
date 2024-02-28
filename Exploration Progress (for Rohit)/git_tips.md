@@ -13,6 +13,7 @@
 ### Branching
 - `git checkout -b <branch-name>` - Create and switch to a new branch 
 - `git switch <branch-name>` - Switch to branch "branch-name"
+- `git push -u origin <branch-name>` - Push a newly created local branch to the remote repository
 - `git push -d origin <branch-name>` - Delete branch remotely (make sure you're not on that branch)
 - `git -d <branch-name>` - Delete branch locally
 
