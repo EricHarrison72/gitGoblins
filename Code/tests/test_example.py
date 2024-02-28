@@ -4,6 +4,8 @@ import pytest
 '''
 > Must be in the folder 'tests'
 > must start with 'test_'
+> naming convention: 'test_className.py'
+> 1 test file tests 1 class or concept
 '''
 
 # FIXTURES
