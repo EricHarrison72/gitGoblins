@@ -9,6 +9,7 @@ def hello_world():
     message = "Hello World!"
     return render_template("index.html", message=message)
 
+@app.route('weather_summary')
 def weather_summary():
     location = "Location Name"
     date = "Date"
