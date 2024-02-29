@@ -1,0 +1,55 @@
+# resources that helped me write this file:
+# > Carberra, "Unit testing Python code using Pytest + GitHub Actions", https://www.youtube.com/watch?v=0aEJBygCn5Q
+# > Muhammed Ali, "HoneyBadger, Build a CI/CD pipeline for Flask apps using GitHub Actions", https://www.honeybadger.io/blog/flask-github-actions-continuous-delivery/
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Activated workflow before push or pull requests
+  push:
+  pull-request:
+
+  # allows you to manually execute this pipeline from the Actions tab.
+  workflow_dispatch:
+
+# A workflow run consists of one or more jobs that can be executed either sequentially or concurrently.
+jobs:
+  run-tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+        #Carberra included way more Python versions, but let's keep it simple for now
+        python-version:
+          - "3.11"
+          - "3.12"
+
+    name: Test
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-Python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Tests
+        run: pytest 
+
+
+
+
+
+
+
+
+
+
