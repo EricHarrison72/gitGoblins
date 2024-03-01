@@ -19,7 +19,7 @@ def create_app():
     db.init_app(app)
 
     # Import and register your blueprints
-    from . import app as app_blueprint
+    from .. import app as app_blueprint
     app.register_blueprint(app_blueprint.bp)
 
     return app
