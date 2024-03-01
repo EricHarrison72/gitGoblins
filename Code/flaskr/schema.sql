@@ -10,7 +10,7 @@ CREATE TABLE City (
 	latiude int,
 	longitude int,
 	PRIMARY KEY (cityId)
-)
+);
 
 CREATE TABLE User (
 	userId int,
@@ -20,7 +20,7 @@ CREATE TABLE User (
 	emailList boolean,
 	password varchar(128),
 	PRIMARY KEY(userId)
-)
+);
 
 CREATE TABLE UsersCities (
 	userId int,
@@ -30,7 +30,7 @@ CREATE TABLE UsersCities (
 		ON DELETE SET NULL ON UPDATE CASCADE,
 	FOREIGN KEY (cityId) REFERENCES City(cityId)
 		ON DELETE SET NULL ON UPDATE CASCADE
-)
+);
 
 CREATE TABLE WeatherInstance (
 	cityId int,
@@ -51,7 +51,7 @@ CREATE TABLE WeatherInstance (
 	PRIMARY KEY(cityId, date),
 	FOREIGN KEY(cityId) REFERENCES City(cityId)
 		ON DELETE SET NULL ON UPDATE CASCADE
-)
+);
 		
 INSERT INTO WeatherInstance (cityId, date, temperature, tempMin, tempMax, sunshine, rainfall, evaporation, cloudCover, pressure, humidity, windSpeed, windDir, windGustSpeed, windGustDir)
 VALUES (1, '2024-03-01 12:00:00', 20.5, 15.0, 25.0, 8, 0.0, 5.2, 2, 1015.4, 60, 15, 'NNE', 25, 'NE');
