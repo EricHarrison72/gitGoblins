@@ -5,7 +5,7 @@
 from flask import Flask, render_template
 from flaskr import create_app, db
 
-#app = Flask(__name__) -- This line doesn't work
+#app = Flask(__name__) -- This line doesn't work as is, but if we figure it out we won't need to re-initialize the database everytime we run it
 app = create_app() #Re-initializes entire database every time we run this :/
 
 @app.route('/')
@@ -17,8 +17,9 @@ def hello_world():
 def weather_summary():
     datb = db.get_db()
 
-    #Using random values to test the database connection
-    city_id = 1
+    city_id = 1 #City set to 1, as there's no way of collecting specific city id from webpage yet
+
+    #SQL query to get data for specific city (query isn't correct right now)
     weather_data = datb.execute('''
         SELECT City.cityName, WeatherInstance.date, WeatherInstance.tempMax AS temp_high, 
                WeatherInstance.tempMin AS temp_low, WeatherInstance.rainfall, 
