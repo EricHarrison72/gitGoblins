@@ -46,10 +46,12 @@ CREATE TABLE WeatherInstance (
 	pressure3pm DECIMAL(4,1),
 	humidity9am int,
 	humidity3pm int,
-	windSpeed int,
-	windDir varchar(3),
 	windGustSpeed int,
 	windGustDir varchar(3),
+	windSpeed9am int,
+	windSpeed3pm int,
+	windDir9am varchar(3),
+	windDir3pm varchar(3),
 	PRIMARY KEY(cityId, date),
 	FOREIGN KEY(cityId) REFERENCES City(cityId)
 		ON DELETE SET NULL ON UPDATE CASCADE
