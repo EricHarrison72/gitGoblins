@@ -17,20 +17,22 @@ def hello_world():
 def weather_summary():
     datb = db.get_db()
 
-    city_id = 1 #City set to 1, as there's no way of collecting specific city id from webpage yet
+    city_id = 0 #City set to 1, as there's no way of collecting specific city id from webpage yet
+    date = "2008-12-01" #Date set to first row of data
 
-    #SQL query to get data for specific city (query isn't correct right now)
+
+    #SQL query to get data for specific city
     weather_data = datb.execute('''
         SELECT City.cityName, WeatherInstance.date, WeatherInstance.tempMax AS temp_high, 
                WeatherInstance.tempMin AS temp_low, WeatherInstance.rainfall, 
-               WeatherInstance.rainfall > 0 AS raining, WeatherInstance.windSpeed, 
-               WeatherInstance.windDir
+               rainToday AS raining, WeatherInstance.windGustSpeed AS wind_speed, 
+               WeatherInstance.windGustDir AS wind_dir
         FROM WeatherInstance
         JOIN City ON WeatherInstance.cityId = City.cityId
-        WHERE WeatherInstance.cityId = ?
-        ORDER BY WeatherInstance.date DESC
-        LIMIT 1
-    ''', (city_id,)).fetchone()
+        WHERE WeatherInstance.cityId = ? AND WeatherInstance.date = ?
+
+    ''', (city_id,date,)).fetchone()
+    
 
     if weather_data is None:
         # Handle the case where no weather data is found
@@ -43,8 +45,8 @@ def weather_summary():
             weather_data['temp_low'], 
             weather_data['rainfall'], 
             weather_data['raining'], 
-            weather_data['windSpeed'], 
-            weather_data['windDir']
+            weather_data['wind_speed'], 
+            weather_data['wind_dir']
         ]
     
     return render_template("weather_summary.html", weather_list=weather_list)
