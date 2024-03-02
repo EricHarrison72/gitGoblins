@@ -53,7 +53,7 @@ CREATE TABLE WeatherInstance (
 	windDir9am varchar(3),
 	windDir3pm varchar(3),
 	rainToday boolean,
-	rainTommorrow boolean,
+	rainTomorrow boolean,
 	PRIMARY KEY(cityId, date),
 	FOREIGN KEY(cityId) REFERENCES City(cityId)
 		ON DELETE SET NULL ON UPDATE CASCADE
