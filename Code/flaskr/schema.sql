@@ -35,7 +35,6 @@ CREATE TABLE UsersCities (
 CREATE TABLE WeatherInstance (
 	cityId int,
 	date DATETIME,
-	temperature DECIMAL(3,1),
 	tempMin DECIMAL(3,1),
 	tempMax DECIMAL(3,1),
 	sunshine int,
