@@ -58,6 +58,4 @@ CREATE TABLE WeatherInstance (
 	FOREIGN KEY(cityId) REFERENCES City(cityId)
 		ON DELETE SET NULL ON UPDATE CASCADE
 );
-		
-INSERT INTO WeatherInstance (cityId, date, temperature, tempMin, tempMax, sunshine, rainfall, evaporation, cloudCover, pressure, humidity, windSpeed, windDir, windGustSpeed, windGustDir)
-VALUES (1, '2024-03-01 12:00:00', 20.5, 15.0, 25.0, 8, 0.0, 5.2, 2, 1015.4, 60, 15, 'NNE', 25, 'NE');
+	
