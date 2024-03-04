@@ -1,6 +1,5 @@
 #__init__.py
 from flask import Flask, render_template
-import weatherApp.views
 import os, csv, sqlite3
 
 city_to_id = {}
@@ -102,3 +101,6 @@ def initialize_cities(city):
     conn.close()
     
     return cities
+
+#views MUSt be imported at bottom of file in order for app initialization to work (even tho it's a circular import)
+import weatherApp.views
