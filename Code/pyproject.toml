@@ -1,0 +1,12 @@
+[project]
+name = "weatherApp"
+dependencies = [
+    "flask",
+]
+
+[build-system]
+requires = ["flit_core<4"]
+build-backend = "flit_core.buildapi"
+
+# The above code is from Flask docs on packages: https://flask.palletsprojects.com/en/2.3.x/patterns/packages/
+
