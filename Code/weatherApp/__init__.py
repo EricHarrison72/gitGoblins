@@ -1,6 +1,6 @@
-#__innit__.py
+#__init__.py
 from flask import Flask, render_template
-
+import weatherApp.views
 import os, csv, sqlite3
 
 city_to_id = {}

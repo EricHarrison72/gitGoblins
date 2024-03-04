@@ -1,6 +1,7 @@
 #views.py
 from flask import Flask, render_template
 from weatherApp import app
+from . import db
 
 @app.route('/')
 def hello_world():
