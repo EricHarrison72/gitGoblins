@@ -1,13 +1,5 @@
-#app.py
-
-# NOTE: This file exists to help us start us out. 
-# We may want to break our app into several python files for different components later on.
 from flask import Flask, render_template
-# from flaskr import create_app, db
-
-#app = Flask(__name__) -- This line doesn't work as is, but if we figure it out we won't need to re-initialize the database everytime we run it
-# app = create_app() #Re-initializes entire database every time we run this :/
-# IAN commented out above line
+from weatherApp import app
 
 @app.route('/')
 def hello_world():
