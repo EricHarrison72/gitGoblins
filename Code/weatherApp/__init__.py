@@ -3,15 +3,23 @@ from flask import Flask, render_template
 import os, csv, sqlite3
 
 city_to_id = {}
-app = Flask(__name__, instance_relative_config=True)
+
 
 #Initalizes database and returns app with working db
-def create_app():
-    #This isn't supposed to be necessary, but the next line wasn't working properly
-    app.config['DATABASE'] = '/instance/database.db' 
+def create_app(test_config=None):
+    #This isn't supposed to be necessary, but the next line wasn't working properly 
+    app = Flask(__name__, instance_relative_config=True)
     
-    # Load configuration from 'instance/config.py'
-    app.config.from_pyfile('config.py', silent=False)
+    app.config.from_mapping(
+        SECRET_KEY='dev',
+        DATABASE=os.path.join(app.instance_path, 'weatherApp.sqlite'),
+    )
+    if test_config is None:
+        # Load configuration from 'instance/config.py'
+        app.config.from_pyfile('config.py', silent=True)
+    else:
+        # load the test config if passed in
+        app.config.from_mapping(test_config)
     
     # Ensure the instance folder exists
     try:
@@ -23,15 +31,14 @@ def create_app():
     from . import db
     db.init_app(app)
     
-    #I couldn't figure out blueprints, maybe they'll help once I figure them out -Eric
-    # Import and register your blueprints
-    #from .views import bp as app_blueprint
-    #app.register_blueprint(app_blueprint)
+    # Import and register blueprints
+    from .views import bp as app_blueprint
+    app.register_blueprint(app_blueprint)
     
     # Initialize the database
     with app.app_context():
         db.init_db()
-    
+        
     # Database connection
     conn = sqlite3.connect(app.config['DATABASE'])
     cur = conn.cursor()
@@ -44,7 +51,7 @@ def create_app():
         
         #Read the values of each row in the csv into the database
         for row in csvreader:
-            city = location_to_id(row[1]) 
+            city = location_to_id(row[1], cur) 
             date, min_temp, max_temp, sunshine, rainfall = row[0], row[2], row[3], row[6], row[4]
             evaporation, cloud9am, cloud3pm, pressure9am, pressure3pm = row[5], row[17], row[18], row[15], row[16]
             humidity9am, humidity3pm, wind_gust_speed, wind_gust_dir = row[13], row[14], row[8], row[7]
@@ -60,22 +67,21 @@ def create_app():
     conn.commit()
     conn.close()
     
+    #views MUSt be imported at bottom of file in order for app initialization to work (even tho it's a circular import)
+    import weatherApp.views
+    
     return app
 
 #Returns cityId for specified city name from dictionary
-def location_to_id(city):
+def location_to_id(city, cur):
     global city_to_id  # Add this line to use the module-level city_to_id
     if len(city_to_id) == 0: #If city_to_id is empty, initialize it
-        city_to_id = initialize_cities(city)
+        city_to_id = initialize_cities(cur)
     return city_to_id[city]
     
 #Initialize dictionary for city_to_cityId
 #Also read city values into city table in SQL schema, since we can only do this once per city it goes here
-def initialize_cities(city):
-    # Database connection
-    conn = sqlite3.connect(app.config['DATABASE'])
-    cur = conn.cursor()
-    
+def initialize_cities(cur):
     i=0
     rows = []
     cities = {}
@@ -96,11 +102,5 @@ def initialize_cities(city):
                 cur.execute(insert_sql, (i, row[1],))
                 
                 i+=1
-                
-    conn.commit()
-    conn.close()
     
     return cities
-
-#views MUSt be imported at bottom of file in order for app initialization to work (even tho it's a circular import)
-import weatherApp.views
