@@ -1,4 +1,15 @@
-#__init__.py
+# ------------------------------------------------------
+# __init__.py
+'''
+This file initializes the app package ('weatherApp').
+Most importantly, it contains the app factory ('create_app()'),
+which creates an instance of the app with a database, 
+and loads the data from weatherAUS.csv into the database.
+
+This is run automatically when you run the app using the terminal command:
+`flask --app weatherApp --debug run`
+'''
+#--------------------------------------------------------
 from flask import Flask, render_template
 import os, csv, sqlite3
 
