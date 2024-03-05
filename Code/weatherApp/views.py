@@ -1,4 +1,20 @@
-#views.py
+# ------------------------------------------------------
+# views.py
+'''
+Contains all current view methods, which do some logic and
+then call render_template().
+- hello_world(): home page
+- weather_summary(): basic weather summary (not dynamic)
+'''
+'''
+TODO:
+Create different blueprints for different parts of the app.
+Each should be "registered" in a separate .py file, which 
+contains the view methods associated with it. (right now
+we only have one blueprint called 'bp', registered in this
+file, and all our view methods use it.)
+'''
+# ------------------------------------------------------
 from flask import Flask, render_template, Blueprint, current_app
 from . import db
 
