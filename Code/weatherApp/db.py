@@ -1,4 +1,10 @@
-#db.py
+# ------------------------------------------------------
+# db.py
+'''
+Methods for creating, accessing and tearing down the 
+database using the specs in schema.sql.
+'''
+# ------------------------------------------------------
 import sqlite3
 import click
 from flask import current_app, g
