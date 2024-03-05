@@ -52,9 +52,14 @@
 * Take breaks during meetings if they run long
 
 ### Technical Stuff
-* File naming: File_Name
+* Naming conventions:
+   * Files: `file_name.extension`
+   * Packages: `packageName`
+   * variables: `variable_name`
+   * Functions: `function_name()`
+   * classes: `ClassName`
+   * constants: `CONSTANT_NAME`
 * Coding:
-    * variable naming: variableName
     * Write self-descriptive code!
     * Good readability - make sure indentation and spacing is consistent
 * Documentation:
