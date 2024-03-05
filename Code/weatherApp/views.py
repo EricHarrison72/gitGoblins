@@ -1,14 +1,15 @@
 #views.py
-from flask import Flask, render_template
-from weatherApp import app
+from flask import Flask, render_template, Blueprint, current_app
 from . import db
 
-@app.route('/')
+bp = Blueprint('bp', __name__)
+
+@bp.route('/')
 def hello_world():
     message = "Hello World!"
     return render_template("index.html", message=message)
 
-@app.route('/weather_summary')
+@bp.route('/weather_summary')
 def weather_summary():
     datb = db.get_db()
 
@@ -45,7 +46,3 @@ def weather_summary():
         ]
     
     return render_template("weather_summary.html", weather_list=weather_list)
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
