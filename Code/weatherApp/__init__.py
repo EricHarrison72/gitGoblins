@@ -7,7 +7,6 @@ city_to_id = {}
 
 #Initalizes database and returns app with working db
 def create_app(test_config=None):
-    #This isn't supposed to be necessary, but the next line wasn't working properly 
     app = Flask(__name__, instance_relative_config=True)
     
     app.config.from_mapping(
