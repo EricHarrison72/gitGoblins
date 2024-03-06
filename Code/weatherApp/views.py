@@ -21,8 +21,8 @@ from . import db
 bp = Blueprint('bp', __name__)
 
 @bp.route('/')
-def hello_world():
-    message = "Hello World!"
+def index():
+    message = "THIS IS THE HOME PAGE. HI!"
     return render_template("index.html", message=message)
 
 @bp.route('/weather_summary')
