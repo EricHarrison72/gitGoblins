@@ -1,5 +1,5 @@
 # ------------------------------------------------------
-# __init__.py
+# __init__.py in weatherApp
 '''
 This file initializes the app package ('weatherApp').
 Most importantly, it contains the app factory ('create_app()'),
