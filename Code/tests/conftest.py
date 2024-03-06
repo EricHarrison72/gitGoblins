@@ -16,4 +16,9 @@ def app():
         db.init_db()
 
     yield app 
-    # everything after this is teardown
+    # everything after this would be teardown
+
+@pytest.fixture()
+def client(app):
+    # allows us to simulate requests to the app
+    app.test_client()
