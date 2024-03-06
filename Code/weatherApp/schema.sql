@@ -35,23 +35,27 @@ CREATE TABLE UsersCities (
 CREATE TABLE WeatherInstance (
 	cityId int,
 	date DATETIME,
-	temperature DECIMAL(3,1),
 	tempMin DECIMAL(3,1),
 	tempMax DECIMAL(3,1),
 	sunshine int,
 	rainfall DECIMAL(5,1),
 	evaporation DECIMAL(5,1),
-	cloudCover int,
-	pressure DECIMAL(4,1),
-	humidity int,
-	windSpeed int,
-	windDir varchar(3),
+	cloud9am int,
+	cloud3pm int,
+	pressure9am DECIMAL(4,1),
+	pressure3pm DECIMAL(4,1),
+	humidity9am int,
+	humidity3pm int,
 	windGustSpeed int,
 	windGustDir varchar(3),
+	windSpeed9am int,
+	windSpeed3pm int,
+	windDir9am varchar(3),
+	windDir3pm varchar(3),
+	rainToday boolean,
+	rainTomorrow boolean,
 	PRIMARY KEY(cityId, date),
 	FOREIGN KEY(cityId) REFERENCES City(cityId)
 		ON DELETE SET NULL ON UPDATE CASCADE
 );
-		
-INSERT INTO WeatherInstance (cityId, date, temperature, tempMin, tempMax, sunshine, rainfall, evaporation, cloudCover, pressure, humidity, windSpeed, windDir, windGustSpeed, windGustDir)
-VALUES (1, '2024-03-01 12:00:00', 20.5, 15.0, 25.0, 8, 0.0, 5.2, 2, 1015.4, 60, 15, 'NNE', 25, 'NE');
+	
