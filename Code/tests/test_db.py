@@ -31,6 +31,7 @@ def test_get_close_db(app):
 # test using inti-db command
 '''
 The init-db command should call the init_db function and output a message.
+It's kinda weird that this test passes when we can't even figure that code out ourselves.
 '''
 def test_init_db_command(runner, monkeypatch):
     class Recorder(object):
