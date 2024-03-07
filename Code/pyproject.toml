@@ -1,3 +1,10 @@
+# ---------------------------------------
+# Project configuration file. Idk exactly why but this needs to exist for Flask to do its thing.
+# 
+# Start code sources: 
+# - [Flask docs on packages](https://flask.palletsprojects.com/en/2.3.x/patterns/packages/)
+# - [Flask docs tutorial: Test Coverage] (https://flask.palletsprojects.com/en/3.0.x/tutorial/tests/#running-the-tests)
+
 [project]
 name = "weatherApp"
 dependencies = [
@@ -8,5 +15,10 @@ dependencies = [
 requires = ["flit_core<4"]
 build-backend = "flit_core.buildapi"
 
-# The above code is from Flask docs on packages: https://flask.palletsprojects.com/en/2.3.x/patterns/packages/
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["flaskr"]
 
