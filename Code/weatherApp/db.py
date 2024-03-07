@@ -13,7 +13,7 @@ from flask import current_app, g
 from flask.cli import with_appcontext
 
 city_to_id = {} # var used to populate db
-weather_data_file = os.path.join("Code","data", "weatherAUS.csv")
+weather_data_file = os.path.join("data", "weatherAUS.csv")
 
 #Returns current database
 def get_db():
