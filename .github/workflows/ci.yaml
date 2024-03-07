@@ -20,6 +20,11 @@ on:
   # allows you to manually execute this pipeline from the Actions tab.
   workflow_dispatch:
 
+# set the default working directory to be the code space	
+defaults:
+  run:
+    working-directory: ./Code
+
 # A workflow run consists of one or more jobs that can be executed either sequentially or concurrently.
 jobs:
   run-tests:
@@ -46,7 +51,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install dependencies
-        run: pip install -r Code/requirements.txt
+        run: pip install -r requirements.txt
 
       - name: Run Tests
         run: pytest 
