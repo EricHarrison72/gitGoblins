@@ -10,7 +10,7 @@ This is run automatically when you run the app using the terminal command:
 `flask --app weatherApp --debug run`
 '''
 #--------------------------------------------------------
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 import os, csv, sqlite3
 
 #Initalizes database and returns app with working db

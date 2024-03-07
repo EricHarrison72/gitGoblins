@@ -5,5 +5,9 @@
 {% endblock %}
 
 {% block body %}
-Some Random HTML and also this message: {{message}}
+Some Random HTML and also this message: {{message}}<br>
+<a href="{{url_for('bp.login')}}">Login Page</a><br>
+
+<a href="{{url_for('bp.register')}}">Register Page</a><br>
+
 {% endblock %}

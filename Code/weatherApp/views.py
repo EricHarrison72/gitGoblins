@@ -15,7 +15,7 @@ we only have one blueprint called 'bp', registered in this
 file, and all our view methods use it.)
 '''
 # ------------------------------------------------------
-from flask import Flask, render_template, Blueprint, current_app
+from flask import Flask, render_template, Blueprint, current_app, url_for
 from . import db
 
 bp = Blueprint('bp', __name__)
@@ -62,3 +62,14 @@ def weather_summary():
         ]
     
     return render_template("weather_summary.html", weather_list=weather_list)
+#Login page
+@bp.route('/login')
+def login():
+    
+    return render_template("login.html")
+
+#Sign up page
+@bp.route('/register')
+def register():
+    
+    return render_template("register.html")
