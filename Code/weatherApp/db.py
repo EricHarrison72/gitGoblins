@@ -8,10 +8,12 @@ database using the specs in schema.sql.
 import sqlite3
 import click
 import csv
+import os
 from flask import current_app, g
 from flask.cli import with_appcontext
 
 city_to_id = {} # var used to populate db
+weather_data_file = os.path.join("Code","data", "weatherAUS.csv")
 
 #Returns current database
 def get_db():
@@ -49,7 +51,7 @@ def populate_db():
     cur = conn.cursor()
 
     # Read from the CSV into the database
-    with open("data\\weatherAUS.csv", 'r') as file:
+    with open(weather_data_file, 'r') as file:
         csvreader = csv.reader(file)
         next(csvreader)  # Skip the header row
         
@@ -86,7 +88,7 @@ def initialize_cities(cur):
     cities = {}
     
     #Read csv row by row, if the city doesn't exist in the dictionary, add it with corresponding id i
-    with open("data\\weatherAUS.csv", 'r') as file:
+    with open(weather_data_file, 'r') as file:
         csvreader = csv.reader(file)
         next(csvreader) #Skip header
         for row in csvreader:
