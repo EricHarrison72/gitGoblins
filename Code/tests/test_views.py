@@ -1,7 +1,7 @@
 # ------------------------------------------------
-# test_weatherApp.py
+# test_views.py
 '''
-I created this file as part of a flask testing tutorial.
+This currently exists to test (mostly front end stuff) in views.py
 In the future we will create several test files. (see test_example)
 '''
 '''
@@ -17,6 +17,8 @@ def test_home(client):
     # check that the page has something we know is going to be there
     assert b"<title>Home</title>" in response.data
 
-def test_weather_summary():
+# this test doesn't do much, but it forces the CI pipeline to try to access the /weather_summary page
+def test_weather_summary(client):
+    response = client.get("/weather_summary")
 
-    assert 1
+    assert b"<title>Weather Summary</title>" in response.data
