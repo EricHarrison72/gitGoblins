@@ -10,8 +10,13 @@ Starter Code sources:
 '''
 # ------------------------------------------------
 
+# Example of a test that uses the client fixture
 def test_home(client):
     response = client.get("/")
 
     # check that the page has something we know is going to be there
     assert b"<title>Home</title>" in response.data
+
+def test_weather_summary():
+
+    assert 1
