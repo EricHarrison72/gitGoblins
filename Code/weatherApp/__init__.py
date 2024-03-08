@@ -43,10 +43,6 @@ def create_app(test_config=None):
     from . import db
     db.init_app(app)
     
-    # Initialize the database
-    with app.app_context():
-        db.init_db()
-    
     # Import and register blueprints
     from .views import bp as app_blueprint
     app.register_blueprint(app_blueprint)
