@@ -73,3 +73,7 @@ def login():
 def register():
     
     return render_template("register.html")
+
+@bp.route('/map')
+def map():
+    return render_template("map.html")
