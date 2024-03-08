@@ -46,8 +46,5 @@ def create_app(test_config=None):
     # Import and register blueprints
     from .views import bp as app_blueprint
     app.register_blueprint(app_blueprint)
-
-    #views MUSt be imported at bottom of function in order for app initialization to work (even tho it's a circular import)
-    import weatherApp.views
     
     return app
