@@ -11,7 +11,7 @@ This is run automatically when you run the app using the terminal command:
 '''
 '''
 Starter code sources:
-- [Flask docs tutorial - Application Setup] (https://flask.palletsprojects.com/en/3.0.x/tutorial/factory/]
+- [Flask docs tutorial - Application Setup] (https://flask.palletsprojects.com/en/3.0.x/tutorial/factory/)
 - [Flask docs tutorial - Define and Access the Database](https://flask.palletsprojects.com/en/3.0.x/tutorial/database/)
 '''
 #--------------------------------------------------------
@@ -43,14 +43,14 @@ def create_app(test_config=None):
     from . import db
     db.init_app(app)
     
-    # Import and register blueprints
-    from .views import bp as app_blueprint
-    app.register_blueprint(app_blueprint)
-    
     # Initialize the database
     with app.app_context():
         db.init_db()
     
+    # Import and register blueprints
+    from .views import bp as app_blueprint
+    app.register_blueprint(app_blueprint)
+
     #views MUSt be imported at bottom of function in order for app initialization to work (even tho it's a circular import)
     import weatherApp.views
     
