@@ -4,6 +4,10 @@
 Methods for creating, accessing and tearing down the 
 database using the specs in schema.sql.
 '''
+'''
+Starter code source:
+- [Flask docs tutorial - Define and Access the Database](https://flask.palletsprojects.com/en/3.0.x/tutorial/database/)
+'''
 # ------------------------------------------------------
 import sqlite3
 import click

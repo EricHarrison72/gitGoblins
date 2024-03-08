@@ -9,6 +9,11 @@ and loads the data from weatherAUS.csv into the database.
 This is run automatically when you run the app using the terminal command:
 `flask --app weatherApp --debug run`
 '''
+'''
+Starter code sources:
+- [Flask docs tutorial - Application Setup] (https://flask.palletsprojects.com/en/3.0.x/tutorial/factory/]
+- [Flask docs tutorial - Define and Access the Database](https://flask.palletsprojects.com/en/3.0.x/tutorial/database/)
+'''
 #--------------------------------------------------------
 from flask import Flask, render_template, url_for
 import os, csv, sqlite3
