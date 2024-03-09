@@ -14,6 +14,10 @@ contains the view methods associated with it. (right now
 we only have one blueprint called 'bp', registered in this
 file, and all our view methods use it.)
 '''
+'''
+Start Code sources:
+- [Flask docs tutorial - Application Setup](https://flask.palletsprojects.com/en/3.0.x/tutorial/factory/)
+'''
 # ------------------------------------------------------
 from flask import Flask, render_template, Blueprint, current_app, url_for
 from . import db
@@ -62,3 +66,8 @@ def weather_summary():
         ]
     
     return render_template("weather_summary.html", weather_list=weather_list)
+
+@bp.route('/map')
+def map():
+    return render_template("map.html")
+
