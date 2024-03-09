@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +12,21 @@
 <body>
     <h1> Login Page</h1>
     <a href="{{url_for('bp.register')}}">Don't have an account? Sign Up.</a><br>
+=======
+{% extends 'base.html' %}
+>>>>>>> 840b6e2 (auth.py file created allows login and register)
 
-    {% block body %}{% endblock %}
-</body>
-</html>
+{% block header %}
+  <h1>{% block title %}Log In{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="username">Username</label>
+    <input name="username" id="username" required>
+    <label for="password">Password</label>
+    <input type="password" name="password" id="password" required>
+    <input type="submit" value="Log In">
+  </form>
+  <li><a href="{{ url_for('auth.register') }}">Create an account</a>
+{% endblock %}
