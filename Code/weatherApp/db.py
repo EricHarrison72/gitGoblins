@@ -1,8 +1,14 @@
 # ------------------------------------------------------
 # db.py
 '''
-Methods for creating, accessing and tearing down the 
+- Methods for creating, accessing and tearing down the 
 database using the specs in schema.sql.
+- To initialize the database, run `flask --app weatherApp init-db` 
+in the terminal.
+'''
+'''
+Starter code source:
+- [Flask docs tutorial - Define and Access the Database](https://flask.palletsprojects.com/en/3.0.x/tutorial/database/)
 '''
 # ------------------------------------------------------
 import sqlite3
@@ -108,7 +114,7 @@ def initialize_cities(cur):
 
 #-------------------------------
 
-#Used for initializing database via command line, I couldn't make it work properly - Eric
+# Defines the terminal command used to initialize database: `flask --app weatherApp init-db`
 @click.command('init-db')
 @with_appcontext
 def init_db_command():
@@ -116,7 +122,7 @@ def init_db_command():
     init_db()
     click.echo('Initialized the database.')
 
-#Used to initialized database commands
+#Used to initialize database commands in app factory
 def init_app(app):
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
