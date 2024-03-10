@@ -12,7 +12,7 @@ Starter Code sources:
 # -------------------------------------------------
 import os
 import tempfile
-
+from weatherApp import bcrypt  
 import pytest
 from weatherApp import create_app
 from weatherApp.db import get_db, init_db
