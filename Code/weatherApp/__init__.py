@@ -17,7 +17,7 @@ Starter code sources:
 #--------------------------------------------------------
 from flask import Flask, render_template, url_for
 import os, csv, sqlite3
-
+from flask_bcrypt import Bcrypt
 #Initalizes database and returns app with working db
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
@@ -46,5 +46,12 @@ def create_app(test_config=None):
     # Import and register blueprints
     from .views import bp as app_blueprint
     app.register_blueprint(app_blueprint)
+    
+    #Import and register the blueprint from the factory using app.register_blueprint().
+    from . import auth
+    app.register_blueprint(auth.bp)
+    
+    # Initialize Flask-Bcrypt with the app instance
+    bcrypt = Bcrypt(app)
     
     return app
