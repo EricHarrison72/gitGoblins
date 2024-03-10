@@ -54,13 +54,13 @@ def login():
 
         if user is None:
             error = 'Incorrect email.'
-        elif not check_password_hash(user['password'], password):
+        elif not bcrypt.check_password_hash(user['password'], password):
             error = 'Incorrect password.'
 
         if error is None:
             session.clear()
             session['user_id'] = user['userId']  # Assuming userId is the correct column name
-            return redirect(url_for('index'))
+            return redirect(url_for('bp.index'))
 
         flash(error)
 
