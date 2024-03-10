@@ -39,6 +39,9 @@ def create_app(test_config=None):
     except OSError:
         pass    
     
+    # Initialize Flask-Bcrypt with the app instance
+    bcrypt = Bcrypt(app)
+    
     # Import and register the database commands from db.py
     from . import db
     db.init_app(app)
@@ -51,7 +54,6 @@ def create_app(test_config=None):
     from . import auth
     app.register_blueprint(auth.bp)
     
-    # Initialize Flask-Bcrypt with the app instance
-    bcrypt = Bcrypt(app)
+    
     
     return app

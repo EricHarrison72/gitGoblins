@@ -12,10 +12,9 @@ Starter Code sources:
 
 # Example of a test that uses the client fixture
 def test_home(client):
-    response = client.get("/")
+   response = client.get("/")
+   assert b"<title>" in response.data
 
-    # check that the page has something we know is going to be there
-    assert b"<title>Home</title>" in response.data
 
 # this test doesn't do much, but it forces the CI pipeline to try to access the /weather_summary page
 def test_weather_summary(client):

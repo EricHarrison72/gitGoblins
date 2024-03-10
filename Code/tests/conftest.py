@@ -12,8 +12,8 @@ Starter Code sources:
 # -------------------------------------------------
 import os
 import tempfile
-from weatherApp import bcrypt  
 import pytest
+from flask_bcrypt import Bcrypt
 from weatherApp import create_app
 from weatherApp.db import get_db, init_db
 
@@ -31,9 +31,14 @@ def app():
         'DATABASE': db_path
     })
 
+    # Initialize Flask-Bcrypt with the app instance
     with app.app_context():
+        bcrypt = Bcrypt(app)
+
+        from weatherApp.db import init_db
         init_db()
-        get_db().executescript(_data_sql)
+        app.db = get_db()
+        app.db.executescript(_data_sql)
 
     yield app 
 
