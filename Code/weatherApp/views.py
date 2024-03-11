@@ -19,7 +19,7 @@ Start Code sources:
 - [Flask docs tutorial - Application Setup](https://flask.palletsprojects.com/en/3.0.x/tutorial/factory/)
 '''
 # ------------------------------------------------------
-from flask import Flask, render_template, Blueprint, current_app, url_for
+from flask import render_template, Blueprint, request
 from . import db
 
 bp = Blueprint('bp', __name__)
@@ -33,8 +33,8 @@ def index():
 def weather_summary():
     datb = db.get_db()
 
-    city_id = 0 #City set to 1, as there's no way of collecting specific city id from webpage yet
-    date = "2008-12-01" #Date set to first row of data
+    city_name = request.args.get('city_name')
+    date = request.args.get('date')
 
 
     #SQL query to get data for specific city
@@ -45,9 +45,9 @@ def weather_summary():
                WeatherInstance.windGustDir AS wind_dir
         FROM WeatherInstance
         JOIN City ON WeatherInstance.cityId = City.cityId
-        WHERE WeatherInstance.cityId = ? AND WeatherInstance.date = ?
+        WHERE City.cityName = ? AND WeatherInstance.date = ?
 
-    ''', (city_id,date,)).fetchone()
+    ''', (city_name,date,)).fetchone()
     
 
     if weather_data is None:
