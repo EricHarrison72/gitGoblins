@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'select_date.html' %}
 
 {% block head %}
     <title>Map</title>
@@ -7,35 +7,11 @@
 {% endblock %}
 
 {% block body %}
-<div style="margin-bottom: 20px;">
-    <select id="yearSelect">
-        {% for year in range(2008, 2018) %}
-        <option value="{{ year }}" {% if year == 2017 %}selected{% endif %}>{{ year }}</option>
-        {% endfor %}
-    </select>
-    <select id="monthSelect">
-        <option value="1">January</option>
-        <option value="2">February</option>
-        <option value="3">March</option>
-        <option value="4">April</option>
-        <option value="5">May</option>
-        <option value="6" selected>June</option>
-        <option value="7">July</option>
-        <option value="8">August</option>
-        <option value="9">September</option>
-        <option value="10">October</option>
-        <option value="11">November</option>
-        <option value="12">December</option>
-    </select>
-    <select id="daySelect">
-        {% for day in range(1, 32) %}
-        <option value="{{ day }}" {% if day == 24 %}selected{% endif %}>{{ day }}</option>
-        {% endfor %}
-    </select>
-</div>
+    {# Render date selection drop-down menu #}
+    {{ super() }}
 
-<div id="map" style="height: 600px; width: 100%;"></div>
-<script src="{{ url_for('static', filename='js/init_map.js') }}"></script>
+    <div id="map" style="height: 600px; width: 100%;"></div>
+    <script src="{{ url_for('static', filename='js/init_map.js') }}"></script>
 {% endblock %}
 
 
