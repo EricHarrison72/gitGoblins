@@ -1,3 +1,14 @@
+# --------------------------------------------------
+# test_auth.py
+'''
+Unit tests for user registration.
+'''
+'''
+Start code sources:
+- ???
+'''
+# --------------------------------------------------
+
 import pytest
 from flask import g, session
 from weatherApp import create_app

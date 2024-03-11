@@ -1,3 +1,14 @@
+# -----------------------------------------------------
+# auth.py
+'''
+[insert description]
+'''
+'''
+Starter code sources:
+- ???
+'''
+# -----------------------------------------------------
+
 import functools
 
 from flask import (
