@@ -28,4 +28,11 @@ def test_register(client, app):
             "SELECT * FROM user WHERE email = 'test@gmail.com'",
         ).fetchone() is not None
 
+# TODO: tests needed
+'''
+- does an error message display upon incorrect info being entered in login?
+- is user data successfully saved?
+- do users stay in the database after app is closed? (yes, but we need unit tests)
+'''
+
 
