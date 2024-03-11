@@ -31,10 +31,10 @@ def register():
                     (email, hashed_password),
                 )
                 datb.commit()
+                flash("Registration successful. You can now log in.")
+                return redirect(url_for("auth.login"))
             except datb.IntegrityError:
                 error = f"User with email {email} is already registered."
-            else:
-                return redirect(url_for("auth.login"))
 
         flash(error)
 
