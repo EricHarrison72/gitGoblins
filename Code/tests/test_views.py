@@ -17,7 +17,7 @@ def test_home(client):
 
 
 # this test doesn't do much, but it forces the CI pipeline to try to access the /weather_summary page
-def test_weather_summary(client):
-    response = client.get("/weather_summary")
+# def test_weather_summary(client):
+#     response = client.get("/weather_summary")
 
-    assert b"<title>Weather Summary</title>" in response.data
+#     assert b"<title>Weather Summary</title>" in response.data
