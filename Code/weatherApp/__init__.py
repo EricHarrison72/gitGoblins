@@ -47,12 +47,11 @@ def create_app(test_config=None):
     db.init_app(app)
     
     # Import and register blueprints
-    from .views import bp as app_blueprint
-    app.register_blueprint(app_blueprint)
+    from .views import bp
+    app.register_blueprint(bp)
     
-    #Import and register the blueprint from the factory using app.register_blueprint().
-    from . import auth
-    app.register_blueprint(auth.bp)
+    from .auth import auth_bp
+    app.register_blueprint(auth_bp)
     
     
     

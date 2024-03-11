@@ -18,10 +18,10 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from flask_bcrypt import Bcrypt
 from . import db
 
-bp = Blueprint('auth', __name__, url_prefix='/auth')
+auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 bcrypt = Bcrypt()
 
-@bp.route('/register', methods=('GET', 'POST'))
+@auth_bp.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
         email = request.form['email']
@@ -52,7 +52,7 @@ def register():
     return render_template('/register.html')
 
 #route to login page
-@bp.route('/login', methods=('GET', 'POST'))
+@auth_bp.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
         email = request.form['email']
@@ -79,7 +79,7 @@ def login():
 
 
 #bp.before_app_request() registers a function that runs before the view function, no matter what URL is requested. 
-@bp.before_app_request
+@auth_bp.before_app_request
 def load_logged_in_user():
     user_id = session.get('user_id')
 
@@ -91,7 +91,7 @@ def load_logged_in_user():
         ).fetchone()
         
 #logout of session
-@bp.route('/logout')
+@auth_bp.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('index'))
