@@ -21,15 +21,17 @@ Start Code sources:
 # ------------------------------------------------------
 from flask import Flask, render_template, Blueprint, current_app, url_for
 from . import db
+from .auth import login_required
 
-bp = Blueprint('bp', __name__)
+views_bp = Blueprint('views', __name__)
 
-@bp.route('/')
+@views_bp.route('/')
+#@login_required
 def index():
-    message = "THIS IS THE HOME PAGE. HI!"
-    return render_template("index.html.jinja", message=message)
+    return render_template("index.html.jinja")
 
-@bp.route('/weather_summary')
+@views_bp.route('/weather_summary')
+#@login_required
 def weather_summary():
     datb = db.get_db()
 
@@ -67,6 +69,7 @@ def weather_summary():
     
     return render_template("weather_summary.html.jinja", weather_list=weather_list)
 
-@bp.route('/map')
+@views_bp.route('/map')
+#@login_required
 def map():
     return render_template("map.html.jinja")

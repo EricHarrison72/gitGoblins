@@ -47,9 +47,9 @@ def create_app(test_config=None):
     db.init_app(app)
     
     # Import and register blueprints
-    from .views import bp
-    app.register_blueprint(bp)
-    
+    from .views import views_bp
+    app.register_blueprint(views_bp)
+
     from .auth import auth_bp
     app.register_blueprint(auth_bp)
     
