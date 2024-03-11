@@ -60,7 +60,7 @@ def login():
         if error is None:
             session.clear()
             session['user_id'] = user['userId']  # Assuming userId is the correct column name
-            return redirect(url_for('bp.index'))
+            return redirect(url_for('bp.weather_summary'))
 
         flash(error)
 
