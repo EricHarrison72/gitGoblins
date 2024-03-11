@@ -1,9 +1,12 @@
 {% extends 'base.html.jinja' %}
 
-{% block title %}Weather Summary{% endblock %}
+{% block title %}
+  Weather Summary
+{% endblock %}
 
-
-{% block header %}<h1>{{weather_list[0]}}</h1>{% endblock %}
+{% block header %}
+  {{weather_list[0]}}
+{% endblock %}
 
 {% block content %}
   <h3>{{weather_list[1]}}</h3>
