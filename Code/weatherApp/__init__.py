@@ -15,9 +15,10 @@ Starter code sources:
 - [Flask docs tutorial - Define and Access the Database](https://flask.palletsprojects.com/en/3.0.x/tutorial/database/)
 '''
 #--------------------------------------------------------
-from flask import Flask, render_template, url_for
-import os, csv, sqlite3
+from flask import Flask
+import os
 from flask_bcrypt import Bcrypt
+
 #Initalizes database and returns app with working db
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
@@ -53,6 +54,5 @@ def create_app(test_config=None):
     from .auth import auth_bp
     app.register_blueprint(auth_bp)
     
-    
-    
+
     return app

@@ -1,14 +1,22 @@
-{% extends 'base.html.jinja' %}
+{% extends 'select_date.html.jinja' %}
 
 {% block head %}
-    <title>Map</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 {% endblock %}
+{% block title %}
+    Map
+{% endblock %}
 
-{% block body %}
-<div id="map" style="height: 600px; width: 100%;"></div>
-<script src="{{ url_for('static', filename='js/init_map.js') }}"></script>
+{% block header %}
+    Map
+{% endblock %}
+{% block content %}
+    {# Render date selection drop-down menu #}
+    {{ super() }}
+
+    <div id="map" style="height: 600px; width: 100%;"></div>
+    <script src="{{ url_for('static', filename='js/init_map.js') }}"></script>
 {% endblock %}
 
 
