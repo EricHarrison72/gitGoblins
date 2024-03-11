@@ -55,3 +55,23 @@ def client(app):
 def runner(app):
     # creates a runner that can call the Click commands registered with the application
     return app.test_cli_runner()
+
+#With the auth fixture, you can call auth.login() in a test to log in as the test user, 
+#which was inserted as part of the test data in the app fixture.
+class AuthActions(object):
+    def __init__(self, client):
+        self._client = client
+
+    def login(self, email='test@gmail.com', password='test'):
+        return self._client.post(
+            '/auth/login',
+            data={'email': email, 'password': password}
+        )
+
+    def logout(self):
+        return self._client.get('/auth/logout')
+
+
+@pytest.fixture
+def auth(client):
+    return AuthActions(client)

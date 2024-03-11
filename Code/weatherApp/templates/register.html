@@ -12,5 +12,6 @@
     <input type="password" name="password" id="password" required>
     <input type="submit" value="Register">
   </form>
+  <p>{{ get_flashed_messages() }}</p>
   <li><a href="{{ url_for('auth.login') }}">Already have an account?</a>
 {% endblock %}
