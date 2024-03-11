@@ -49,7 +49,7 @@ def register():
 
         flash(error)
 
-    return render_template('auth/register.html')
+    return render_template('auth/register.html.jinja')
 
 #route to login page
 @auth_bp.route('/login', methods=('GET', 'POST'))
@@ -75,7 +75,7 @@ def login():
 
         flash(error)
 
-    return render_template('auth/login.html')
+    return render_template('auth/login.html.jinja')
 
 
 #bp.before_app_request() registers a function that runs before the view function, no matter what URL is requested. 

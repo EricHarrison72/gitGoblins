@@ -27,7 +27,7 @@ bp = Blueprint('bp', __name__)
 @bp.route('/')
 def index():
     message = "THIS IS THE HOME PAGE. HI!"
-    return render_template("index.html", message=message)
+    return render_template("index.html.jinja", message=message)
 
 @bp.route('/weather_summary')
 def weather_summary():
@@ -65,8 +65,8 @@ def weather_summary():
             weather_data['wind_dir']
         ]
     
-    return render_template("weather_summary.html", weather_list=weather_list)
+    return render_template("weather_summary.html.jinja", weather_list=weather_list)
 
 @bp.route('/map')
 def map():
-    return render_template("map.html")
+    return render_template("map.html.jinja")
