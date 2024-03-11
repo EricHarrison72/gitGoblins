@@ -66,17 +66,6 @@ def weather_summary():
         ]
     
     return render_template("weather_summary.html", weather_list=weather_list)
-#Login page
-@bp.route('/login')
-def login():
-    
-    return render_template("login.html")
-
-#Sign up page
-@bp.route('/register')
-def register():
-    
-    return render_template("register.html")
 
 @bp.route('/map')
 def map():
