@@ -1,4 +1,15 @@
+// -------------------------------------------------
+// init_map.js
+/*
+Uses leaflet.js api to create a map where users can select their date and location.
 
+TODO:
+- add visual markers representing city weather (if we have time)
+
+Starter code sources:
+- ???
+*/
+// -------------------------------------------------
 var cityMarkers = [];
 
 function initMap() {
