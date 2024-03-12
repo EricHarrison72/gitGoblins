@@ -1,11 +1,14 @@
 # -----------------------------------------------------
 # auth.py
 '''
-[insert description]
+Code establishes user authentication with registration, login, and logout routes, 
+handling input validation and password hashing. 
+It utilizes sessions to store user IDs upon successful login and 
+includes a login_required decorator to ensure protected views are accessible only to authenticated users.
 '''
 '''
 Starter code sources:
-- ???
+- https://flask.palletsprojects.com/en/3.0.x/tutorial/views/#login
 '''
 # -----------------------------------------------------
 

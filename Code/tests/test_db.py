@@ -1,7 +1,9 @@
 # -------------------------------------------------
 # test_db.py
 '''
-Unit tests for the database
+This code provides a basic user authentication system for a Flask web application, 
+including user registration, login, and logout functionalities.
+The login_required decorator can be applied to views that require authentication to restrict access.
 '''
 '''
 Starter Code sources:

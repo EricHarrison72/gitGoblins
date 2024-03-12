@@ -5,7 +5,7 @@ Unit tests for user registration.
 '''
 '''
 Start code sources:
-- ???
+- https://flask.palletsprojects.com/en/3.0.x/tutorial/tests/#authentication
 '''
 # --------------------------------------------------
 
