@@ -8,6 +8,7 @@
 ### Making changes
 - `git add .` - stage changes
 - `git commit -m"<commit-message>"` - commit changes
+- `git commit -m"<commit-message>" -m"<commit-message-details>` - commit changes with a more detailed description
 - `git push` - push changes to remote repo
 
 ### Branching
