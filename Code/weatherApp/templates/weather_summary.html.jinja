@@ -1,0 +1,30 @@
+{% extends 'base.html.jinja' %}
+
+{% block title %}
+  Weather Summary
+{% endblock %}
+
+{% block header %}
+  {{weather_list[0]}}
+{% endblock %}
+
+{% block content %}
+  <h3>{{weather_list[1]}}</h3>
+
+  <font size="+2">{{weather_list[2]}}&deg</font><font size="-2"><sub>high</sub></font> |
+  <font size="+2">{{weather_list[3]}}&deg</font><font size="-2"><sub>low</sub></font>
+
+  <br></br><br></br>
+
+  <table>
+    <tr>
+      <td>It is raining | <b>{{weather_list[5]}}</b></td>
+      <td>Precipitation% | <b>{{weather_list[4]}}</b></td>
+    </tr>
+    <tr>
+      <td>Wind speed | <b>{{weather_list[6]}}</b></td>
+      <td>Wind direction | <b>{{weather_list[7]}}</b></td>
+    </tr>
+  </table>
+
+{% endblock %}

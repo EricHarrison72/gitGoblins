@@ -1,0 +1,21 @@
+{% extends 'base.html.jinja' %}
+
+{% block title %}
+  Home
+{% endblock %}
+
+{% block header %}
+  Home
+{% endblock %}
+
+{% block content %}
+  <ul>
+    <li><a href = "{{ url_for('views.map') }}">Map</a></li>
+    <li><a href = "{{ url_for('views.weather_summary') }}">Summary</a></li>
+    <li>Location select (no page yet)</li>
+    <li>Current data graph (no page yet)</li>
+    <li>Past data graph (no page yet)</li>
+  </ul>
+{% endblock %}
+
+

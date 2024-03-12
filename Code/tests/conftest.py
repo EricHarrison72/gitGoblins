@@ -12,8 +12,8 @@ Starter Code sources:
 # -------------------------------------------------
 import os
 import tempfile
-
 import pytest
+from flask_bcrypt import Bcrypt
 from weatherApp import create_app
 from weatherApp.db import get_db, init_db
 
@@ -31,9 +31,14 @@ def app():
         'DATABASE': db_path
     })
 
+    # Initialize Flask-Bcrypt with the app instance
     with app.app_context():
+        bcrypt = Bcrypt(app)
+
+        from weatherApp.db import init_db
         init_db()
-        get_db().executescript(_data_sql)
+        app.db = get_db()
+        app.db.executescript(_data_sql)
 
     yield app 
 
@@ -50,3 +55,23 @@ def client(app):
 def runner(app):
     # creates a runner that can call the Click commands registered with the application
     return app.test_cli_runner()
+
+#With the auth fixture, you can call auth.login() in a test to log in as the test user, 
+#which was inserted as part of the test data in the app fixture.
+class AuthActions(object):
+    def __init__(self, client):
+        self._client = client
+
+    def login(self, email='test@gmail.com', password='test'):
+        return self._client.post(
+            '/auth/login',
+            data={'email': email, 'password': password}
+        )
+
+    def logout(self):
+        return self._client.get('/auth/logout')
+
+
+@pytest.fixture
+def auth(client):
+    return AuthActions(client)

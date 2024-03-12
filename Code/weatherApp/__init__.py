@@ -17,6 +17,7 @@ Starter code sources:
 #--------------------------------------------------------
 from flask import Flask
 import os
+from flask_bcrypt import Bcrypt
 
 #Initalizes database and returns app with working db
 def create_app(test_config=None):
@@ -39,12 +40,19 @@ def create_app(test_config=None):
     except OSError:
         pass    
     
+    # Initialize Flask-Bcrypt with the app instance
+    bcrypt = Bcrypt(app)
+    
     # Import and register the database commands from db.py
     from . import db
     db.init_app(app)
     
     # Import and register blueprints
-    from .views import bp as app_blueprint
-    app.register_blueprint(app_blueprint)
+    from .views import views_bp
+    app.register_blueprint(views_bp)
+
+    from .auth import auth_bp
+    app.register_blueprint(auth_bp)
     
+
     return app

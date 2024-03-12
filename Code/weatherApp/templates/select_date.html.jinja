@@ -5,9 +5,9 @@ Nothing should link directly here. This is a parent template for all pages that
 allow user to select the date(i.e. map, graphs and location selections)
 #}
 
-{% extends 'base.html' %}
+{% extends 'base.html.jinja' %}
 
-{% block body %}
+{% block content %}
 <div style="margin-bottom: 20px;">
     <select id="yearSelect">
         {% for year in range(2008, 2018) %}

@@ -1,0 +1,113 @@
+# -----------------------------------------------------
+# auth.py
+'''
+Code establishes user authentication with registration, login, and logout routes, 
+handling input validation and password hashing. 
+It utilizes sessions to store user IDs upon successful login and 
+includes a login_required decorator to ensure protected views are accessible only to authenticated users.
+'''
+'''
+Starter code sources:
+- https://flask.palletsprojects.com/en/3.0.x/tutorial/views/#login
+'''
+# -----------------------------------------------------
+
+import functools
+
+from flask import (
+    Blueprint, flash, g, redirect, render_template, request, session, url_for
+)
+from werkzeug.security import check_password_hash, generate_password_hash
+from flask_bcrypt import Bcrypt
+from . import db
+
+auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
+bcrypt = Bcrypt()
+
+@auth_bp.route('/register', methods=('GET', 'POST'))
+def register():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        datb = db.get_db()
+        error = None
+
+        if not email:
+            error = 'Email is required.'
+        elif not password:
+            error = 'Password is required.'
+
+        if error is None:
+            try:
+                hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+                datb.execute(
+                    "INSERT INTO User (email, password) VALUES (?, ?)",
+                    (email, hashed_password),
+                )
+                datb.commit()
+                flash("Registration successful. You can now log in.")
+                return redirect(url_for("auth.login"))
+            except datb.IntegrityError:
+                error = f"User with email {email} is already registered."
+
+        flash(error)
+
+    return render_template('auth/register.html.jinja')
+
+#route to login page
+@auth_bp.route('/login', methods=('GET', 'POST'))
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        datb = db.get_db()
+        error = None
+        user = datb.execute(
+            'SELECT * FROM User WHERE email = ?', (email,)
+        ).fetchone()
+
+        if user is None:
+            error = 'Incorrect email.'
+        elif not bcrypt.check_password_hash(user['password'], password):
+            error = 'Incorrect password.'
+
+        if error is None:
+            session.clear()
+            session['user_id'] = user['userId']  # Assuming userId is the correct column name
+            return redirect(url_for('views.weather_summary'))
+
+        flash(error)
+
+    return render_template('auth/login.html.jinja')
+
+
+#bp.before_app_request() registers a function that runs before the view function, no matter what URL is requested. 
+@auth_bp.before_app_request
+def load_logged_in_user():
+    user_id = session.get('user_id')
+
+    if user_id is None:
+        g.user = None
+    else:
+        g.user = db.get_db().execute(
+            'SELECT * FROM user WHERE id = ?', (user_id,)
+        ).fetchone()
+        
+#logout of session
+@auth_bp.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('index'))
+
+#Checks if a user is loaded and redirects to the login page otherwise. 
+#If a user is loaded the original view is called and continues normally.
+def login_required(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user is None:
+            return redirect(url_for('auth.login'))
+
+        return view(**kwargs)
+
+    return wrapped_view
+
