@@ -38,15 +38,18 @@ jobs:
           python-version: 3.12
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          pip install -r requirements.txt
+          # pip install pytest-cov
+          # pytest --cov-report "xml:coverage.xml" --cov=src tests/
 
       - name: Run unit tests
         run: coverage run -m pytest
       
       - name: Generate coverage report
-        run: coverage xml
+        run: coverage xml 
 
       - name: Pytest coverage comment
         uses: MishaKav/pytest-coverage-comment@main
         with:
-          pytest-xml-coverage-path: tests/coverage.xml
+          pytest-xml-coverage-path: tests\coverage.xml
