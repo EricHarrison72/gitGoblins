@@ -7,3 +7,39 @@
 # Resources:
 # > MishaKav on GitHub, "GitHub Action: pytest coverage comment",https://github.com/MishaKav/pytest-coverage-comment/
 # -----------------------------------------------------------------------------
+name: Coverage Report
+
+# Controls when the workflow will run
+on:
+  # Activate workflow on pull requests
+  pull_request:
+
+  # allows you to manually execute this pipeline from the Actions tab.
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Coverage Report
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-Python@v5
+        with:
+          python-version: 3.12
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build Coverage File
+        run: |
+          pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=app tests/ | tee pytest-coverage.txt
+
+      - name: Pytest coverage comment
+        uses: MishaKav/pytest-coverage-comment@main
+        with:
+          pytest-coverage-path: ./pytest-coverage.txt
+          junitxml-path: ./pytest.xml
