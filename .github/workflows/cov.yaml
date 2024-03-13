@@ -40,10 +40,11 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Build Coverage File
-        run: |
-        coverage run -m pytest
-        coverage xml
+      - name: Run unit tests
+        run: coverage run -m pytest
+      
+      - name: Generate coverage report
+        run: coverage xml
 
       - name: Pytest coverage comment
         uses: MishaKav/pytest-coverage-comment@main
