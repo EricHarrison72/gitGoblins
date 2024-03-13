@@ -7,7 +7,8 @@ TODO:
 - add visual markers representing city weather (if we have time)
 
 Starter code sources:
-- ???
+- ChatGPT
+- https://leafletjs.com/examples.html (Not what I used but it has good code examples)
 */
 // -------------------------------------------------
 var cityMarkers = [];
@@ -108,3 +109,5 @@ function updatePopupLinks() {
 }
 
   initMap();
+    // Export the functions for use in other files
+    module.exports = { initMap, updatePopupLinks };
