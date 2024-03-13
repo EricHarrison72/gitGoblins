@@ -1,0 +1,9 @@
+# -------------------------------------------------------------------------------
+# cov.yaml (Coverage Testing workflow)
+#
+# A GitHub Actions workflow for running generating a coverage report 
+# comment on pull requests.
+#
+# Resources:
+# > MishaKav on GitHub, "GitHub Action: pytest coverage comment",https://github.com/MishaKav/pytest-coverage-comment/
+# -----------------------------------------------------------------------------
