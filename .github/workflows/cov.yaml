@@ -41,7 +41,9 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Build Coverage File
-        run: coverage run -m pytest
+        run: |
+        coverage run -m pytest
+        coverage xml
 
       - name: Pytest coverage comment
         uses: MishaKav/pytest-coverage-comment@main
