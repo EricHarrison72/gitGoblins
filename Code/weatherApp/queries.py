@@ -33,14 +33,14 @@ def get_weather_data (city_name, date):
         'temp_high': 0, 
         'temp_low': 0, 
         'rainfall': 0.0, 
-        'raining': False, 
+        'raining': '?', 
         'wind_speed': 0, 
-        'wind_dir': 'N/A'
+        'wind_dir': '?'
         }
 
         # If a city name and date were passed, put that in the dict
         try:
-            weather_data_dict['city_name'] += ' ' + city_name
+            weather_data_dict['city_name'] += ' for ' + city_name + ' on this date'
             weather_data_dict['date'] = date
         except:
             pass
