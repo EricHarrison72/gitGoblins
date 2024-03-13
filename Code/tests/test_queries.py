@@ -9,7 +9,7 @@ from weatherApp.queries import get_weather_data
 
 @pytest.fixture()
 def expected_dict():
-    return {
+    my_dict = {
         # data directly from the csv
         'params passed + data exists': {
             'city_name': 'Albury', 
@@ -43,6 +43,8 @@ def expected_dict():
             'wind_dir': '?'
         }
     }
+
+    return my_dict
 
 def test_get_weather_data(app, expected_dict):
     
