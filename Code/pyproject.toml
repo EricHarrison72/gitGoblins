@@ -23,3 +23,6 @@ testpaths = ["tests"]
 branch = true
 source = ["weatherApp"]
 
+[tool.coverage.xml]
+output = "tests/coverage.xml"
+
