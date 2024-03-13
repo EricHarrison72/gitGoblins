@@ -7,6 +7,7 @@
 # Resources:
 # > MishaKav on GitHub, "GitHub Action: pytest coverage comment", https://github.com/MishaKav/pytest-coverage-comment/
 # > pytest docs, https://docs.pytest.org/en/7.2.x/how-to/output.html
+# > pytest-cov docs, "Configuration", https://pytest-cov.readthedocs.io/en/latest/config.html
 # -----------------------------------------------------------------------------
 name: Coverage Report
 
@@ -21,7 +22,7 @@ on:
 # set the default working directory to be the code space	
 defaults:
   run:
-    working-directory: ./Code
+    working-directory: .\Code
 
 jobs:
   build:
@@ -44,10 +45,10 @@ jobs:
 
       - name: Build Coverage report
         run: |
-          pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=app tests/ | tee pytest-coverage.txt
+          pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=weatherApp tests\ | tee pytest-coverage.txt
 
       - name: Pytest coverage comment
         uses: MishaKav/pytest-coverage-comment@main
         with:
-          pytest-coverage-path: ./pytest-coverage.txt
-          junitxml-path: ./pytest.xml
+          pytest-coverage-path: tests\pytest-coverage.txt
+          junitxml-path: tests\pytest.xml
