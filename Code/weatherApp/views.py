@@ -20,7 +20,7 @@ Start Code sources:
 '''
 # ------------------------------------------------------
 from flask import render_template, Blueprint, request
-from . import db
+from . import queries
 from .auth import login_required
 
 views_bp = Blueprint('views', __name__)
@@ -33,41 +33,13 @@ def index():
 @views_bp.route('/weather_summary')
 #@login_required
 def weather_summary():
-    datb = db.get_db()
 
     city_name = request.args.get('city_name')
     date = request.args.get('date')
 
-
-    #SQL query to get data for specific city
-    weather_data = datb.execute('''
-        SELECT City.cityName, WeatherInstance.date, WeatherInstance.tempMax AS temp_high, 
-               WeatherInstance.tempMin AS temp_low, WeatherInstance.rainfall, 
-               rainToday AS raining, WeatherInstance.windGustSpeed AS wind_speed, 
-               WeatherInstance.windGustDir AS wind_dir
-        FROM WeatherInstance
-        JOIN City ON WeatherInstance.cityId = City.cityId
-        WHERE City.cityName = ? AND WeatherInstance.date = ?
-
-    ''', (city_name,date,)).fetchone()
+    weather_dict = queries.get_weather_data(city_name, date)
     
-
-    if weather_data is None:
-        # Handle the case where no weather data is found
-        weather_list = ["No data", "N/A", 0, 0, 0.0, False, 0, "N/A"]
-    else:
-        weather_list = [
-            weather_data['cityName'], 
-            weather_data['date'], 
-            weather_data['temp_high'], 
-            weather_data['temp_low'], 
-            weather_data['rainfall'], 
-            weather_data['raining'], 
-            weather_data['wind_speed'], 
-            weather_data['wind_dir']
-        ]
-    
-    return render_template("weather_summary.html.jinja", weather_list=weather_list)
+    return render_template("weather_summary.html.jinja", weather_dict=weather_dict)
 
 @views_bp.route('/map')
 #@login_required
