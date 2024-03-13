@@ -8,24 +8,45 @@ import pytest
 from weatherApp.queries import get_weather_data
 
 @pytest.fixture()
-def expected_dict_1():
+def expected_dict():
     return {
-        'city_name': 'Albany', 
-        'date': '2008-12-01', 
-        'temp_high': 22.9, 
-        'temp_low': 13.4, 
-        'rainfall': 0.6, 
-        'raining': False, 
-        'wind_speed': 44, 
-        'wind_dir': 'W'
+        # data directly from the csv
+        'params passed + data exists': {
+            'city_name': 'Albury', 
+            'date': '2008-12-01', 
+            'temp_high': 22.9, 
+            'temp_low': 13.4, 
+            'rainfall': 0.6, 
+            'raining': 'No', 
+            'wind_speed': 44, 
+            'wind_dir': 'W'
+        },
+        # data for Albury starts in 2008, so there should be no data for 2007
+        'params passed + no data exists': {
+            'city_name': 'NO DATA for Albury on this date', 
+            'date': '2007-12-01', 
+            'temp_high': 0, 
+            'temp_low': 0, 
+            'rainfall': 0.0, 
+            'raining': '?', 
+            'wind_speed': 0, 
+            'wind_dir': '?'
+        },
+        'none params passed': {
+            'city_name': 'NO DATA', 
+            'date': 'No Date', 
+            'temp_high': 0, 
+            'temp_low': 0, 
+            'rainfall': 0.0, 
+            'raining': '?', 
+            'wind_speed': 0, 
+            'wind_dir': '?'
+        }
     }
 
-
-def test_get_weather_data(app, expected_dict_1):
-    # 1 test when parameters are passed and data exists for those parameters
+def test_get_weather_data(app, expected_dict):
+    
     with app.app_context():
-        assert expected_dict_1 == get_weather_data('Albany', '2008-12-01')
-
-
-    # 2 test parameters passed and no data exists
-    # 3 test no parameters passed
+        assert expected_dict['params passed + data exists'] == get_weather_data('Albury', '2008-12-01')
+        assert expected_dict['params passed + no data exists'] == get_weather_data('Albury', '2007-12-01')
+        assert expected_dict['none params passed'] == get_weather_data(None, None)
