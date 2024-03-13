@@ -41,10 +41,9 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Build Coverage File
-        run: |
-          pytest --cov-report "xml:coverage.xml" --cov=src tests/
+        run: coverage run -m pytest
 
       - name: Pytest coverage comment
         uses: MishaKav/pytest-coverage-comment@main
         with:
-          pytest-xml-coverage-path: ./coverage.xml
+          pytest-xml-coverage-path: ./tests/coverage.xml
