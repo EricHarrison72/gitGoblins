@@ -17,6 +17,11 @@ on:
   # allows you to manually execute this pipeline from the Actions tab.
   workflow_dispatch:
 
+# set the default working directory to be the code space	
+defaults:
+  run:
+    working-directory: ./Code
+    
 jobs:
   build:
     name: Coverage Report
