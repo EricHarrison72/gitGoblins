@@ -33,6 +33,9 @@ General guidelines as stated in our test plan (milestone 3):
    - `coverage report` outputs a very simple report in the terminal
    - `coverage html` generates an interactive version of the report which you can open in a browser
 
+#### Checking Coverage Before Merging
+- There is a GitHub Actions workflow that automatically generates a basic coverage report and comments it on new pull requests. 
+- If you are reviewing code, be sure to look at this report.
 
 ## Integration testing
 Continuous is set up with a GitHub Actions workflow. This workflow runs automatically on every push and pull request. It installs dependencies, builds the program, and runs all unit tests on several virtual machines, so that we can test the program on different operating systems (latest releases of Ubuntu, Windows, MacOS), as well as a few different versions of Python (currently 3.11 and 3.12). 
