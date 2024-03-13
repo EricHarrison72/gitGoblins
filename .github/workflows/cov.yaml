@@ -40,14 +40,11 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
-          # pip install pytest-cov
-          # pytest --cov-report "xml:coverage.xml" --cov=src tests/
+          pip install pytest-cov
 
-      - name: Run unit tests
-        run: coverage run -m pytest
-      
-      - name: Generate coverage report
-        run: coverage xml 
+      - name: Build Coverage report
+        run: |
+          pytest --cov-report "xml:tests\coverage.xml" --cov=src tests/
 
       - name: Pytest coverage comment
         uses: MishaKav/pytest-coverage-comment@main
