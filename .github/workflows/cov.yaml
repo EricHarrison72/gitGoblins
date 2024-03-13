@@ -1,0 +1,56 @@
+# -------------------------------------------------------------------------------
+# cov.yaml (Coverage Testing workflow)
+#
+# A GitHub Actions workflow for running generating a coverage report 
+# comment on pull requests.
+#
+# Resources:
+# > MishaKav on GitHub, "GitHub Action: pytest coverage comment", https://github.com/MishaKav/pytest-coverage-comment/
+# > pytest docs, https://docs.pytest.org/en/7.2.x/how-to/output.html
+# > pytest-cov docs, "Configuration", https://pytest-cov.readthedocs.io/en/latest/config.html
+# -----------------------------------------------------------------------------
+name: Coverage Report
+
+# Controls when the workflow will run
+on:
+  # Activate workflow on pull requests
+  pull_request:
+
+  # allows you to manually execute this pipeline from the Actions tab.
+  workflow_dispatch:
+
+# set the default working directory to be the code space	
+defaults:
+  run:
+    working-directory: .\Code
+
+jobs:
+  build:
+    name: Coverage Report
+    runs-on: windows-latest
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-Python@v5
+        with:
+          python-version: 3.12
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install flake8 pytest pytest-cov
+
+      - name: Build Coverage report
+        run: |
+          pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=weatherApp tests\ | tee pytest-coverage.txt
+
+      - name: Pytest coverage comment
+        uses: MishaKav/pytest-coverage-comment@main
+        with:
+          pytest-coverage-path: Code\pytest-coverage.txt
+          junitxml-path: Code\pytest.xml

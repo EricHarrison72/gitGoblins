@@ -1,5 +1,5 @@
 # ------------------------------------------------
-# ci.yaml
+# ci.yaml (Continuous Integration workflow)
 #
 # Contains instructions for running the GitHub Actions 
 # continuous integration workflow.
