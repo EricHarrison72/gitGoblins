@@ -12,7 +12,7 @@ Starter Code sources:
 # -------------------------------------------------
 import sqlite3
 import pytest
-from weatherApp.db import get_db, populate_db
+from weatherApp.db import get_db, _populate_db
 
 # --------------------------
 # TESTING for TESTING
@@ -27,8 +27,7 @@ def test_test_db(app):
             FROM WeatherInstance
             JOIN City ON WeatherInstance.cityId = City.cityId
             WHERE City.cityName = ? AND WeatherInstance.date = ?
-        ''', ('Albury','2008-12-01')).fetchone()
-
+        ''', ('Springfield','2023-01-01')).fetchone()
     assert db != None
 
 #------------------------------
