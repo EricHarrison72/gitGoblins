@@ -38,7 +38,7 @@ def app():
 
         # initialize  database (with extra data from data.sql script)
         init_db()
-        #get_db().executescript(_data_sql)
+        get_db().executescript(_data_sql)
 
     yield app 
 
