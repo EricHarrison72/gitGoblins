@@ -54,7 +54,7 @@ def weather_summary():
 
     if weather_data is None:
         # Handle the case where no weather data is found
-        weather_list = ["No data", "N/A", 0, 0, 0.0, False, 0, "N/A"]
+        weather_list = [city_name, date, 0, 0, 0.0, False, 0, "N/A"]
     else:
         weather_list = [
             weather_data['cityName'], 
