@@ -37,10 +37,8 @@ def app():
         bcrypt = Bcrypt(app)
 
         # initialize  database (with extra data from data.sql script)
-        from weatherApp.db import init_db
         init_db()
-        app.db = get_db()
-        app.db.executescript(_data_sql)
+        get_db().executescript(_data_sql)
 
     yield app 
 
