@@ -31,14 +31,22 @@ def app():
         'DATABASE': db_path
     })
 
-    # Initialize Flask-Bcrypt with the app instance
     with app.app_context():
+        # Initialize Flask-Bcrypt with the app instance
         bcrypt = Bcrypt(app)
 
-        from weatherApp.db import init_db
+        # TODO @Eric
+        '''
+        - Write a script in data.sql that populates the database with a few rows of weather data
+        - test that it works
+        - This same script should also add some test users, but we can let Chase do that probably
+        '''
+
+        # Initialize the database & populate it w/ some test data
         init_db()
-        app.db = get_db()
-        app.db.executescript(_data_sql)
+        get_db().executescript(_data_sql) # Chase replaced this w/ the two commented out lines below, but I think that's wrong?
+        #app.db = get_db()
+        #app.db.executescript(_data_sql)
 
     yield app 
 
