@@ -19,6 +19,7 @@ Start Code sources:
 - [Flask docs tutorial - Application Setup](https://flask.palletsprojects.com/en/3.0.x/tutorial/factory/)
 '''
 # ------------------------------------------------------
+
 from flask import render_template, Blueprint, request
 from . import db
 from .auth import login_required

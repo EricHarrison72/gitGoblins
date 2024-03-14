@@ -17,8 +17,9 @@ import functools
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
-from werkzeug.security import check_password_hash, generate_password_hash
+
 from flask_bcrypt import Bcrypt
+from flask_login import LoginManager 
 from . import db
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -73,7 +74,7 @@ def login():
 
         if error is None:
             session.clear()
-            session['user_id'] = user['userId']  # Assuming userId is the correct column name
+            session['user_id'] = user['userId']  
             return redirect(url_for('views.weather_summary'))
 
         flash(error)
