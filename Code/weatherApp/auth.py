@@ -17,7 +17,6 @@ import functools
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
-
 from flask_bcrypt import Bcrypt
 from . import db
 
@@ -29,6 +28,7 @@ def register():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
+        userId = 1
         datb = db.get_db()
         error = None
 
@@ -41,8 +41,8 @@ def register():
             try:
                 hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
                 datb.execute(
-                    "INSERT INTO User (email, password) VALUES (?, ?)",
-                    (email, hashed_password),
+                    "INSERT INTO User (email, password, userId) VALUES (?, ?, ?)",
+                    (email, hashed_password,  userId)
                 )
                 datb.commit()
                 flash("Registration successful. You can now log in.")
@@ -62,12 +62,13 @@ def login():
         password = request.form['password']
         db_conn = db.get_db()
         error = None
-
+        print(email)
         # Fetch user data including userId based on email
         user = db_conn.execute(
             'SELECT userId, password FROM User WHERE email = ?', (email,)
         ).fetchone()
-
+       
+        print(email)
         if user is None:
             error = 'Incorrect email.'
         elif not bcrypt.check_password_hash(user['password'], password):
@@ -76,20 +77,30 @@ def login():
         if error is None:
             session.clear()
             session['user_id'] = user['userId']  # Store user ID in session
-            g.user = user 
+            
             return redirect(url_for('views.weather_summary'))
 
         flash(error)
 
     return render_template('auth/login.html.jinja')
 
+@auth_bp.before_app_request
+def load_logged_in_user():
+    print(session)
+    user_id = session.get('user_id')
 
+    if user_id is None:
+        g.user = None
+    else:
+        g.user = db.get_db().execute(
+            'SELECT * FROM user WHERE userId = ?', (user_id,)
+        ).fetchone()
         
 #logout of session
 @auth_bp.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('index'))
+    return redirect(url_for('views.index'))
 
 #Checks if a user is loaded and redirects to the login page otherwise. 
 #If a user is loaded the original view is called and continues normally.
