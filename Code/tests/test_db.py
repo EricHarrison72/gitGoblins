@@ -14,6 +14,17 @@ import sqlite3
 import pytest
 from weatherApp.db import get_db, populate_db
 
+def test_db_exist(app):
+
+        conn = sqlite3.connect(app.config['DATABASE'])
+        cur = conn.cursor()
+
+        stmt = "SHOW TABLES LIKE 'weatherInstance'"
+        cur.execute(stmt) 
+
+        assert cur.fetchone() == (1,)
+
+
 # check if the test db is populated
 def test_test_db(app):
     with app.app_context():
