@@ -27,12 +27,12 @@ from .auth import login_required
 views_bp = Blueprint('views', __name__)
 
 @views_bp.route('/')
-#@login_required
+@login_required
 def index():
     return render_template("index.html.jinja")
 
 @views_bp.route('/weather_summary')
-#@login_required
+@login_required
 def weather_summary():
     datb = db.get_db()
 
@@ -71,6 +71,6 @@ def weather_summary():
     return render_template("weather_summary.html.jinja", weather_list=weather_list)
 
 @views_bp.route('/map')
-#@login_required
+@login_required
 def map():
     return render_template("map.html.jinja")

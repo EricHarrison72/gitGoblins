@@ -23,12 +23,15 @@ from . import db
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 bcrypt = Bcrypt()
 
+
+
 @auth_bp.route('/register', methods=('GET', 'POST'))
 def register():
+  
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-        userId = 1
+       
         datb = db.get_db()
         error = None
 
@@ -41,11 +44,12 @@ def register():
             try:
                 hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
                 datb.execute(
-                    "INSERT INTO User (email, password, userId) VALUES (?, ?, ?)",
-                    (email, hashed_password,  userId)
+                    "INSERT INTO User (email, password) VALUES (?, ?)",
+                    (email, hashed_password)
                 )
                 datb.commit()
                 flash("Registration successful. You can now log in.")
+               
                 return redirect(url_for("auth.login"))
             except datb.IntegrityError:
                 error = f"User with email {email} is already registered."
