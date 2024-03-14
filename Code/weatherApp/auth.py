@@ -19,7 +19,6 @@ from flask import (
 )
 
 from flask_bcrypt import Bcrypt
-from flask_login import LoginManager 
 from . import db
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -61,10 +60,12 @@ def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-        datb = db.get_db()
+        db_conn = db.get_db()
         error = None
-        user = datb.execute(
-            'SELECT * FROM User WHERE email = ?', (email,)
+
+        # Fetch user data including userId based on email
+        user = db_conn.execute(
+            'SELECT userId, password FROM User WHERE email = ?', (email,)
         ).fetchone()
 
         if user is None:
@@ -74,7 +75,8 @@ def login():
 
         if error is None:
             session.clear()
-            session['user_id'] = user['userId']  
+            session['user_id'] = user['userId']  # Store user ID in session
+            g.user = user 
             return redirect(url_for('views.weather_summary'))
 
         flash(error)
@@ -82,17 +84,6 @@ def login():
     return render_template('auth/login.html.jinja')
 
 
-#bp.before_app_request() registers a function that runs before the view function, no matter what URL is requested. 
-@auth_bp.before_app_request
-def load_logged_in_user():
-    user_id = session.get('user_id')
-
-    if user_id is None:
-        g.user = None
-    else:
-        g.user = db.get_db().execute(
-            'SELECT * FROM user WHERE id = ?', (user_id,)
-        ).fetchone()
         
 #logout of session
 @auth_bp.route('/logout')
