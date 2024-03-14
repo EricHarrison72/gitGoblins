@@ -14,6 +14,25 @@ import sqlite3
 import pytest
 from weatherApp.db import get_db, populate_db
 
+# --------------------------
+# TESTING for TESTING
+# TODO @Eric: check if the test db is populated
+def test_test_db(app):
+    with app.app_context():
+        db = get_db().execute('''
+            SELECT City.cityName AS city_name, WeatherInstance.date, WeatherInstance.tempMax AS temp_high, 
+                WeatherInstance.tempMin AS temp_low, WeatherInstance.rainfall, 
+                rainToday AS raining, WeatherInstance.windGustSpeed AS wind_speed, 
+                WeatherInstance.windGustDir AS wind_dir
+            FROM WeatherInstance
+            JOIN City ON WeatherInstance.cityId = City.cityId
+            WHERE City.cityName = ? AND WeatherInstance.date = ?
+        ''', ('Albury','2008-12-01')).fetchone()
+
+    assert db != None
+
+#------------------------------
+    
 # Test getting and closing db
 '''
 Within an application context, get_db should return
