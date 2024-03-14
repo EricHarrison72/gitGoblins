@@ -16,7 +16,7 @@ CREATE TABLE User (
 	userId int AUTOINCREMENT PRIMARY KEY,
 	firstName varchar(30),
 	lastName varchar(30),
-	email varchar(50),
+	email varchar(50) UNIQUE,
 	emailList boolean,
 	password varchar(128),
 	

@@ -23,7 +23,11 @@ from . import db
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 bcrypt = Bcrypt()
 
+id = 2
 
+def increment():
+    global id 
+    id += 1
 
 @auth_bp.route('/register', methods=('GET', 'POST'))
 def register():
@@ -39,13 +43,15 @@ def register():
             error = 'Email is required.'
         elif not password:
             error = 'Password is required.'
+            
 
         if error is None:
             try:
+                increment()
                 hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
                 datb.execute(
-                    "INSERT INTO User (email, password) VALUES (?, ?)",
-                    (email, hashed_password)
+                    "INSERT INTO User (email, password, userid) VALUES (?, ?,?)",
+                    (email, hashed_password, id)
                 )
                 datb.commit()
                 flash("Registration successful. You can now log in.")
