@@ -5,9 +5,11 @@ General guidelines as stated in our test plan (milestone 3):
 - One function/action ⇒ one unit test
 - Aim for full coverage; give tests data that covers all decision branches
 
-## Just running unit tests
+For most terminal commands below, your cwd should be the `Code` folder.
+
+## Python Unit Tests
 #### In the terminal:
-- `pytest` will run all unit tests
+- `pytest` will run all Python unit tests
 - `pytest test_file.py` runs a specific test file
 
 #### Using VS Code:
@@ -15,9 +17,20 @@ General guidelines as stated in our test plan (milestone 3):
 - This might already be configured for you since `.vscode/settings.json` was pushed to GitHub
 - This provides a nice UI for your to easily run and debug specific tests
 
+## JS Unit Tests
+#### Set-up:
+- You will have to [download Node.js](https://nodejs.org/en/download) in order to use `npm`. Then restart VS Code.
+- Install the JS testing framework _Jest_ by running the terminal command `npm install jest`
+- make sure to add a `.gitignore` file (with the contents "`*`") to the huge `node_modules` folder that will generate in your local repo
 
-## See your Coverage
+#### In the terminal:
+- `npm test` will run all JS unit tests
 
+#### Using VS Code
+- Install the [Jest extension](https://marketplace.visualstudio.com/items?itemName=Orta.vscode-jest)
+- You should be able to access/configure Jest in the same testing tab as Python unit tests.
+
+## See Your Coverage (Python only)
 #### To visualize coverage in editor:
 - Install the VS Code extension [Coverage Gutters](https://marketplace.visualstudio.com/items?itemName=ryanluker.vscode-coverage-gutters) (ryanluker.vscode-coverage-gutters)
 
@@ -37,9 +50,9 @@ General guidelines as stated in our test plan (milestone 3):
 - There is a GitHub Actions workflow that automatically generates a basic coverage report and comments it on new pull requests. 
 - If you are reviewing code, be sure to look at this report.
 
-## Integration testing
-Continuous is set up with a GitHub Actions workflow. This workflow runs automatically on every push and pull request. It installs dependencies, builds the program, and runs all unit tests on several virtual machines, so that we can test the program on different operating systems (latest releases of Ubuntu, Windows, MacOS), as well as a few different versions of Python (currently 3.11 and 3.12). 
+## Integration Testing
+We have two GitHub Actions workflows (CI and JS CI) that make unit testing part of our continuous integration pipeline. 
 
-Essentially, the CI workflow catches little errors that we might not if we simply ran tests on our own machines, and it ensures that new code does not break old tests.
+These workflows run automatically on every push and pull request. They install dependencies, build the program, and run all unit tests on several virtual machines, so that we can test the program on different operating systems (latest releases of Ubuntu, Windows, MacOS), as well as a few different versions of Python (currently 3.11 and 3.12). 
 
-**You don't have to do anything except check the test report on GitHub if the tests fail.**
+Essentially, the CI and JS CI workflows catch little errors that we might not if we simply ran tests on our own machines, and ensure that new code does not break old tests. **You don't have to do anything except check the test report on GitHub if the tests fail.**
