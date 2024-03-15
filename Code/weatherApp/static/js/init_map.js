@@ -25,6 +25,11 @@ function initMap() {
     document.getElementById('monthSelect').addEventListener('change', updatePopupLinks);
     document.getElementById('daySelect').addEventListener('change', updatePopupLinks);
 
+    //Event listeners to the dropdowns to update marker icons when selections change
+    document.getElementById('yearSelect').addEventListener('change', updateMarkerIcons);
+    document.getElementById('monthSelect').addEventListener('change', updateMarkerIcons);
+    document.getElementById('daySelect').addEventListener('change', updateMarkerIcons);
+
     // Create markers for each city
     createMarker(map, -36.0751, 146.9095, 'Albury');
     createMarker(map, -33.8751, 150.7634, 'Badgerys Creek');
@@ -92,41 +97,77 @@ function updatePopupLinks() {
         var month = document.getElementById('monthSelect').value;
         var day = document.getElementById('daySelect').value;
         var date = year + '-' + month.padStart(2, '0') + '-' + day.padStart(2, '0')
-        
-        //Change marker icon depending on weather here
-        var weatherIcon = determineMarkerIcon(cityName, date); //Determine correct icon
-        //Remove current icon
-        // Set new icon (will need to get latitude and longitude here marker.lat & marker.lng might work?
 
         var newPopupContent = `<b>${cityName}</b><br><a href="#" onclick="window.location.href='${generateWeatherSummaryUrl(cityName, date)}'">See weather details</a>`;
         marker.setPopupContent(newPopupContent);
     });
 }
 
+//Function to update all markers' icons with the current date
+async function updateMarkerIcons() {
+    console.log("Updating markers...");
+
+    var year = document.getElementById('yearSelect').value;
+    var month = document.getElementById('monthSelect').value;
+    var day = document.getElementById('daySelect').value;
+    var date = year + '-' + month.padStart(2, '0') + '-' + day.padStart(2, '0');
+    
+    // Loop through all markers and update their icon
+    for (const marker of cityMarkers) {
+        const cityName = marker.options.cityName; // Assuming cityName is stored in options
+        const iconUrl = await determineMarkerIcon(cityName, date);
+        const newIcon = L.icon({
+            iconUrl: iconUrl,
+            iconSize: [45, 40], // Size of the icon
+            iconAnchor: [35, 35], // Point of the icon which will correspond to marker's location
+            popupAnchor: [-10, -32], // Point from which the popup should open relative to the iconAnchor
+        });
+        marker.setIcon(newIcon); // This should work if `marker` is a Leaflet marker instance
+    }
+}
+
+
 // Define createMarker at the top level, this is done so that it can be exported for testing
-function createMarker(map, lat, lng, cityName) {
+async function createMarker(map, lat, lng, cityName) {
     var year = document.getElementById('yearSelect').value;
     var month = document.getElementById('monthSelect').value;
     var day = document.getElementById('daySelect').value;
     var date = year + '-' + month.padStart(2, '0') + '-' + day.padStart(2, '0')
 
-    //Determine correct marker  icon here
-
-    var marker = L.marker([lat, lng]).addTo(map);
+    var iconURL = await determineMarkerIcon(cityName, date);
+    console.log(iconURL)
+    //Determine correct marker icon here
+    const newIcon = L.icon({
+        iconUrl: iconURL,
+        iconSize: [45, 40], // Size of the icon
+        iconAnchor: [35, 35], // Point of the icon which will correspond to marker's location
+        popupAnchor: [-10, -32], // Point from which the popup should open relative to the iconAnchor
+    });
+    
+    var marker = L.marker([lat, lng], {icon: newIcon}).addTo(map);
 
     marker.bindPopup(`<b>${cityName}</b><br><a href="#" onclick="event.preventDefault(); window.location.href='${generateWeatherSummaryUrl(cityName, date)}';">See weather details</a>`);
     marker.options.cityName = cityName; // Store cityName within marker options for later access
     cityMarkers.push(marker);
 }
 
-//Probably need to write this function in python and find a way to call it from this javascript file
 async function determineMarkerIcon(cityName, date) {
-    //SQL Query to get data from cityName on date
-
-    //Conditional logic to determine correct icon
-
-    //Return name of icon
+    try {
+        // Encode the city name to ensure the URL is properly formatted
+        const response = await fetch(`/api/weather_icon?cityName=${encodeURIComponent(cityName)}&date=${date}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        
+        return data.icon;
+    } catch (error) {
+        console.error("Failed to fetch weather icon:", error);
+        // Return a default icon in case of error
+        return "/static/img/marker_cloud.png";
+    }
 }
+
 
   initMap();
     // Export functions for testing purposes
