@@ -8,8 +8,7 @@ defaults:
 
 jobs:
   build:
-    runs-on: 
-      os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: [ubuntu-latest, macos-latest, windows-latest]
     steps:
     - uses: actions/checkout@v4
     - name: Install modules
