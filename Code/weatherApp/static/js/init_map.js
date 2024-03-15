@@ -163,8 +163,8 @@ async function determineMarkerIcon(cityName, date) {
         return data.icon;
     } catch (error) {
         console.error("Failed to fetch weather icon:", error);
-        // Return a default icon in case of error
-        return "/static/img/marker_cloud.png";
+        // Return error icon in case of error
+        return "/static/img/marker_error.png";
     }
 }
 
