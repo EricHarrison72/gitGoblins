@@ -23,20 +23,19 @@ from . import db
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 bcrypt = Bcrypt()
 
-id = 2
-
-def increment():
-    global id 
-    id += 1
 
 @auth_bp.route('/register', methods=('GET', 'POST'))
 def register():
-  
+    datb = db.get_db()
+    pw = '123'
+    hp = bcrypt.generate_password_hash(pw).decode('utf-8')
+    datb.execute("INSERT INTO User(firstname, lastname, email, emaillist, password) VALUES ('Wade', 'Wadeson', 'wade@gmail.com', TRUE, ?)",hp)
+    datb.commit()
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
        
-        datb = db.get_db()
+       
         error = None
 
         if not email:
@@ -47,12 +46,13 @@ def register():
 
         if error is None:
             try:
-                increment()
+              
                 hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
                 datb.execute(
-                    "INSERT INTO User (email, password, userid) VALUES (?, ?,?)",
-                    (email, hashed_password, id)
+                    "INSERT INTO User (email, password) VALUES (?, ?)",
+                    (email, hashed_password)
                 )
+                
                 datb.commit()
                 flash("Registration successful. You can now log in.")
                
@@ -70,11 +70,11 @@ def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-        db_conn = db.get_db()
+        datb = db.get_db()
         error = None
         print(email)
         # Fetch user data including userId based on email
-        user = db_conn.execute(
+        user = datb.execute(
             'SELECT userId, password FROM User WHERE email = ?', (email,)
         ).fetchone()
        
