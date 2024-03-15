@@ -13,14 +13,14 @@ CREATE TABLE City (
 );
 
 CREATE TABLE User (
-	userId int AUTOINCREMENT PRIMARY KEY,
-	firstName varchar(30),
-	lastName varchar(30),
-	email varchar(50) UNIQUE,
-	emailList boolean,
-	password varchar(128),
-	
+    userId INTEGER PRIMARY KEY AUTOINCREMENT,
+    firstName VARCHAR(30),
+    lastName VARCHAR(30),
+    email VARCHAR(50) UNIQUE,
+    emailList BOOLEAN,
+    password VARCHAR(128)
 );
+
 
 CREATE TABLE UsersCities (
 	userId int,
