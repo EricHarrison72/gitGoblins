@@ -7,14 +7,6 @@ then call render_template().
 - weather_summary(): basic weather summary (not dynamic)
 '''
 '''
-TODO:
-Create different blueprints for different parts of the app.
-Each should be "registered" in a separate .py file, which 
-contains the view methods associated with it. (right now
-we only have one blueprint called 'bp', registered in this
-file, and all our view methods use it.)
-'''
-'''
 Start Code sources:
 - [Flask docs tutorial - Application Setup](https://flask.palletsprojects.com/en/3.0.x/tutorial/factory/)
 '''
@@ -54,7 +46,7 @@ def weather_summary():
 
     if weather_data is None:
         # Handle the case where no weather data is found
-        weather_list = ["No data", "N/A", 0, 0, 0.0, False, 0, "N/A"]
+        weather_list = [city_name, date, 0, 0, 0.0, False, 0, "N/A"]
     else:
         weather_list = [
             weather_data['cityName'], 

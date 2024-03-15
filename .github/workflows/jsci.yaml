@@ -1,0 +1,25 @@
+name: JS CI
+on: push
+
+# set the default working directory to be the code space	
+defaults:
+  run:
+    working-directory: ./Code
+
+jobs:
+  run-js-tests:
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+    name: JS Tests
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install modules
+      run: npm install jest
+    - name: Run tests
+      run: npm test
