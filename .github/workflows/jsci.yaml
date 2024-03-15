@@ -1,5 +1,11 @@
 name: JS CI
 on: push
+
+# set the default working directory to be the code space	
+defaults:
+  run:
+    working-directory: ./Code
+    
 jobs:
   build:
     runs-on: ubuntu-latest
