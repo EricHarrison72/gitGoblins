@@ -44,9 +44,7 @@ def app():
 
         # Initialize the database & populate it w/ some test data
         init_db()
-        get_db().executescript(_data_sql) # Chase replaced this w/ the two commented out lines below, but I think that's wrong?
-        #app.db = get_db()
-        #app.db.executescript(_data_sql)
+        get_db().executescript(_data_sql)
 
     yield app 
 
