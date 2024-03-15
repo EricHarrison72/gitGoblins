@@ -70,7 +70,7 @@ describe('init_map.js', () => {
 
   //Test function for generating weather summary
   test('generateWeatherSummaryUrl generates the correct URL', () => {
-      const url = generateWeatherSummaryUrl('Brisbane', "2017", "06", "24");
+      const url = generateWeatherSummaryUrl('Brisbane', "2017-06-24");
       expect(url).toBe('/weather_summary?city_name=Brisbane&date=2017-06-24');
   });
 
