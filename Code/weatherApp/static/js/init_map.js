@@ -14,7 +14,7 @@ var cityMarkers = [];
 
 function initMap() {
     var map = L.map('map').setView([-27.07, 132.08], 4); // Latitude, Longitude, Zoom level when map first opens
-
+    
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map); // Import and display map
@@ -92,8 +92,11 @@ function updatePopupLinks() {
         var month = document.getElementById('monthSelect').value;
         var day = document.getElementById('daySelect').value;
         var date = year + '-' + month.padStart(2, '0') + '-' + day.padStart(2, '0')
-
+        
         //Change marker icon depending on weather here
+        var weatherIcon = determineMarkerIcon(cityName, date); //Determine correct icon
+        //Remove current icon
+        // Set new icon (will need to get latitude and longitude here marker.lat & marker.lng might work?
 
         var newPopupContent = `<b>${cityName}</b><br><a href="#" onclick="window.location.href='${generateWeatherSummaryUrl(cityName, date)}'">See weather details</a>`;
         marker.setPopupContent(newPopupContent);
@@ -116,10 +119,11 @@ function createMarker(map, lat, lng, cityName) {
     cityMarkers.push(marker);
 }
 
-function determineMarkerIcon(cityName, date) {
+//Probably need to write this function in python and find a way to call it from this javascript file
+async function determineMarkerIcon(cityName, date) {
     //SQL Query to get data from cityName on date
 
-    //Conditional locig to determine correct icon
+    //Conditional logic to determine correct icon
 
     //Return name of icon
 }
