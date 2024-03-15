@@ -6,6 +6,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Install modules
-      run: yarn
+      run: npm install jest
     - name: Run tests
-      run: yarn tests
+      run: npm test
