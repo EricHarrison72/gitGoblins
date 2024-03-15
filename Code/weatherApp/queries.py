@@ -17,7 +17,7 @@ def get_weather_data (city_name, date):
         SELECT City.cityName AS city_name, WeatherInstance.date, WeatherInstance.tempMax AS temp_high, 
                WeatherInstance.tempMin AS temp_low, WeatherInstance.rainfall, 
                rainToday AS raining, WeatherInstance.windGustSpeed AS wind_speed, 
-               WeatherInstance.windGustDir AS wind_dir
+               WeatherInstance.windGustDir AS wind_dir, WeatherInstance.cloud3pm AS cloud
         FROM WeatherInstance
         JOIN City ON WeatherInstance.cityId = City.cityId
         WHERE City.cityName = ? AND WeatherInstance.date = ?
@@ -35,7 +35,8 @@ def get_weather_data (city_name, date):
         'rainfall': 0.0, 
         'raining': '?', 
         'wind_speed': 0, 
-        'wind_dir': '?'
+        'wind_dir': '?',
+        'cloud': 0
         }
 
         # If a city name and date were passed, put that in the dict
@@ -54,7 +55,8 @@ def get_weather_data (city_name, date):
         'rainfall': weather_data_row['rainfall'], 
         'raining': weather_data_row['raining'], 
         'wind_speed': weather_data_row['wind_speed'], 
-        'wind_dir': weather_data_row['wind_dir']
+        'wind_dir': weather_data_row['wind_dir'],
+        'cloud' : weather_data_row['cloud']
         }
 
     return weather_data_dict
