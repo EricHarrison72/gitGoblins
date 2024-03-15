@@ -12,7 +12,7 @@ Start Code sources:
 '''
 # ------------------------------------------------------
 from flask import render_template, Blueprint, request, jsonify
-from . import db
+from . import db, queries
 from .auth import login_required
 
 views_bp = Blueprint('views', __name__)
@@ -44,18 +44,34 @@ def get_weather_icon():
     city_name = request.args.get('cityName')
     date = request.args.get('date')
     
-    # Use the database connection to query weather data
-    db = db.get_db()
-    weather_data = db.execute('''
-        SELECT * FROM WeatherInstance
-        JOIN City ON WeatherInstance.cityId = City.cityId
-        WHERE City.cityName = ? AND WeatherInstance.date = ?
-    ''', (city_name, date)).fetchone()
+    weather_dict = queries.get_weather_data(city_name, date)
     
-    # Assuming `determine_icon_based_on_weather` is a function that takes weather data and returns an icon name
-    if weather_data:
-        icon_name = determine_icon_based_on_weather(weather_data)
+    if weather_dict is not None:
+        icon_name = determine_icon_based_on_weather(weather_dict)
     else:
-        icon_name = "default_icon"  # Fallback icon if no weather data found
+        icon_name = "/static/img/marker_error.png"  # Fallback icon if no weather data found
     
     return jsonify({'icon': icon_name})
+
+def determine_icon_based_on_weather(weather_data):
+    # Helper function to safely convert to int, handling 'NA', 'N/A', etc.
+    def safe_int(value, default=0):
+        try:
+            return int(value)
+        except ValueError:
+            return default
+
+    if weather_data['raining'] == "Yes":
+        return "/static/img/marker_rain.png"
+
+    wind_speed = safe_int(weather_data['wind_speed'])
+    if wind_speed > 80:
+        return "/static/img/marker_wind.png"
+
+    cloud_cover = safe_int(weather_data['cloud'])
+    if cloud_cover > 4:
+        return "/static/img/marker_cloud.png"
+    elif cloud_cover > 0:
+        return "/static/img/marker_partcloud.png"
+
+    return "/static/img/marker_sun.png"
