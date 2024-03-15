@@ -80,10 +80,7 @@ function initMap() {
 }
 
 //Function to generate the URL for the popup link
-function generateWeatherSummaryUrl(cityName, year, month, day) {
-    var date = year + '-' + month.padStart(2, '0') + '-' + day.padStart(2, '0');
-    
-    //Adjust the URL path according to your application's routing
+function generateWeatherSummaryUrl(cityName, date) {
     return `/weather_summary?city_name=${encodeURIComponent(cityName)}&date=${date}`;
 }
 
@@ -94,7 +91,11 @@ function updatePopupLinks() {
         var year = document.getElementById('yearSelect').value;
         var month = document.getElementById('monthSelect').value;
         var day = document.getElementById('daySelect').value;
-        var newPopupContent = `<b>${cityName}</b><br><a href="#" onclick="window.location.href='${generateWeatherSummaryUrl(cityName, year, month, day)}'">See weather details</a>`;
+        var date = year + '-' + month.padStart(2, '0') + '-' + day.padStart(2, '0')
+
+        //Change marker icon depending on weather here
+
+        var newPopupContent = `<b>${cityName}</b><br><a href="#" onclick="window.location.href='${generateWeatherSummaryUrl(cityName, date)}'">See weather details</a>`;
         marker.setPopupContent(newPopupContent);
     });
 }
@@ -104,10 +105,23 @@ function createMarker(map, lat, lng, cityName) {
     var year = document.getElementById('yearSelect').value;
     var month = document.getElementById('monthSelect').value;
     var day = document.getElementById('daySelect').value;
+    var date = year + '-' + month.padStart(2, '0') + '-' + day.padStart(2, '0')
+
+    //Determine correct marker  icon here
+
     var marker = L.marker([lat, lng]).addTo(map);
-    marker.bindPopup(`<b>${cityName}</b><br><a href="#" onclick="event.preventDefault(); window.location.href='${generateWeatherSummaryUrl(cityName, year, month, day)}';">See weather details</a>`);
+
+    marker.bindPopup(`<b>${cityName}</b><br><a href="#" onclick="event.preventDefault(); window.location.href='${generateWeatherSummaryUrl(cityName, date)}';">See weather details</a>`);
     marker.options.cityName = cityName; // Store cityName within marker options for later access
     cityMarkers.push(marker);
+}
+
+function determineMarkerIcon(cityName, date) {
+    //SQL Query to get data from cityName on date
+
+    //Conditional locig to determine correct icon
+
+    //Return name of icon
 }
 
   initMap();
