@@ -31,16 +31,13 @@ def app():
         'DATABASE': db_path
     })
 
-    
     with app.app_context():
-        # Initialize flask-Bcrypt with the app instance
+        # Initialize Flask-Bcrypt with the app instance
         bcrypt = Bcrypt(app)
 
-        # initialize  database (with extra data from data.sql script)
-        from weatherApp.db import init_db
+        # Initialize the database & populate it w/ some test data
         init_db()
-        app.db = get_db()
-        app.db.executescript(_data_sql)
+        get_db().executescript(_data_sql)
 
     yield app 
 

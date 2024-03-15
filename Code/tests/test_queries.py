@@ -15,22 +15,22 @@ built incorrectly on GitHub Actions, causing integration tests to fail
 # Expected dict for: params passed, data exists
 @pytest.fixture()
 def expected_dict_1():
-    # data straight from csv
+    # data that I know is in test DB
     return {
-            'city_name': 'Albury', 
-            'date': '2008-12-01', 
-            'temp_high': 22.9, 
-            'temp_low': 13.4, 
-            'rainfall': 0.6, 
+            'city_name': 'Springfield', 
+            'date': '2023-01-01', 
+            'temp_high': 10.0, 
+            'temp_low': -5.0, 
+            'rainfall': 0.0, 
             'raining': 'No', 
-            'wind_speed': 44, 
-            'wind_dir': 'W'
+            'wind_speed': 30, 
+            'wind_dir': 'N'
         }
 
 # Expected dict for: params passed, no data exists
 @pytest.fixture()
 def expected_dict_2():
-        # data for Albury starts in 2008, so there should be no data for 2007
+        # There is no data for Albury in the test DB
         return {
             'city_name': 'NO DATA for Albury on this date', 
             'date': '2007-12-01', 
@@ -60,7 +60,7 @@ def test_get_weather_data(app, expected_dict_1, expected_dict_2, expected_dict_3
 
     with app.app_context():
         # params passed, data exists
-        assert expected_dict_1 == get_weather_data('Albury', '2008-12-01')
+        assert expected_dict_1 == get_weather_data('Springfield', '2023-01-01')
 
         # params passed, no data exists
         assert expected_dict_2 == get_weather_data('Albury', '2007-12-01')
