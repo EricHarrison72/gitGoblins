@@ -65,9 +65,9 @@ CREATE TABLE IF NOT EXISTS WeatherInstance (
 -- Insert data for testing into test tables
 
 -- Cities
-INSERT INTO City (cityId, cityName, latitude, longitude) VALUES
-(99, 'Springfield', 0, 0), -- Added dummy latitude and longitude values
-(100, 'Shelbyville', 0, 0);
+INSERT INTO City (cityId, cityName) VALUES
+(99, 'Springfield'), -- cityId set to 99 and 100 so it doesn't fail UNIQUE constraint 
+(100, 'Shelbyville'); -- error when populating actual database
 
 -- Users
 INSERT INTO User (userId, firstName, lastName, email, emailList, password) VALUES
