@@ -35,13 +35,6 @@ def app():
         # Initialize Flask-Bcrypt with the app instance
         bcrypt = Bcrypt(app)
 
-        # TODO @Eric
-        '''
-        - Write a script in data.sql that populates the database with a few rows of weather data
-        - test that it works
-        - This same script should also add some test users, but we can let Chase do that probably
-        '''
-
         # Initialize the database & populate it w/ some test data
         init_db()
         get_db().executescript(_data_sql)
