@@ -5,10 +5,11 @@ on: push
 defaults:
   run:
     working-directory: ./Code
-    
+
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: 
+      os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
     - uses: actions/checkout@v4
     - name: Install modules
