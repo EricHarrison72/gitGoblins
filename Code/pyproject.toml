@@ -21,5 +21,8 @@ testpaths = ["tests"]
 
 [tool.coverage.run]
 branch = true
-source = ["flaskr"]
+source = ["weatherApp"]
+
+[tool.coverage.xml]
+output = "tests/coverage.xml"
 

@@ -31,12 +31,11 @@ def app():
         'DATABASE': db_path
     })
 
-    
     with app.app_context():
-        # Initialize flask-Bcrypt with the app instance
+        # Initialize Flask-Bcrypt with the app instance
         bcrypt = Bcrypt(app)
 
-        # initialize  database (with extra data from data.sql script)
+        # Initialize the database & populate it w/ some test data
         init_db()
         get_db().executescript(_data_sql)
 

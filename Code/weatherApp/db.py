@@ -18,9 +18,6 @@ import os
 from flask import current_app, g
 from flask.cli import with_appcontext
 
-city_to_id = {} # var used to populate db
-weather_data_file = os.path.join("data", "weatherAUS.csv")
-
 #Returns current database
 def get_db():
     if 'db' not in g:
@@ -45,25 +42,39 @@ def init_db():
     with current_app.open_resource('schema.sql') as f:
         db.executescript(f.read().decode('utf8'))
 
-    populate_db()
+# Defines the terminal command used to initialize database: `flask --app weatherApp init-db`
+@click.command('init-db')
+@with_appcontext
+def init_db_command():
+    """Clear existing data and create new tables."""
+    init_db()
+    _populate_db()
+    click.echo('Initialized and populated the database.')
+
+#Used to initialize database commands in app factory
+def init_app(app):
+    app.teardown_appcontext(close_db)
+    app.cli.add_command(init_db_command)
 
 #---------------------------
 # DATABASE POPULATION
+_city_to_id = {} # var used to populate db
+_weather_data_file = os.path.join("data", "weatherAUS.csv")
 
-# populates the db with data from weatherAUS.csv     
-def populate_db():
+# (Helper method) populates the db with data from weatherAUS.csv     
+def _populate_db():
     # Database connection
     conn = sqlite3.connect(current_app.config['DATABASE'])
     cur = conn.cursor()
 
     # Read from the CSV into the database
-    with open(weather_data_file, 'r') as file:
+    with open(_weather_data_file, 'r') as file:
         csvreader = csv.reader(file)
         next(csvreader)  # Skip the header row
         
         #Read the values of each row in the csv into the database
         for row in csvreader:
-            city = location_to_id(row[1], cur) 
+            city = _location_to_id(row[1], cur) 
             date, min_temp, max_temp, sunshine, rainfall = row[0], row[2], row[3], row[6], row[4]
             evaporation, cloud9am, cloud3pm, pressure9am, pressure3pm = row[5], row[17], row[18], row[15], row[16]
             humidity9am, humidity3pm, wind_gust_speed, wind_gust_dir = row[13], row[14], row[8], row[7]
@@ -80,21 +91,21 @@ def populate_db():
     conn.close()
 
 # (Helper method) Returns cityId for specified city name from dictionary
-def location_to_id(city, cur):
-    global city_to_id  # Add this line to use the module-level city_to_id
-    if len(city_to_id) == 0: #If city_to_id is empty, initialize it
-        city_to_id = initialize_cities(cur)
-    return city_to_id[city]
+def _location_to_id(city, cur):
+    global _city_to_id  # Add this line to use the module-level city_to_id
+    if len(_city_to_id) == 0: #If city_to_id is empty, initialize it
+        _city_to_id = _initialize_cities(cur)
+    return _city_to_id[city]
     
 # (Helper method) Initialize dictionary for city_to_cityId
 #Also read city values into city table in SQL schema, since we can only do this once per city it goes here
-def initialize_cities(cur):
+def _initialize_cities(cur):
     i=0
     rows = []
     cities = {}
     
     #Read csv row by row, if the city doesn't exist in the dictionary, add it with corresponding id i
-    with open(weather_data_file, 'r') as file:
+    with open(_weather_data_file, 'r') as file:
         csvreader = csv.reader(file)
         next(csvreader) #Skip header
         for row in csvreader:
@@ -112,17 +123,4 @@ def initialize_cities(cur):
     
     return cities
 
-#-------------------------------
 
-# Defines the terminal command used to initialize database: `flask --app weatherApp init-db`
-@click.command('init-db')
-@with_appcontext
-def init_db_command():
-    """Clear existing data and create new tables."""
-    init_db()
-    click.echo('Initialized the database.')
-
-#Used to initialize database commands in app factory
-def init_app(app):
-    app.teardown_appcontext(close_db)
-    app.cli.add_command(init_db_command)
