@@ -19,7 +19,7 @@ from weatherApp.db import get_db, _populate_db
 # Checks if the test db is populated with the INSERT statements from the data.sql file
 def test_test_db(app):
     with app.app_context():
-        db = get_db().execute('''
+        weather_db = get_db().execute('''
             SELECT City.cityName AS city_name, WeatherInstance.date, WeatherInstance.tempMax AS temp_high, 
                 WeatherInstance.tempMin AS temp_low, WeatherInstance.rainfall, 
                 rainToday AS raining, WeatherInstance.windGustSpeed AS wind_speed, 
@@ -28,7 +28,15 @@ def test_test_db(app):
             JOIN City ON WeatherInstance.cityId = City.cityId
             WHERE City.cityName = ? AND WeatherInstance.date = ?
         ''', ('Springfield','2023-01-01')).fetchone()
-    assert db != None
+        
+        user_db = get_db().execute('''
+            SELECT userId, firstName, lastName, email, emailList, password
+            FROM User
+            WHERE userId = ? AND email = ?
+        ''', ('1','homer@example.com')).fetchone()
+        
+    assert weather_db != None
+    assert user_db != None
 
 #------------------------------
     
