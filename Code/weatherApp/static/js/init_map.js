@@ -4,10 +4,10 @@
 Uses leaflet.js api to create a map where users can select their date and location.
 
 TODO:
-- add visual markers representing city weather (if we have time)
+- add visual markers representing city weather
 
 Starter code sources:
-- ???
+- https://leafletjs.com/examples.html
 */
 // -------------------------------------------------
 var cityMarkers = [];
