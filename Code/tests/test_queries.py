@@ -24,7 +24,8 @@ def expected_dict_1():
             'rainfall': 0.0, 
             'raining': 'No', 
             'wind_speed': 30, 
-            'wind_dir': 'N'
+            'wind_dir': 'N',
+            'cloud': 3
         }
 
 # Expected dict for: params passed, no data exists
@@ -39,7 +40,8 @@ def expected_dict_2():
             'rainfall': 0.0, 
             'raining': '?', 
             'wind_speed': 0, 
-            'wind_dir': '?'
+            'wind_dir': '?',
+            'cloud': 0
         }
 
 # Expected dict for: 'None' params passed
@@ -53,7 +55,8 @@ def expected_dict_3():
             'rainfall': 0.0, 
             'raining': '?', 
             'wind_speed': 0, 
-            'wind_dir': '?'
+            'wind_dir': '?',
+            'cloud': 0
         }
 
 def test_get_weather_data(app, expected_dict_1, expected_dict_2, expected_dict_3):
