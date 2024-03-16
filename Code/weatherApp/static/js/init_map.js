@@ -9,6 +9,49 @@ Starter code sources:
 // -------------------------------------------------
 var cityMarkers = [];
 
+//Create icon variables for each weather icon
+var sunIcon = L.icon({
+    iconUrl: "/static/img/marker_sun.png",
+    iconSize: [45, 40], // Size of the icon
+    iconAnchor: [35, 35], // Point of the icon which will correspond to marker's location
+    popupAnchor: [-10, -32], // Point from which the popup should open relative to the iconAnchor
+});
+
+var rainIcon = L.icon({
+    iconUrl: "/static/img/marker_rain.png",
+    iconSize: [45, 35],
+    iconAnchor: [35, 35],
+    popupAnchor: [-10, -32],
+});
+
+var windIcon = L.icon({
+    iconUrl: "/static/img/marker_wind.png",
+    iconSize: [35, 25],
+    iconAnchor: [35, 35],
+    popupAnchor: [-10, -32],
+});
+
+var cloudIcon = L.icon({
+    iconUrl: "/static/img/marker_cloud.png",
+    iconSize: [35, 30],
+    iconAnchor: [35, 35],
+    popupAnchor: [-10, -32],
+});
+
+var partCloudIcon = L.icon({
+    iconUrl: "/static/img/marker_partcloud.png",
+    iconSize: [45, 30],
+    iconAnchor: [35, 35],
+    popupAnchor: [-10, -32],
+});
+
+var errorIcon = L.icon({
+    iconUrl: "/static/img/marker_error.png",
+    iconSize: [30, 30],
+    iconAnchor: [35, 35],
+    popupAnchor: [-10, -32],
+});
+
 function initMap() {
     var map = L.map('map').setView([-27.07, 132.08], 4); // Latitude, Longitude, Zoom level when map first opens
     
@@ -112,13 +155,8 @@ async function updateMarkerIcons() {
     // Loop through all markers and update their icon
     for (const marker of cityMarkers) {
         const cityName = marker.options.cityName; // Assuming cityName is stored in options
-        const iconUrl = await determineMarkerIcon(cityName, date);
-        const newIcon = L.icon({
-            iconUrl: iconUrl,
-            iconSize: [45, 40], // Size of the icon
-            iconAnchor: [35, 35], // Point of the icon which will correspond to marker's location
-            popupAnchor: [-10, -32], // Point from which the popup should open relative to the iconAnchor
-        });
+        const newIcon = await determineMarkerIcon(cityName, date);
+
         marker.setIcon(newIcon); // This should work if `marker` is a Leaflet marker instance
     }
 }
@@ -131,15 +169,7 @@ async function createMarker(map, lat, lng, cityName) {
     var day = document.getElementById('daySelect').value;
     var date = year + '-' + month.padStart(2, '0') + '-' + day.padStart(2, '0')
 
-    var iconURL = await determineMarkerIcon(cityName, date);
-
-    //Determine correct marker icon here
-    const newIcon = L.icon({
-        iconUrl: iconURL,
-        iconSize: [45, 40], // Size of the icon
-        iconAnchor: [35, 35], // Point of the icon which will correspond to marker's location
-        popupAnchor: [-10, -32], // Point from which the popup should open relative to the iconAnchor
-    });
+    var newIcon = await determineMarkerIcon(cityName, date);
     
     var marker = L.marker([lat, lng], {icon: newIcon}).addTo(map);
 
@@ -156,12 +186,26 @@ async function determineMarkerIcon(cityName, date) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        
-        return data.icon;
+
+        // Match the returned identifier with the corresponding icon
+        switch(data.icon) {
+            case 'sun':
+                return sunIcon;
+            case 'rain':
+                return rainIcon;
+            case 'wind':
+                return windIcon;
+            case 'cloud':
+                return cloudIcon;
+            case 'partcloud':
+                return partCloudIcon;
+            default:
+                return errorIcon;
+        }
     } catch (error) {
         console.error("Failed to fetch weather icon:", error);
         // Return error icon in case of error
-        return "/static/img/marker_error.png";
+        return errorIcon;
     }
 }
 
