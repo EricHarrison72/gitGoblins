@@ -49,7 +49,7 @@ def get_weather_icon():
     if weather_dict is not None:
         icon_name = determine_icon_based_on_weather(weather_dict)
     else:
-        icon_name = "/static/img/marker_error.png"  # Fallback icon if no weather data found
+        icon_name = 'error'  # Fallback icon if no weather data found
     
     return jsonify({'icon': icon_name})
 
@@ -61,17 +61,21 @@ def determine_icon_based_on_weather(weather_data):
         except ValueError:
             return default
 
+    #If high and low temps are 0 it means there was no data for that day
+    if (weather_data['temp_high'] == 0) & (weather_data['temp_low'] == 0):
+        return 'error'
+    
     if weather_data['raining'] == "Yes":
-        return "/static/img/marker_rain.png"
+        return 'rain'
 
     wind_speed = safe_int(weather_data['wind_speed'])
     if wind_speed > 80:
-        return "/static/img/marker_wind.png"
+        return 'wind'
 
     cloud_cover = safe_int(weather_data['cloud'])
     if cloud_cover > 4:
-        return "/static/img/marker_cloud.png"
+        return 'cloud'
     elif cloud_cover > 0:
-        return "/static/img/marker_partcloud.png"
+        return 'partcloud'
 
-    return "/static/img/marker_sun.png"
+    return 'sun'
