@@ -4,7 +4,7 @@
 beforeAll(() => {
   global.fetch = jest.fn(() => Promise.resolve({
     ok: true,
-    json: () => Promise.resolve({ icon: '../weatherApp/static/img/marker_error.png' }),
+    json: () => Promise.resolve({ icon: 'error' }),
   }));
 });
 
