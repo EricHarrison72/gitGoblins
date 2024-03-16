@@ -86,6 +86,7 @@ describe('init_map.js', () => {
 
 });
 
+//Clear all mocks after each test
 afterEach(() => {
   jest.clearAllMocks();
 });
