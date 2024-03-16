@@ -1,0 +1,21 @@
+{% extends "select_date.html.jinja" %}
+
+{% block head %}{% endblock %}
+{% block title %}
+    Graph
+{% endblock %}
+
+{% block header %}
+    Graph
+{% endblock %}
+
+{% block content %}
+    {# Render date selection drop-down menu #}
+    <p>Start date:</p>
+    {{ super() }}
+    <p>End date:</p>
+    {{ super() }}
+
+    {# put graph stuff here#}
+
+{% endblock %}

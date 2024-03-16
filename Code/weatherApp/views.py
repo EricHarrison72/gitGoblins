@@ -37,3 +37,7 @@ def weather_summary():
 #@login_required
 def map():
     return render_template("map.html.jinja")
+
+@views_bp.route('/graph')
+def graph():
+    return render_template("graph.html.jinja")
