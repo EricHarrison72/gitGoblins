@@ -3,9 +3,6 @@
 /*
 Uses leaflet.js api to create a map where users can select their date and location.
 
-TODO:
-- add visual markers representing city weather
-
 Starter code sources:
 - https://leafletjs.com/examples.html
 */
@@ -135,7 +132,7 @@ async function createMarker(map, lat, lng, cityName) {
     var date = year + '-' + month.padStart(2, '0') + '-' + day.padStart(2, '0')
 
     var iconURL = await determineMarkerIcon(cityName, date);
-    console.log(iconURL)
+
     //Determine correct marker icon here
     const newIcon = L.icon({
         iconUrl: iconURL,
