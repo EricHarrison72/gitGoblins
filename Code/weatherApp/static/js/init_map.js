@@ -166,6 +166,5 @@ async function determineMarkerIcon(cityName, date) {
 }
 
 
-  initMap();
     // Export functions for testing purposes
     module.exports = { initMap, createMarker, generateWeatherSummaryUrl, updatePopupLinks };
