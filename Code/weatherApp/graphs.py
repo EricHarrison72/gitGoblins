@@ -19,10 +19,18 @@ def show_graph(city_name='Albury', start_date='2008-12-01', end_date='2008-12-30
 
     # convert the SQL query to a pandas dataframe format (plotly needs it)
     df = DataFrame(queries.get_temp_in_range(city_name, start_date, end_date))
-    df.columns=['city_name', 'date', 'temp_high', 'temp_low']
+    df.columns=['Date', 'Low', 'High']
 
     # generate a bar chart from the dataframe
-    fig = px.bar(df, x='date', y=['temp_high', 'temp_low'], title="Past Data for "+city_name)
+    # TODO: get the variables to show next ot each other
+    fig = px.bar(
+        df,
+        x = 'Date',
+        y = ['Low', 'High'],
+        barmode = 'group',
+        title = "Past Data for "+ city_name,
+        labels = {"value": "Temperature (°C)", "variable": "Type"}
+        )
 
     # show the bar chart
     fig.show()

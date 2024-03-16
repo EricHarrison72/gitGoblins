@@ -13,6 +13,7 @@ Start Code sources:
 # ------------------------------------------------------
 from flask import render_template, Blueprint, request
 from . import queries
+from . import graphs
 from .auth import login_required
 
 views_bp = Blueprint('views', __name__)
@@ -40,4 +41,5 @@ def map():
 
 @views_bp.route('/graph')
 def graph():
+    graphs.show_graph()
     return render_template("graph.html.jinja")
