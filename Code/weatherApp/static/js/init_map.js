@@ -14,7 +14,7 @@ var sunIcon = L.icon({
     iconUrl: "/static/img/marker_sun.png",
     iconSize: [45, 40], // Size of the icon
     iconAnchor: [35, 35], // Point of the icon which will correspond to marker's location
-    popupAnchor: [-10, -32], // Point from which the popup should open relative to the iconAnchor
+    popupAnchor: [-12, -31], // Point from which the popup should open relative to the iconAnchor
 });
 
 var rainIcon = L.icon({
@@ -28,28 +28,28 @@ var windIcon = L.icon({
     iconUrl: "/static/img/marker_wind.png",
     iconSize: [35, 25],
     iconAnchor: [35, 35],
-    popupAnchor: [-10, -32],
+    popupAnchor: [-13, -34],
 });
 
 var cloudIcon = L.icon({
     iconUrl: "/static/img/marker_cloud.png",
     iconSize: [35, 30],
     iconAnchor: [35, 35],
-    popupAnchor: [-10, -32],
+    popupAnchor: [-17, -34],
 });
 
 var partCloudIcon = L.icon({
     iconUrl: "/static/img/marker_partcloud.png",
     iconSize: [45, 30],
     iconAnchor: [35, 35],
-    popupAnchor: [-10, -32],
+    popupAnchor: [-12, -32],
 });
 
 var errorIcon = L.icon({
     iconUrl: "/static/img/marker_error.png",
     iconSize: [30, 30],
-    iconAnchor: [35, 35],
-    popupAnchor: [-10, -32],
+    iconAnchor: [25, 35],
+    popupAnchor: [-10, -31],
 });
 
 function initMap() {
