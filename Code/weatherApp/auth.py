@@ -27,35 +27,33 @@ bcrypt = Bcrypt()
 @auth_bp.route('/register', methods=('GET', 'POST'))
 def register():
     datb = db.get_db()
-    pw = '123'
-    hp = bcrypt.generate_password_hash(pw).decode('utf-8')
-    datb.execute("INSERT INTO User(firstname, lastname, email, emaillist, password) VALUES ('Wade', 'Wadeson', 'wade@gmail.com', TRUE, ?)",hp)
-    datb.commit()
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-       
-       
+        first_name = request.form.get('first_name', '')
+        last_name = request.form.get('last_name', '')
+        email_list = bool(request.form.get('email_list'))
+
+        # Get the last userId and increment it by 1
+        last_user_id = get_last_user_id(datb)
+        user_id = last_user_id + 1
+
         error = None
 
         if not email:
             error = 'Email is required.'
         elif not password:
             error = 'Password is required.'
-            
 
         if error is None:
             try:
-              
                 hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
                 datb.execute(
-                    "INSERT INTO User (email, password) VALUES (?, ?)",
-                    (email, hashed_password)
+                    "INSERT INTO User (userId, email, password, firstName, lastName, emailList) VALUES (?, ?, ?, ?, ?, ?)",
+                    (user_id, email, hashed_password, first_name, last_name, email_list)
                 )
-                
                 datb.commit()
                 flash("Registration successful. You can now log in.")
-               
                 return redirect(url_for("auth.login"))
             except datb.IntegrityError:
                 error = f"User with email {email} is already registered."
@@ -63,6 +61,7 @@ def register():
         flash(error)
 
     return render_template('auth/register.html.jinja')
+
 
 #route to login page
 @auth_bp.route('/login', methods=('GET', 'POST'))
@@ -124,3 +123,9 @@ def login_required(view):
 
     return wrapped_view
 
+
+def get_last_user_id(datb):
+    # Query the database to get the maximum userId
+    result = datb.execute("SELECT MAX(userId) FROM User").fetchone()
+    last_user_id = result[0] if result[0] is not None else 0
+    return last_user_id
