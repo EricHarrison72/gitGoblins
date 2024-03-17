@@ -90,14 +90,14 @@ def load_logged_in_user():
         g.user = None
     else:
         g.user = db.get_db().execute(
-            'SELECT * FROM user WHERE id = ?', (user_id,)
+            'SELECT * FROM user WHERE userid = ?', (user_id,)
         ).fetchone()
         
 #logout of session
 @auth_bp.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('index'))
+    return redirect(url_for('views.index'))
 
 #Checks if a user is loaded and redirects to the login page otherwise. 
 #If a user is loaded the original view is called and continues normally.
