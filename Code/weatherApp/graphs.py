@@ -15,6 +15,14 @@ from pandas import DataFrame
 
 from . import queries
 
+# TODO:
+'''
+- embed graph in template with plotly.js 
+- add graphs for different statistics
+- write tests for query and graph stuff
+    - possibly seperate show_graph into more functions to make this easier
+'''
+
 def show_graph(city_name='Albury', start_date='2008-12-01', end_date='2008-12-30'):
 
     # convert the SQL query to a pandas dataframe format (plotly needs it)
@@ -22,7 +30,6 @@ def show_graph(city_name='Albury', start_date='2008-12-01', end_date='2008-12-30
     df.columns=['Date', 'Low', 'High']
 
     # generate a bar chart from the dataframe
-    # TODO: get the variables to show next ot each other
     fig = px.bar(
         df,
         x = 'Date',
