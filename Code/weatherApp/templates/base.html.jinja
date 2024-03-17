@@ -22,6 +22,7 @@ FreeCodeCamp "Learn Flask for Python" https://www.youtube.com/watch?v=Z1RJmh_Oqe
         <ul>
             {% if g.user %}
                 <li><span>{{ g.user['firstname'] }}</span></li>
+                <li><span> ID: {{ g.user['userid'] }}</span></li>
                 <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
             {% else %}
                 <li><a href="{{ url_for('auth.register') }}">Register</a></li>
