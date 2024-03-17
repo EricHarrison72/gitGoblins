@@ -38,6 +38,11 @@ def weather_summary():
 def map():
     return render_template("map.html.jinja")
 
+@views_bp.route('/location_select')
+#@login_required
+def location_select():
+    return render_template("location_select.html.jinja")
+
 #This page is used only to determine which weather icon to use on the map as a marker
 @views_bp.route('/api/weather_icon')
 def get_weather_icon():
