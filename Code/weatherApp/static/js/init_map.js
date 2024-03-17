@@ -3,18 +3,58 @@
 /*
 Uses leaflet.js api to create a map where users can select their date and location.
 
-TODO:
-- add visual markers representing city weather (if we have time)
-
 Starter code sources:
-- ???
+- https://leafletjs.com/examples.html
 */
 // -------------------------------------------------
 var cityMarkers = [];
 
+//Create icon variables for each weather icon
+var sunIcon = L.icon({
+    iconUrl: "/static/img/marker_sun.png",
+    iconSize: [45, 40], // Size of the icon
+    iconAnchor: [35, 35], // Point of the icon which will correspond to marker's location
+    popupAnchor: [-12, -31], // Point from which the popup should open relative to the iconAnchor
+});
+
+var rainIcon = L.icon({
+    iconUrl: "/static/img/marker_rain.png",
+    iconSize: [45, 35],
+    iconAnchor: [35, 35],
+    popupAnchor: [-10, -32],
+});
+
+var windIcon = L.icon({
+    iconUrl: "/static/img/marker_wind.png",
+    iconSize: [35, 25],
+    iconAnchor: [35, 35],
+    popupAnchor: [-13, -34],
+});
+
+var cloudIcon = L.icon({
+    iconUrl: "/static/img/marker_cloud.png",
+    iconSize: [35, 30],
+    iconAnchor: [35, 35],
+    popupAnchor: [-17, -34],
+});
+
+var partCloudIcon = L.icon({
+    iconUrl: "/static/img/marker_partcloud.png",
+    iconSize: [45, 30],
+    iconAnchor: [35, 35],
+    popupAnchor: [-12, -32],
+});
+
+var errorIcon = L.icon({
+    iconUrl: "/static/img/marker_error.png",
+    iconSize: [30, 30],
+    iconAnchor: [25, 35],
+    popupAnchor: [-10, -31],
+});
+
 function initMap() {
     var map = L.map('map').setView([-27.07, 132.08], 4); // Latitude, Longitude, Zoom level when map first opens
-
+    
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map); // Import and display map
@@ -24,6 +64,11 @@ function initMap() {
     document.getElementById('yearSelect').addEventListener('change', updatePopupLinks);
     document.getElementById('monthSelect').addEventListener('change', updatePopupLinks);
     document.getElementById('daySelect').addEventListener('change', updatePopupLinks);
+
+    //Event listeners to the dropdowns to update marker icons when selections change
+    document.getElementById('yearSelect').addEventListener('change', updateMarkerIcons);
+    document.getElementById('monthSelect').addEventListener('change', updateMarkerIcons);
+    document.getElementById('daySelect').addEventListener('change', updateMarkerIcons);
 
     // Create markers for each city
     createMarker(map, -36.0751, 146.9095, 'Albury');
@@ -80,10 +125,7 @@ function initMap() {
 }
 
 //Function to generate the URL for the popup link
-function generateWeatherSummaryUrl(cityName, year, month, day) {
-    var date = year + '-' + month.padStart(2, '0') + '-' + day.padStart(2, '0');
-    
-    //Adjust the URL path according to your application's routing
+function generateWeatherSummaryUrl(cityName, date) {
     return `/weather_summary?city_name=${encodeURIComponent(cityName)}&date=${date}`;
 }
 
@@ -94,22 +136,79 @@ function updatePopupLinks() {
         var year = document.getElementById('yearSelect').value;
         var month = document.getElementById('monthSelect').value;
         var day = document.getElementById('daySelect').value;
-        var newPopupContent = `<b>${cityName}</b><br><a href="#" onclick="window.location.href='${generateWeatherSummaryUrl(cityName, year, month, day)}'">See weather details</a>`;
+        var date = year + '-' + month.padStart(2, '0') + '-' + day.padStart(2, '0')
+
+        var newPopupContent = `<b>${cityName}</b><br><a href="#" onclick="window.location.href='${generateWeatherSummaryUrl(cityName, date)}'">See weather details</a>`;
         marker.setPopupContent(newPopupContent);
     });
 }
 
-// Define createMarker at the top level, this is done so that it can be exported for testing
-function createMarker(map, lat, lng, cityName) {
+//Function to update all markers' icons with the current date
+async function updateMarkerIcons() {
+    console.log("Updating markers...");
+
     var year = document.getElementById('yearSelect').value;
     var month = document.getElementById('monthSelect').value;
     var day = document.getElementById('daySelect').value;
-    var marker = L.marker([lat, lng]).addTo(map);
-    marker.bindPopup(`<b>${cityName}</b><br><a href="#" onclick="event.preventDefault(); window.location.href='${generateWeatherSummaryUrl(cityName, year, month, day)}';">See weather details</a>`);
+    var date = year + '-' + month.padStart(2, '0') + '-' + day.padStart(2, '0');
+    
+    // Loop through all markers and update their icon
+    for (const marker of cityMarkers) {
+        const cityName = marker.options.cityName; // Assuming cityName is stored in options
+        const newIcon = await determineMarkerIcon(cityName, date);
+
+        marker.setIcon(newIcon); // This should work if `marker` is a Leaflet marker instance
+    }
+}
+
+
+// Define createMarker at the top level, this is done so that it can be exported for testing
+async function createMarker(map, lat, lng, cityName) {
+    var year = document.getElementById('yearSelect').value;
+    var month = document.getElementById('monthSelect').value;
+    var day = document.getElementById('daySelect').value;
+    var date = year + '-' + month.padStart(2, '0') + '-' + day.padStart(2, '0')
+
+    var newIcon = await determineMarkerIcon(cityName, date);
+    
+    var marker = L.marker([lat, lng], {icon: newIcon}).addTo(map);
+
+    marker.bindPopup(`<b>${cityName}</b><br><a href="#" onclick="event.preventDefault(); window.location.href='${generateWeatherSummaryUrl(cityName, date)}';">See weather details</a>`);
     marker.options.cityName = cityName; // Store cityName within marker options for later access
     cityMarkers.push(marker);
 }
 
-  initMap();
+async function determineMarkerIcon(cityName, date) {
+    try {
+        // Encode the city name to ensure the URL is properly formatted
+        const response = await fetch(`/api/weather_icon?cityName=${encodeURIComponent(cityName)}&date=${date}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+
+        // Match the returned identifier with the corresponding icon
+        switch(data.icon) {
+            case 'sun':
+                return sunIcon;
+            case 'rain':
+                return rainIcon;
+            case 'wind':
+                return windIcon;
+            case 'cloud':
+                return cloudIcon;
+            case 'partcloud':
+                return partCloudIcon;
+            default:
+                return errorIcon;
+        }
+    } catch (error) {
+        console.error("Failed to fetch weather icon:", error);
+        // Return error icon in case of error
+        return errorIcon;
+    }
+}
+
+
     // Export functions for testing purposes
     module.exports = { initMap, createMarker, generateWeatherSummaryUrl, updatePopupLinks };
