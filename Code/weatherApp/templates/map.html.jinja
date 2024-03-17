@@ -17,6 +17,11 @@
 
     <div id="map" style="height: 600px; width: 100%;"></div>
     <script src="{{ url_for('static', filename='js/init_map.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Ensure the DOM is fully loaded before calling initMap
+            // Assuming initMap is globally accessible once init_map.js is loaded
+            initMap();
+        });
+    </script>
 {% endblock %}
-
-

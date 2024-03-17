@@ -7,21 +7,12 @@ then call render_template().
 - weather_summary(): basic weather summary (not dynamic)
 '''
 '''
-TODO:
-Create different blueprints for different parts of the app.
-Each should be "registered" in a separate .py file, which 
-contains the view methods associated with it. (right now
-we only have one blueprint called 'bp', registered in this
-file, and all our view methods use it.)
-'''
-'''
 Start Code sources:
 - [Flask docs tutorial - Application Setup](https://flask.palletsprojects.com/en/3.0.x/tutorial/factory/)
 '''
 # ------------------------------------------------------
-
-from flask import render_template, Blueprint, request
-from . import db
+from flask import render_template, Blueprint, request, jsonify
+from . import db, queries
 from .auth import login_required
 
 views_bp = Blueprint('views', __name__)
@@ -34,43 +25,58 @@ def index():
 @views_bp.route('/weather_summary')
 @login_required
 def weather_summary():
-    datb = db.get_db()
 
     city_name = request.args.get('city_name')
     date = request.args.get('date')
 
-
-    #SQL query to get data for specific city
-    weather_data = datb.execute('''
-        SELECT City.cityName, WeatherInstance.date, WeatherInstance.tempMax AS temp_high, 
-               WeatherInstance.tempMin AS temp_low, WeatherInstance.rainfall, 
-               rainToday AS raining, WeatherInstance.windGustSpeed AS wind_speed, 
-               WeatherInstance.windGustDir AS wind_dir
-        FROM WeatherInstance
-        JOIN City ON WeatherInstance.cityId = City.cityId
-        WHERE City.cityName = ? AND WeatherInstance.date = ?
-
-    ''', (city_name,date,)).fetchone()
+    weather_dict = queries.get_weather_data(city_name, date)
     
-
-    if weather_data is None:
-        # Handle the case where no weather data is found
-        weather_list = ["No data", "N/A", 0, 0, 0.0, False, 0, "N/A"]
-    else:
-        weather_list = [
-            weather_data['cityName'], 
-            weather_data['date'], 
-            weather_data['temp_high'], 
-            weather_data['temp_low'], 
-            weather_data['rainfall'], 
-            weather_data['raining'], 
-            weather_data['wind_speed'], 
-            weather_data['wind_dir']
-        ]
-    
-    return render_template("weather_summary.html.jinja", weather_list=weather_list)
+    return render_template("weather_summary.html.jinja", weather_dict=weather_dict)
 
 @views_bp.route('/map')
-@login_required
+#@login_required
 def map():
     return render_template("map.html.jinja")
+
+#This page is used only to determine which weather icon to use on the map as a marker
+@views_bp.route('/api/weather_icon')
+def get_weather_icon():
+    city_name = request.args.get('cityName')
+    date = request.args.get('date')
+    
+    weather_dict = queries.get_weather_data(city_name, date)
+    
+    if weather_dict is not None:
+        icon_name = determine_icon_based_on_weather(weather_dict)
+    else:
+        icon_name = 'error'  # Fallback icon if no weather data found
+    
+    return jsonify({'icon': icon_name})
+
+def determine_icon_based_on_weather(weather_data):
+    # Helper function to safely convert to int, handling 'NA', 'N/A', etc.
+    def safe_int(value, default=0):
+        try:
+            return int(value)
+        except ValueError:
+            return default
+
+    #If high and low temps are 0 it means there was no data for that day
+    if (weather_data['temp_high'] == 0) & (weather_data['temp_low'] == 0):
+        return 'error'
+    
+    if weather_data['raining'] == "Yes":
+        return 'rain'
+
+    wind_speed = safe_int(weather_data['wind_speed'])
+    if wind_speed > 80:
+        return 'wind'
+
+    cloud_cover = safe_int(weather_data['cloud'])
+    if cloud_cover > 4:
+        return 'cloud'
+    elif cloud_cover > 0:
+        return 'partcloud'
+
+    return 'sun'
+

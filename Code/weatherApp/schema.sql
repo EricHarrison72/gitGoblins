@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS WeatherInstance;
 CREATE TABLE City (
 	cityId int,
 	cityName varchar(30),
-	latiude int,
+	latitude int,
 	longitude int,
 	PRIMARY KEY (cityId)
 );

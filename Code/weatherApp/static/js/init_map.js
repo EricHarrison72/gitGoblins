@@ -3,18 +3,58 @@
 /*
 Uses leaflet.js api to create a map where users can select their date and location.
 
-TODO:
-- add visual markers representing city weather (if we have time)
-
 Starter code sources:
-- ???
+- https://leafletjs.com/examples.html
 */
 // -------------------------------------------------
 var cityMarkers = [];
 
+//Create icon variables for each weather icon
+var sunIcon = L.icon({
+    iconUrl: "/static/img/marker_sun.png",
+    iconSize: [45, 40], // Size of the icon
+    iconAnchor: [35, 35], // Point of the icon which will correspond to marker's location
+    popupAnchor: [-12, -31], // Point from which the popup should open relative to the iconAnchor
+});
+
+var rainIcon = L.icon({
+    iconUrl: "/static/img/marker_rain.png",
+    iconSize: [45, 35],
+    iconAnchor: [35, 35],
+    popupAnchor: [-10, -32],
+});
+
+var windIcon = L.icon({
+    iconUrl: "/static/img/marker_wind.png",
+    iconSize: [35, 25],
+    iconAnchor: [35, 35],
+    popupAnchor: [-13, -34],
+});
+
+var cloudIcon = L.icon({
+    iconUrl: "/static/img/marker_cloud.png",
+    iconSize: [35, 30],
+    iconAnchor: [35, 35],
+    popupAnchor: [-17, -34],
+});
+
+var partCloudIcon = L.icon({
+    iconUrl: "/static/img/marker_partcloud.png",
+    iconSize: [45, 30],
+    iconAnchor: [35, 35],
+    popupAnchor: [-12, -32],
+});
+
+var errorIcon = L.icon({
+    iconUrl: "/static/img/marker_error.png",
+    iconSize: [30, 30],
+    iconAnchor: [25, 35],
+    popupAnchor: [-10, -31],
+});
+
 function initMap() {
     var map = L.map('map').setView([-27.07, 132.08], 4); // Latitude, Longitude, Zoom level when map first opens
-
+    
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map); // Import and display map
@@ -25,76 +65,67 @@ function initMap() {
     document.getElementById('monthSelect').addEventListener('change', updatePopupLinks);
     document.getElementById('daySelect').addEventListener('change', updatePopupLinks);
 
-    //Function that creates a marker at a specific latitude, longitude for a specific city
-    function createMarker(lat, lng, cityName) {
-        var marker = L.marker([lat, lng]).addTo(map);
-        marker.bindPopup(`<b>${cityName}</b><br><a href="#" onclick="event.preventDefault(); window.location.href='${generateWeatherSummaryUrl(cityName)}';">See weather details</a>`);
-        marker.options.cityName = cityName; // Store cityName within marker options for later access
-        cityMarkers.push(marker);
-    }
+    //Event listeners to the dropdowns to update marker icons when selections change
+    document.getElementById('yearSelect').addEventListener('change', updateMarkerIcons);
+    document.getElementById('monthSelect').addEventListener('change', updateMarkerIcons);
+    document.getElementById('daySelect').addEventListener('change', updateMarkerIcons);
 
     // Create markers for each city
-    createMarker(-36.0751, 146.9095, 'Albury');
-    createMarker(-33.8751, 150.7634, 'Badgerys Creek');
-    createMarker(-31.4978, 145.8363, 'Cobar');
-    createMarker(-30.2962, 153.1139, 'Coffs Harbour');
-    createMarker(-29.4653, 149.8416, 'Moree');
-    createMarker(-32.9283, 151.7817, 'Newcastle');
-    createMarker(-33.2822, 151.5669, 'Norah Head');
-    createMarker(-29.0408, 167.9547, 'Norfolk Island');
-    createMarker(-33.7507, 150.6877, 'Penrith');
-    createMarker(-37.8239, 144.9983, 'Richmond');
-    createMarker(-33.8688, 151.2093, 'Sydney');
-    createMarker(-33.9400, 151.1754, 'Sydney Airport');
-    createMarker(-35.1026, 147.3655, 'Wagga Wagga');
-    createMarker(-32.8115, 151.8443, 'Williamtown');
-    createMarker(-34.4248, 150.8931, 'Wollongong');
-    createMarker(-35.2802, 149.1310, 'Canberra');
-    createMarker(-35.4180, 149.0694, 'Tuggeranong');
-    createMarker(-35.5294, 148.7723, 'Mount Ginini');
-    createMarker(-37.5622, 143.8503, 'Ballarat');
-    createMarker(-36.7596, 144.2786, 'Bendigo');
-    createMarker(-38.1051, 147.0680, 'Sale');
-    createMarker(-37.6708, 144.8430, 'Melbourne Airport');
-    createMarker(-37.8136, 144.9631, 'Melbourne');
-    createMarker(-34.2068, 142.1367, 'Mildura');
-    createMarker(-36.3328, 141.6503, 'Nhil');
-    createMarker(-38.3421, 141.6012, 'Portland');
-    createMarker(-37.7101, 145.0828, 'Watsonia');
-    createMarker(-37.9224, 141.2754, 'Dartmoor');
-    createMarker(-27.4705, 153.0260, 'Brisbane');
-    createMarker(-16.9203, 145.7710, 'Cairns');
-    createMarker(-28.0167, 153.4000, 'Gold Coast');
-    createMarker(-19.2590, 146.8169, 'Townsville');
-    createMarker(-34.9285, 138.6007, 'Adelaide');
-    createMarker(-37.8284, 140.7807, 'Mount Gambier');
-    createMarker(-34.4730, 138.9957, 'Nuriootpa');
-    createMarker(-31.1988, 136.8251, 'Woomera');
-    createMarker(-35.0268, 117.8837, 'Albany');
-    createMarker(-34.0262, 115.1002, 'Witchcliffe');
-    createMarker(-31.6676, 116.0292, 'Pearce RAAF');
-    createMarker(-31.9385, 115.9672, 'Perth Airport');
-    createMarker(-31.9514, 115.8617, 'Perth');
-    createMarker(-32.9804, 121.6456, 'Salmon Gums');
-    createMarker(-34.9762, 116.7313, 'Walpole');
-    createMarker(-42.8826, 147.3257, 'Hobart');
-    createMarker(-41.4391, 147.1358, 'Launceston');
-    createMarker(-23.6980, 133.8807, 'Alice Springs');
-    createMarker(-12.4637, 130.8444, 'Darwin');
-    createMarker(-14.4520, 132.2699, 'Katherine');
-    createMarker(-25.3444, 131.0369, 'Uluru');
+    createMarker(map, -36.0751, 146.9095, 'Albury');
+    createMarker(map, -33.8751, 150.7634, 'Badgerys Creek');
+    createMarker(map, -31.4978, 145.8363, 'Cobar');
+    createMarker(map, -30.2962, 153.1139, 'Coffs Harbour');
+    createMarker(map, -29.4653, 149.8416, 'Moree');
+    createMarker(map, -32.9283, 151.7817, 'Newcastle');
+    createMarker(map, -33.2822, 151.5669, 'Norah Head');
+    createMarker(map, -29.0408, 167.9547, 'Norfolk Island');
+    createMarker(map, -33.7507, 150.6877, 'Penrith');
+    createMarker(map, -37.8239, 144.9983, 'Richmond');
+    createMarker(map, -33.8688, 151.2093, 'Sydney');
+    createMarker(map, -33.9400, 151.1754, 'Sydney Airport');
+    createMarker(map, -35.1026, 147.3655, 'Wagga Wagga');
+    createMarker(map, -32.8115, 151.8443, 'Williamtown');
+    createMarker(map, -34.4248, 150.8931, 'Wollongong');
+    createMarker(map, -35.2802, 149.1310, 'Canberra');
+    createMarker(map, -35.4180, 149.0694, 'Tuggeranong');
+    createMarker(map, -35.5294, 148.7723, 'Mount Ginini');
+    createMarker(map, -37.5622, 143.8503, 'Ballarat');
+    createMarker(map, -36.7596, 144.2786, 'Bendigo');
+    createMarker(map, -38.1051, 147.0680, 'Sale');
+    createMarker(map, -37.6708, 144.8430, 'Melbourne Airport');
+    createMarker(map, -37.8136, 144.9631, 'Melbourne');
+    createMarker(map, -34.2068, 142.1367, 'Mildura');
+    createMarker(map, -36.3328, 141.6503, 'Nhil');
+    createMarker(map, -38.3421, 141.6012, 'Portland');
+    createMarker(map, -37.7101, 145.0828, 'Watsonia');
+    createMarker(map, -37.9224, 141.2754, 'Dartmoor');
+    createMarker(map, -27.4705, 153.0260, 'Brisbane');
+    createMarker(map, -16.9203, 145.7710, 'Cairns');
+    createMarker(map, -28.0167, 153.4000, 'Gold Coast');
+    createMarker(map, -19.2590, 146.8169, 'Townsville');
+    createMarker(map, -34.9285, 138.6007, 'Adelaide');
+    createMarker(map, -37.8284, 140.7807, 'Mount Gambier');
+    createMarker(map, -34.4730, 138.9957, 'Nuriootpa');
+    createMarker(map, -31.1988, 136.8251, 'Woomera');
+    createMarker(map, -35.0268, 117.8837, 'Albany');
+    createMarker(map, -34.0262, 115.1002, 'Witchcliffe');
+    createMarker(map, -31.6676, 116.0292, 'Pearce RAAF');
+    createMarker(map, -31.9385, 115.9672, 'Perth Airport');
+    createMarker(map, -31.9514, 115.8617, 'Perth');
+    createMarker(map, -32.9804, 121.6456, 'Salmon Gums');
+    createMarker(map, -34.9762, 116.7313, 'Walpole');
+    createMarker(map, -42.8826, 147.3257, 'Hobart');
+    createMarker(map, -41.4391, 147.1358, 'Launceston');
+    createMarker(map, -23.6980, 133.8807, 'Alice Springs');
+    createMarker(map, -12.4637, 130.8444, 'Darwin');
+    createMarker(map, -14.4520, 132.2699, 'Katherine');
+    createMarker(map, -25.3444, 131.0369, 'Uluru');
 
     
 }
 
 //Function to generate the URL for the popup link
-function generateWeatherSummaryUrl(cityName) {
-    var year = document.getElementById('yearSelect').value;
-    var month = document.getElementById('monthSelect').value;
-    var day = document.getElementById('daySelect').value;
-    var date = year + '-' + month.padStart(2, '0') + '-' + day.padStart(2, '0');
-    
-    //Adjust the URL path according to your application's routing
+function generateWeatherSummaryUrl(cityName, date) {
     return `/weather_summary?city_name=${encodeURIComponent(cityName)}&date=${date}`;
 }
 
@@ -102,9 +133,82 @@ function generateWeatherSummaryUrl(cityName) {
 function updatePopupLinks() {
     cityMarkers.forEach(marker => {
         var cityName = marker.getPopup().getContent().match(/<b>(.*?)<\/b>/)[1];
-        var newPopupContent = `<b>${cityName}</b><br><a href="#" onclick="window.location.href='${generateWeatherSummaryUrl(cityName)}'">See weather details</a>`;
+        var year = document.getElementById('yearSelect').value;
+        var month = document.getElementById('monthSelect').value;
+        var day = document.getElementById('daySelect').value;
+        var date = year + '-' + month.padStart(2, '0') + '-' + day.padStart(2, '0')
+
+        var newPopupContent = `<b>${cityName}</b><br><a href="#" onclick="window.location.href='${generateWeatherSummaryUrl(cityName, date)}'">See weather details</a>`;
         marker.setPopupContent(newPopupContent);
     });
 }
 
-  initMap();
+//Function to update all markers' icons with the current date
+async function updateMarkerIcons() {
+    console.log("Updating markers...");
+
+    var year = document.getElementById('yearSelect').value;
+    var month = document.getElementById('monthSelect').value;
+    var day = document.getElementById('daySelect').value;
+    var date = year + '-' + month.padStart(2, '0') + '-' + day.padStart(2, '0');
+    
+    // Loop through all markers and update their icon
+    for (const marker of cityMarkers) {
+        const cityName = marker.options.cityName; // Assuming cityName is stored in options
+        const newIcon = await determineMarkerIcon(cityName, date);
+
+        marker.setIcon(newIcon); // This should work if `marker` is a Leaflet marker instance
+    }
+}
+
+
+// Define createMarker at the top level, this is done so that it can be exported for testing
+async function createMarker(map, lat, lng, cityName) {
+    var year = document.getElementById('yearSelect').value;
+    var month = document.getElementById('monthSelect').value;
+    var day = document.getElementById('daySelect').value;
+    var date = year + '-' + month.padStart(2, '0') + '-' + day.padStart(2, '0')
+
+    var newIcon = await determineMarkerIcon(cityName, date);
+    
+    var marker = L.marker([lat, lng], {icon: newIcon}).addTo(map);
+
+    marker.bindPopup(`<b>${cityName}</b><br><a href="#" onclick="event.preventDefault(); window.location.href='${generateWeatherSummaryUrl(cityName, date)}';">See weather details</a>`);
+    marker.options.cityName = cityName; // Store cityName within marker options for later access
+    cityMarkers.push(marker);
+}
+
+async function determineMarkerIcon(cityName, date) {
+    try {
+        // Encode the city name to ensure the URL is properly formatted
+        const response = await fetch(`/api/weather_icon?cityName=${encodeURIComponent(cityName)}&date=${date}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+
+        // Match the returned identifier with the corresponding icon
+        switch(data.icon) {
+            case 'sun':
+                return sunIcon;
+            case 'rain':
+                return rainIcon;
+            case 'wind':
+                return windIcon;
+            case 'cloud':
+                return cloudIcon;
+            case 'partcloud':
+                return partCloudIcon;
+            default:
+                return errorIcon;
+        }
+    } catch (error) {
+        console.error("Failed to fetch weather icon:", error);
+        // Return error icon in case of error
+        return errorIcon;
+    }
+}
+
+
+    // Export functions for testing purposes
+    module.exports = { initMap, createMarker, generateWeatherSummaryUrl, updatePopupLinks };
