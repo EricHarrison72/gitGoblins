@@ -1,8 +1,15 @@
+<!--
+    sources:
+    https://codepen.io/Rio517/pen/NPLbpP
+    https://www.youtube.com/watch?v=jIAPewyzrp0
+-->
+
 {% extends 'select_date.html.jinja' %}
 
 {% block head %}
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 {% endblock %}
 {% block title %}
     Location Select
@@ -21,20 +28,18 @@
             <div>{{ super() }}</div>
         </div>
 
-        <div class="container" align="center">
-            <div class="row">
-                <label>Select City</label>
-                <div class="col-md-6">
-                    <select class="selectpicker" data-live-search="true">
-                        <option value="1">Albany</option>
-                        <option value="2">Albury</option>
-                        <option value="3">Alice Springs</option>
-                        <option value="4"></option>
-                        <option value="5"></option>
-                        <option value="6"></option>
-                        <option value="7"></option>
-                    </select>
-                </div>
+        <div align="center">
+            <label>Select City</label>
+            <div>
+                <select class="selectpicker" data-live-search="true">
+                    <option value="1">Albany</option>
+                    <option value="2">Albury</option>
+                    <option value="3">Alice Springs</option>
+                    <option value="4"></option>
+                    <option value="5"></option>
+                    <option value="6"></option>
+                    <option value="7"></option>
+                </select>
             </div>
         </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
