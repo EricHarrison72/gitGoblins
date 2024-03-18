@@ -31,7 +31,7 @@
         <div align="center">
             <label>Select City</label>
             <div>
-                <select class="selectpicker" data-live-search="true">
+                <select class="selectpicker" data-live-search="true" id="citySelect">
                     <option value="1">Adelaide</option>
                     <option value="2">Albany</option>
                     <option value="3">Albury</option>
@@ -87,6 +87,20 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
+        <script src="{{ url_for('static', filename='js/location_select.js') }}"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', (event) => {
+                // Ensure the DOM is fully loaded before calling initMap
+                // Assuming initLocationSelect is globally accessible once location_map.js is loaded
+                initLocationSelect();
+            });
+        </script>
+    </div>
+    
+    <br><br>
+
+    <div align="center">
+        <a class="button" id="submitButton" href="{{ url_for('views.weather_summary') }}">Done</a>
     </div>
 
 {% endblock %}
