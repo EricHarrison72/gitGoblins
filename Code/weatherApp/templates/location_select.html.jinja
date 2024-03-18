@@ -1,1 +1,45 @@
 {% extends 'select_date.html.jinja' %}
+
+{% block head %}
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
+{% endblock %}
+{% block title %}
+    Location Select
+{% endblock %}
+
+{% block header %}
+    Location Select
+{% endblock %}
+{% block content %}
+
+    <div>
+        <h1 align="center">Select City and Date</h1>
+        
+        <div align="center">
+            <label>Select Date</label>
+            <div>{{ super() }}</div>
+        </div>
+
+        <div class="container" align="center">
+            <div class="row">
+                <label>Select City</label>
+                <div class="col-md-6">
+                    <select class="selectpicker" data-live-search="true">
+                        <option value="1">Albany</option>
+                        <option value="2">Albury</option>
+                        <option value="3">Alice Springs</option>
+                        <option value="4"></option>
+                        <option value="5"></option>
+                        <option value="6"></option>
+                        <option value="7"></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
+    </div>
+
+{% endblock %}
