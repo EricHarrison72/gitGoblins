@@ -21,9 +21,15 @@ from . import queries
 - add graphs for different statistics
 - write tests for query and graph stuff
     - possibly seperate show_graph into more functions to make this easier
+
+- separate into issues:
+1. create basic graph
+2. embed graph
+3. make graphs dynamic
+4. test graphs
 '''
 
-def show_graph(city_name='Albury', start_date='2008-12-01', end_date='2008-12-30'):
+def get_temp_figure_html(city_name='Albury', start_date='2008-12-01', end_date='2008-12-30'):
 
     # convert the SQL query to a pandas dataframe format (plotly needs it)
     df = DataFrame(queries.get_temp_in_range(city_name, start_date, end_date))
@@ -39,8 +45,7 @@ def show_graph(city_name='Albury', start_date='2008-12-01', end_date='2008-12-30
         labels = {"value": "Temperature (°C)", "variable": "Type"}
         )
 
-    # show the bar chart
-    fig.show()
+    # return the chart in html string form so it can be passed to the html template
+    return fig.to_html()
 
-    # return the chart so it can be passed to the html template somehow
-    pass
+    

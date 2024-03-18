@@ -41,5 +41,5 @@ def map():
 
 @views_bp.route('/graph')
 def graph():
-    graphs.show_graph()
-    return render_template("graph.html.jinja")
+    figure_html = graphs.get_temp_figure_html()
+    return render_template("graph.html.jinja", figure_html = figure_html)

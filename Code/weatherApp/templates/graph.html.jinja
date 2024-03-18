@@ -1,3 +1,4 @@
+{# This template expects the parameter: figure_html - a plotly figure object in html string form#}
 {% extends "select_date.html.jinja" %}
 
 {% block head %}{% endblock %}
@@ -16,6 +17,7 @@
     <p>End date:</p>
     {{ super() }}
 
-    {# put graph stuff here#}
+    {# embedded graph #}
+    {{ figure_html }}
 
 {% endblock %}
