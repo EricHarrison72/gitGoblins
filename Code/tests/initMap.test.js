@@ -42,7 +42,7 @@ const L = {
 };
 global.L = L;
 
-// Assuming initMap is modified to be a module or its methods are otherwise made testable
+// Import everything required for testing from init_map.js
 const { initMap, createMarker, generateWeatherSummaryUrl, updatePopupLinks, cityMarkers  } = require('../weatherApp/static/js/init_map');
 
 
@@ -86,6 +86,7 @@ describe('init_map.js', () => {
       expect(L.setView).toHaveBeenCalledTimes(1);
   });
 
+  // Test for createMarker function
   test('createMarker adds a marker to the map', async () => { // Note the async keyword
     L.marker.mockClear();
     await createMarker(L.map, -27.4705, 153.0260, 'Brisbane'); // Await the async function
@@ -112,7 +113,6 @@ describe('updatePopupLinks updates the links for each popup correctly', () => {
       cityMarkers.push(marker);
     });
 
-    // Action: Trigger the function to update popup links
     updatePopupLinks();
 
     // Assertion: Check if setPopupContent was called for each marker, and that URL is correct
