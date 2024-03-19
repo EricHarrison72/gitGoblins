@@ -105,15 +105,24 @@ describe('init_map.js', () => {
 // Test for updatePopupLinks function
 describe('updatePopupLinks updates the links for each popup correctly', () => {
   test('it updates popup content based on selected date', () => {
-    // Setup
-    const testMarker = createMockMarker('Brisbane');
-    cityMarkers.push(testMarker); // Assuming this replaces the beforeEach setup for this test
+    // Setup: Define multiple cities and create a mock marker for each
+    const cities = ['Brisbane', 'Sydney', 'Melbourne'];
+    cities.forEach(cityName => {
+      const marker = createMockMarker(cityName);
+      cityMarkers.push(marker);
+    });
 
-    // Action
+    // Action: Trigger the function to update popup links
     updatePopupLinks();
 
-    // Assertion: Directly checking the mock set on a known marker
-    expect(testMarker.setPopupContent).toHaveBeenCalledTimes(1);
+    // Assertion: Check if setPopupContent was called for each marker, and that URL is correct
+    cityMarkers.forEach((marker, index) => {
+      expect(marker.setPopupContent).toHaveBeenCalledTimes(1);
+
+      const expectedDate = '2017-06-24';
+      const expectedUrlPart = `/weather_summary?city_name=${cities[index]}&date=${expectedDate}`;
+      expect(marker.setPopupContent).toHaveBeenCalledWith(expect.stringContaining(expectedUrlPart));
+    });
   });
 });
 
