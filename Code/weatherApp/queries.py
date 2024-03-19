@@ -23,6 +23,7 @@ def get_weather_data (city_name, date):
             rainToday AS raining,
             WeatherInstance.windGustSpeed AS wind_speed, 
             WeatherInstance.windGustDir AS wind_dir
+            WeatherInstance.cloud3pm AS cloud
         FROM WeatherInstance
         JOIN City ON WeatherInstance.cityId = City.cityId
         WHERE City.cityName = ? AND WeatherInstance.date = ?
@@ -40,31 +41,49 @@ def get_weather_data (city_name, date):
         'rainfall': 0.0, 
         'raining': '?', 
         'wind_speed': 0, 
-        'wind_dir': '?'
+        'wind_dir': '?',
+        'cloud': 0
         }
 
         # If a city name and date were passed, put that in the dict
         try:
-            weather_data_dict['city_name'] += ' for ' + city_name + ' on this date'
+            weather_data_dict['city_name'] += ' for ' + _add_space(city_name) + ' on this date'
             weather_data_dict['date'] = date
         except:
             pass
 
     else:
         weather_data_dict = {
-        'city_name': weather_data_row['city_name'], 
+        'city_name': _add_space(weather_data_row['city_name']), 
         'date': weather_data_row['date'], 
         'temp_high': weather_data_row['temp_high'], 
         'temp_low': weather_data_row['temp_low'], 
         'rainfall': weather_data_row['rainfall'], 
         'raining': weather_data_row['raining'], 
         'wind_speed': weather_data_row['wind_speed'], 
-        'wind_dir': weather_data_row['wind_dir']
+        'wind_dir': weather_data_row['wind_dir'],
+        'cloud' : weather_data_row['cloud']
         }
 
     return weather_data_dict
 
-# 
+# helper method that adds a space to the city name if it should have one
+# eg 'AliceSprings' -> 'Alice Springs'
+def _add_space(city_name: str):
+
+    upper_count = 0 # number of uppercase letters in city_name
+
+    # Add spaces in front of all internal upper case characterss
+    i = 1 # (we can skip checking first char
+    while i in range(len(city_name)):
+        if city_name[i].isupper():
+            city_name = city_name[:i] + ' ' + city_name[i:]
+            i += 1 # needed to skip the space
+
+        i += 1
+
+    return city_name
+
 def get_temp_in_range(city_name, start_date, end_date):
 
     datb = db.get_db()
@@ -82,3 +101,4 @@ def get_temp_in_range(city_name, start_date, end_date):
     ''', (city_name,start_date, end_date)).fetchall()
 
     return temp_in_range
+

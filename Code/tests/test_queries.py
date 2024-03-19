@@ -7,7 +7,8 @@ Contains unit tests for queries.py
 import pytest
 from weatherApp.queries import (
     get_weather_data,
-    get_temp_in_range
+    get_temp_in_range,
+    _add_space
 )
 
 # --------
@@ -29,7 +30,8 @@ def expected_dict_1():
             'rainfall': 0.0, 
             'raining': 'No', 
             'wind_speed': 30, 
-            'wind_dir': 'N'
+            'wind_dir': 'N',
+            'cloud': 3
         }
 
 # Expected dict for: params passed, no data exists
@@ -44,7 +46,8 @@ def expected_dict_2():
             'rainfall': 0.0, 
             'raining': '?', 
             'wind_speed': 0, 
-            'wind_dir': '?'
+            'wind_dir': '?',
+            'cloud': 0
         }
 
 # Expected dict for: 'None' params passed
@@ -58,7 +61,8 @@ def expected_dict_3():
             'rainfall': 0.0, 
             'raining': '?', 
             'wind_speed': 0, 
-            'wind_dir': '?'
+            'wind_dir': '?',
+            'cloud': 0
         }
 
 # Note
@@ -91,6 +95,10 @@ def test_get_weather_data(app, expected_dict_1, expected_dict_2, expected_dict_3
         #'None' params passed
         assert expected_dict_3 == get_weather_data(None, None)
 
+def test_add_space():
+      assert _add_space('AliceSprings') == 'Alice Springs'
+      assert _add_space('NewYorkCity') == 'New York City'
+
 def test_get_temp_in_range(app, expected_temp_table):
     
     with app.app_context():
@@ -101,3 +109,4 @@ def test_get_temp_in_range(app, expected_temp_table):
             assert expected_temp_table[i][key] == real_temp_table[i][key]
 
 # --------
+
