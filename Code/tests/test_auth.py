@@ -73,8 +73,9 @@ def test_logout(client, app):
         data={'email': 'test_user@gmail.com', 'password': 'password'}
     )
 
-    # Test logout with user ID 100
-    client.get('/auth/logout')
-    # Ensure that the user ID is removed from the session
-    assert 'user_id' not in session
+    # Test logout with user ID 100 within client context
+    with client:
+        client.get('/auth/logout')
+        # Ensure that the user ID is removed from the session
+        assert 'user_id' not in session
 
