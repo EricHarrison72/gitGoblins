@@ -161,7 +161,8 @@ async function updateMarkerIcons() {
         -- see that the icons are changing, so we know the setIcon function is still working
         */
          if (typeof marker.setIcon !== 'function') {
-            console.error('setIcon is not a function on this marker:', marker);
+            //Error message is commented out so it doesn't output each time a test is run
+            //console.error('setIcon is not a function on this marker:', marker);
             continue;
           }
 
@@ -218,4 +219,4 @@ async function determineMarkerIcon(cityName, date) {
 }
 
     // Export functions for testing purposes
-    module.exports = { initMap, createMarker, generateWeatherSummaryUrl, updatePopupLinks, updateMarkerIcons, cityMarkers };
+    module.exports = { initMap, createMarker, generateWeatherSummaryUrl, updatePopupLinks, updateMarkerIcons, determineMarkerIcon, cityMarkers };
