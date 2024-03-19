@@ -20,7 +20,7 @@ function initLocationSelect() {
 
         var date = year.value + '-' + month.value.padStart(2, '0') + '-' + day.value.padStart(2, '0');
 
-        this.href = generateWeatherSummaryUrl(city, date);
+        this.href = generateWeatherSummaryUrl(city.replace(/\s+/g, ''), date);
     };
 }
 
