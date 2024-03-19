@@ -155,12 +155,14 @@ async function updateMarkerIcons() {
         const cityName = marker.options.cityName;
         const newIcon = await determineMarkerIcon(cityName.replace(/\s+/g, ''), date);
 
-        // Mocking the setIcon function for testing isn't working
-        // This conditional allows us to skip the setIcon function only during testing calls
-        // Visually we can see that the icons are changing, so we know the setIcon function is still working
-        if (typeof marker.setIcon !== 'function') {
+        /* 
+        -- Mocking the setIcon function for testing isn't working properly. This conditional
+        -- allows us to skip the setIcon function only during testing calls. Visually we can
+        -- see that the icons are changing, so we know the setIcon function is still working
+        */
+         if (typeof marker.setIcon !== 'function') {
             console.error('setIcon is not a function on this marker:', marker);
-            continue; // Skip this iteration to avoid breaking the test
+            continue;
           }
 
         marker.setIcon(newIcon);
