@@ -22,7 +22,7 @@ def get_weather_data (city_name, date):
             WeatherInstance.rainfall, 
             rainToday AS raining,
             WeatherInstance.windGustSpeed AS wind_speed, 
-            WeatherInstance.windGustDir AS wind_dir
+            WeatherInstance.windGustDir AS wind_dir,
             WeatherInstance.cloud3pm AS cloud
         FROM WeatherInstance
         JOIN City ON WeatherInstance.cityId = City.cityId
