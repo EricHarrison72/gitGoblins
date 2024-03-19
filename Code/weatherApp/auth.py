@@ -17,19 +17,27 @@ import functools
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
-from werkzeug.security import check_password_hash, generate_password_hash
 from flask_bcrypt import Bcrypt
 from . import db
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 bcrypt = Bcrypt()
 
+
 @auth_bp.route('/register', methods=('GET', 'POST'))
 def register():
+    datb = db.get_db()
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-        datb = db.get_db()
+        first_name = request.form.get('first_name', '')
+        last_name = request.form.get('last_name', '')
+        email_list = bool(request.form.get('email_list'))
+
+        # Get the last userId and increment it by 1
+        last_user_id = get_last_user_id(datb)
+        user_id = last_user_id + 1
+
         error = None
 
         if not email:
@@ -41,8 +49,8 @@ def register():
             try:
                 hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
                 datb.execute(
-                    "INSERT INTO User (email, password) VALUES (?, ?)",
-                    (email, hashed_password),
+                    "INSERT INTO User (userId, email, password, firstName, lastName, emailList) VALUES (?, ?, ?, ?, ?, ?)",
+                    (user_id, email, hashed_password, first_name, last_name, email_list)
                 )
                 datb.commit()
                 flash("Registration successful. You can now log in.")
@@ -54,6 +62,7 @@ def register():
 
     return render_template('auth/register.html.jinja')
 
+
 #route to login page
 @auth_bp.route('/login', methods=('GET', 'POST'))
 def login():
@@ -62,10 +71,13 @@ def login():
         password = request.form['password']
         datb = db.get_db()
         error = None
+        print(email)
+        # Fetch user data including userId based on email
         user = datb.execute(
-            'SELECT * FROM User WHERE email = ?', (email,)
+            'SELECT userId, password FROM User WHERE email = ?', (email,)
         ).fetchone()
-
+       
+        print(email)
         if user is None:
             error = 'Incorrect email.'
         elif not bcrypt.check_password_hash(user['password'], password):
@@ -73,24 +85,24 @@ def login():
 
         if error is None:
             session.clear()
-            session['user_id'] = user['userId']  # Assuming userId is the correct column name
+            session['user_id'] = user['userId']  # Store user ID in session
+            
             return redirect(url_for('views.weather_summary'))
 
         flash(error)
 
     return render_template('auth/login.html.jinja')
 
-
-#bp.before_app_request() registers a function that runs before the view function, no matter what URL is requested. 
 @auth_bp.before_app_request
 def load_logged_in_user():
+    print(session)
     user_id = session.get('user_id')
 
     if user_id is None:
         g.user = None
     else:
         g.user = db.get_db().execute(
-            'SELECT * FROM user WHERE userid = ?', (user_id,)
+            'SELECT * FROM user WHERE userId = ?', (user_id,)
         ).fetchone()
         
 #logout of session
@@ -111,3 +123,9 @@ def login_required(view):
 
     return wrapped_view
 
+
+def get_last_user_id(datb):
+    # Query the database to get the maximum userId
+    result = datb.execute("SELECT MAX(userId) FROM User").fetchone()
+    last_user_id = result[0] if result[0] is not None else 0
+    return last_user_id

@@ -18,12 +18,12 @@ from .auth import login_required
 views_bp = Blueprint('views', __name__)
 
 @views_bp.route('/')
-#@login_required
+@login_required
 def index():
     return render_template("index.html.jinja")
 
 @views_bp.route('/weather_summary')
-#@login_required
+@login_required
 def weather_summary():
 
     city_name = request.args.get('city_name')
@@ -84,3 +84,4 @@ def determine_icon_based_on_weather(weather_data):
         return 'partcloud'
 
     return 'sun'
+
