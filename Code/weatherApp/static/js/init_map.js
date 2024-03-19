@@ -138,15 +138,13 @@ function updatePopupLinks() {
         var day = document.getElementById('daySelect').value;
         var date = year + '-' + month.padStart(2, '0') + '-' + day.padStart(2, '0')
 
-        var newPopupContent = `<b>${cityName}</b><br><a href="#" onclick="window.location.href='${generateWeatherSummaryUrl(cityName, date)}'">See weather details</a>`;
+        var newPopupContent = `<b>${cityName}</b><br><a href="#" onclick="window.location.href='${generateWeatherSummaryUrl(cityName.replace(/\s+/g, ''), date)}'">See weather details</a>`;
         marker.setPopupContent(newPopupContent);
     });
 }
 
 //Function to update all markers' icons with the current date
 async function updateMarkerIcons() {
-    console.log("Updating markers...");
-
     var year = document.getElementById('yearSelect').value;
     var month = document.getElementById('monthSelect').value;
     var day = document.getElementById('daySelect').value;
@@ -155,7 +153,7 @@ async function updateMarkerIcons() {
     // Loop through all markers and update their icon
     for (const marker of cityMarkers) {
         const cityName = marker.options.cityName; // Assuming cityName is stored in options
-        const newIcon = await determineMarkerIcon(cityName, date);
+        const newIcon = await determineMarkerIcon(cityName.replace(/\s+/g, ''), date);
 
         marker.setIcon(newIcon); // This should work if `marker` is a Leaflet marker instance
     }
@@ -169,11 +167,11 @@ async function createMarker(map, lat, lng, cityName) {
     var day = document.getElementById('daySelect').value;
     var date = year + '-' + month.padStart(2, '0') + '-' + day.padStart(2, '0')
 
-    var newIcon = await determineMarkerIcon(cityName, date);
+    var newIcon = await determineMarkerIcon(cityName.replace(/\s+/g, ''), date);
     
     var marker = L.marker([lat, lng], {icon: newIcon}).addTo(map);
 
-    marker.bindPopup(`<b>${cityName}</b><br><a href="#" onclick="event.preventDefault(); window.location.href='${generateWeatherSummaryUrl(cityName, date)}';">See weather details</a>`);
+    marker.bindPopup(`<b>${cityName}</b><br><a href="#" onclick="event.preventDefault(); window.location.href='${generateWeatherSummaryUrl(cityName.replace(/\s+/g, ''), date)}';">See weather details</a>`);
     marker.options.cityName = cityName; // Store cityName within marker options for later access
     cityMarkers.push(marker);
 }
