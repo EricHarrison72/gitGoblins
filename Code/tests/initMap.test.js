@@ -13,9 +13,11 @@ beforeAll(() => {
 document.getElementById = jest.fn().mockImplementation(id => {
   switch (id) {
       case 'yearSelect':
+        return { addEventListener: jest.fn(), value: "2017" };
       case 'monthSelect':
+        return { addEventListener: jest.fn(), value: "06" };
       case 'daySelect':
-          return { addEventListener: jest.fn(), value: "2020" };
+          return { addEventListener: jest.fn(), value: "24" };
       default:
           return null;
   }
@@ -40,11 +42,20 @@ const L = {
 };
 global.L = L;
 
-
-
-
 // Assuming initMap is modified to be a module or its methods are otherwise made testable
-const { initMap, createMarker, generateWeatherSummaryUrl, updatePopupLinks } = require('../weatherApp/static/js/init_map');
+const { initMap, createMarker, generateWeatherSummaryUrl, updatePopupLinks, cityMarkers  } = require('../weatherApp/static/js/init_map');
+
+
+// Additional mock setup to simulate cityMarkers and their popups
+const mockSetPopupContent = jest.fn();
+const createMockMarker = (cityName) => ({
+  getPopup: jest.fn().mockImplementation(() => ({
+    getContent: jest.fn().mockImplementation(() => `<b>${cityName}</b>`),
+    setContent: mockSetPopupContent
+  })),
+  setPopupContent: jest.fn(),
+  options: { cityName }
+});
 
 describe('init_map.js', () => {
   beforeEach(() => {
@@ -53,6 +64,10 @@ describe('init_map.js', () => {
     L.tileLayer.mockClear();
     L.addTo.mockClear();
     L.setView.mockClear();
+
+    // Reset mockSetPopupContent for clean test starts
+    mockSetPopupContent.mockClear();
+    cityMarkers.length = 0; // Clear existing markers
 
     // Reset the mocks for functions called on the object returned by L.marker()
     if (L.marker().addTo.mockClear) {
@@ -84,6 +99,22 @@ describe('init_map.js', () => {
       expect(url).toBe('/weather_summary?city_name=Brisbane&date=2017-06-24');
   });
 
+});
+
+
+// Test for updatePopupLinks function
+describe('updatePopupLinks updates the links for each popup correctly', () => {
+  test('it updates popup content based on selected date', () => {
+    // Setup
+    const testMarker = createMockMarker('Brisbane');
+    cityMarkers.push(testMarker); // Assuming this replaces the beforeEach setup for this test
+
+    // Action
+    updatePopupLinks();
+
+    // Assertion: Directly checking the mock set on a known marker
+    expect(testMarker.setPopupContent).toHaveBeenCalledTimes(1);
+  });
 });
 
 //Clear all mocks after each test
