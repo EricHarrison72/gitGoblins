@@ -23,17 +23,19 @@ document.getElementById = jest.fn().mockImplementation(id => {
   }
 });
 
-const sunIcon = 'mockSunIcon';
-const mockIcon = jest.fn().mockImplementation(() => 'mockSunIcon');
+const mockIcon = jest.fn().mockImplementation(iconOptions => {
+  if (iconOptions.iconUrl.includes("sun")) {
+    return 'mockSunIcon';
+  } else if (iconOptions.iconUrl.includes("rain")) {
+    return 'mockRainIcon';
+  } else if (iconOptions.iconUrl.includes("error")) {
+    return 'mockErrorIcon';
+  } else {
+    return 'mockDefaultIcon'; // Fallback or default icon
+  }
+});
 const mockSetIcon = jest.fn();
-// Extend the createMockMarker to include setIcon
-const extendedCreateMockMarker = (cityName) => {
-  const baseMock = createMockMarker(cityName);
-  return {
-    ...baseMock,
-    setIcon: mockSetIcon
-  };
-};
+
 
 // Mock bind popup function
 const mockBindPopup = jest.fn().mockReturnThis();
@@ -55,7 +57,7 @@ const L = {
 global.L = L;
 
 // Import everything required for testing from init_map.js
-const { initMap, createMarker, generateWeatherSummaryUrl, updatePopupLinks, updateMarkerIcons, cityMarkers  } = require('../weatherApp/static/js/init_map');
+const { initMap, createMarker, generateWeatherSummaryUrl, updatePopupLinks, updateMarkerIcons, determineMarkerIcon, cityMarkers  } = require('../weatherApp/static/js/init_map');
 
 
 // Additional mock setup to simulate cityMarkers and their popups
@@ -69,6 +71,7 @@ const createMockMarker = (cityName) => ({
   options: { cityName }
 });
 
+//Tests functionality for all functions necessary to initialize the map
 describe('init_map.js', () => {
   beforeEach(() => {
     // Reset the mocks for functions called on the L object directly
@@ -152,7 +155,6 @@ describe('updateMarkerIcons updates the icons for each marker correctly', () => 
       json: () => Promise.resolve({ icon: 'sun' }),
     });
   
-
     const cities = ['Brisbane', 'Sydney', 'Melbourne'];
     cities.forEach(cityName => {
       const marker = createMockMarker(cityName); // Original mock without setIcon
@@ -164,7 +166,44 @@ describe('updateMarkerIcons updates the icons for each marker correctly', () => 
     await updateMarkerIcons();
   
     // Assertions: Verify setIcon was called with the expected icon
-    expect(mockSetIcon).toHaveBeenCalledWith(sunIcon);
+    expect(mockSetIcon).toHaveBeenCalledWith('mockSunIcon');
+  });
+});
+
+// Test for determineMarkerIcon function
+describe('determineMarkerIcon functionality', () => {
+  beforeEach(() => {
+    // Reset fetch mock before each test
+    fetch.mockClear();
+  });
+
+  test('returns correct icon for sunny weather', async () => {
+    fetch.mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve({ icon: 'sun' }),
+    });
+    
+    //City and date don't matter here as above statement ensures the icon will be 'sun'
+    const icon = await determineMarkerIcon('Brisbane', '2017-06-24');
+    expect(icon).toEqual('mockSunIcon');
+  });
+
+  test('returns correct icon for rainy weather', async () => {
+    fetch.mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve({ icon: 'rain' }),
+    });
+    
+    //City and date don't matter here as above statement ensures the icon will be 'rain'
+    const icon = await determineMarkerIcon('Sydney', '2017-06-24');
+    expect(icon).toEqual('mockRainIcon');
+  });
+
+  //This test intentionally throws an error which will display in the console
+  test('returns error icon on fetch failure', async () => {
+    fetch.mockRejectedValueOnce(new Error('API failure'));
+    const icon = await determineMarkerIcon('Melbourne', '2017-06-24');
+    expect(icon).toEqual('mockErrorIcon');
   });
 });
 
