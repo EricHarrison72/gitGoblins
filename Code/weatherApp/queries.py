@@ -14,10 +14,16 @@ def get_weather_data (city_name, date):
     #SQL query to get data for specific city
     #weather_data is an sqlite3 Row object
     weather_data_row = datb.execute('''
-        SELECT City.cityName AS city_name, WeatherInstance.date, WeatherInstance.tempMax AS temp_high, 
-               WeatherInstance.tempMin AS temp_low, WeatherInstance.rainfall, 
-               rainToday AS raining, WeatherInstance.windGustSpeed AS wind_speed, 
-               WeatherInstance.windGustDir AS wind_dir, WeatherInstance.cloud3pm AS cloud
+        SELECT
+            City.cityName AS city_name,
+            WeatherInstance.date,
+            WeatherInstance.tempMax AS temp_high,
+            WeatherInstance.tempMin AS temp_low,
+            WeatherInstance.rainfall, 
+            rainToday AS raining,
+            WeatherInstance.windGustSpeed AS wind_speed, 
+            WeatherInstance.windGustDir AS wind_dir,
+            WeatherInstance.cloud3pm AS cloud
         FROM WeatherInstance
         JOIN City ON WeatherInstance.cityId = City.cityId
         WHERE City.cityName = ? AND WeatherInstance.date = ?
@@ -77,3 +83,22 @@ def _add_space(city_name: str):
         i += 1
 
     return city_name
+
+def get_temp_in_range(city_name, start_date, end_date):
+
+    datb = db.get_db()
+
+    #SQL query to get data for specific city
+    #weather_data is an sqlite3 Row object
+    temp_in_range = datb.execute('''
+        SELECT
+            WeatherInstance.date, 
+            WeatherInstance.tempMin AS temp_low,
+            WeatherInstance.tempMax AS temp_high
+        FROM WeatherInstance
+        JOIN City ON WeatherInstance.cityId = City.cityId
+        WHERE City.cityName = ? AND date BETWEEN ? AND ?
+    ''', (city_name,start_date, end_date)).fetchall()
+
+    return temp_in_range
+
