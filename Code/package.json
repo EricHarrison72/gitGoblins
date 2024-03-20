@@ -3,22 +3,29 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type":"module",
+
   "directories": {
     "test": "tests"
   },
+
   "scripts": {
     "test": "jest"
   },
+
   "keywords": [],
   "author": "",
   "license": "ISC",
+
   "devDependencies": {
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0"
   },
+
   "jest": {
     "testEnvironment": "jsdom"
   },
+
   "dependencies": {
     "node-fetch": "^2.7.0"
   }

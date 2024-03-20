@@ -5,8 +5,6 @@
  */
 // -------------------------------------------------
 
-function generateWeatherSummaryURL(cityName, date) {
+export function generateWeatherSummaryURL(cityName, date) {
     return `/weather_summary?city_name=${encodeURIComponent(cityName)}&date=${date}`;  
 }
-
-module.exports = { generateWeatherSummaryURL };

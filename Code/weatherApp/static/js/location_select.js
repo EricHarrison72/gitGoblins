@@ -3,7 +3,7 @@
  *
  * Sources: https://stackoverflow.com/questions/44346094/how-to-change-button-url-through-js
  */
-const generateWeatherSummaryURL = require('./urls.js')
+import { generateWeatherSummaryURL } from './urls.js';
 
 
 /* Initializes location_select.html. 
@@ -23,6 +23,7 @@ function initLocationSelect() {
         var date = year.value + '-' + month.value.padStart(2, '0') + '-' + day.value.padStart(2, '0');
 
         this.href = generateWeatherSummaryURL(city.replace(/\s+/g, ''), date);
+        debugger;
     };
 }
 
