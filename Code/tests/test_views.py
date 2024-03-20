@@ -62,3 +62,10 @@ def test_map(client, app):
         # Access the map page
         response = client.get('/map')
         assert response.status_code == 200
+        
+# Test if the location_select page renders successfully
+def test_location_select(client, app):
+    with client:
+        # Access the location_select page
+        response = client.get('/location_select')
+        assert response.status_code == 200
