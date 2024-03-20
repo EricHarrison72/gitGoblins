@@ -69,3 +69,10 @@ def test_location_select(client, app):
         # Access the location_select page
         response = client.get('/location_select')
         assert response.status_code == 200
+        
+# Test if the weather_icon API returns a valid response
+def test_get_weather_icon(client, app):
+    with client:
+        # Access the weather_icon API
+        response = client.get('/api/weather_icon?cityName=Sydney&date=2024-03-20')
+        assert response.status_code == 200
