@@ -40,7 +40,7 @@ def weather_summary():
     return render_template("weather_summary.html.jinja", weather_dict=weather_dict)
 
 @views_bp.route('/map')
-#@login_required
+@login_required
 def map():
     return render_template("map.html.jinja")
 
@@ -50,7 +50,7 @@ def graph():
     return render_template("graph.html.jinja", figure_html = figure_html)
 
 @views_bp.route('/location_select')
-#@login_required
+@login_required
 def location_select():
     return render_template("location_select.html.jinja")
 

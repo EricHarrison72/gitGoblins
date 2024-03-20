@@ -61,14 +61,14 @@ def test_map(client, app):
     with client:
         # Access the map page
         response = client.get('/map')
-        assert response.status_code == 200
+        assert response.status_code == 302
         
 # Test if the location_select page renders successfully
 def test_location_select(client, app):
     with client:
         # Access the location_select page
         response = client.get('/location_select')
-        assert response.status_code == 200
+        assert response.status_code == 302
         
 # Test if the weather_icon API returns a valid response
 def test_get_weather_icon(client, app):
@@ -76,3 +76,10 @@ def test_get_weather_icon(client, app):
         # Access the weather_icon API
         response = client.get('/api/weather_icon?cityName=Sydney&date=2024-03-20')
         assert response.status_code == 200
+   #graph.py is currently being worked on so this test isn't complete     
+"""
+def test_graph(client, app):
+   with client:
+      response = client.get('/graph')
+      assert response.status_code == 302
+   """
