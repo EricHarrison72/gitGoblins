@@ -55,3 +55,10 @@ def test_weather_summary_not_authenticated(client, app):
         response = client.get('/weather_summary')
         assert response.status_code == 302  # Redirect to login
         assert response.headers['Location'].endswith('/auth/login')
+
+# Test if the map page renders successfully
+def test_map(client, app):
+    with client:
+        # Access the map page
+        response = client.get('/map')
+        assert response.status_code == 200
