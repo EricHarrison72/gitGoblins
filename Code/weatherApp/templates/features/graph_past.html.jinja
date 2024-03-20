@@ -12,10 +12,11 @@
 
 {% block content %}
     {# Render date selection drop-down menu #}
-    <p>Start date:</p>
-    {{ super() }}
-    <p>End date:</p>
-    {{ super() }}
+    </br>
+    <label>Start date</label>
+    {% include 'helpers/select_date.html.jinja' %}
+    <label>End date</label>
+    {% include 'helpers/select_date.html.jinja' %}
 
     {# embedded graph #}
     {{ figure_html }}
