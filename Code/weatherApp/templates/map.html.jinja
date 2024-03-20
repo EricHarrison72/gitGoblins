@@ -1,4 +1,4 @@
-{% extends 'select_date.html.jinja' %}
+{% extends 'base.html.jinja' %}
 
 {% block head %}
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -13,7 +13,7 @@
 {% endblock %}
 {% block content %}
     {# Render date selection drop-down menu #}
-    {{ super() }}
+    {% include './helpers/select_date.html.jinja'%}
 
     <div id="map" style="height: 600px; width: 100%;"></div>
     <script src="{{ url_for('static', filename='js/init_map.js') }}"></script>

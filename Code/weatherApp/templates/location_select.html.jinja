@@ -4,7 +4,7 @@
     https://www.youtube.com/watch?v=jIAPewyzrp0
 -->
 
-{% extends 'select_date.html.jinja' %}
+{% extends 'base.html.jinja' %}
 
 {% block head %}
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
@@ -25,7 +25,7 @@
         
         <div align="center">
             <label>Select Date</label>
-            <div>{{ super() }}</div>
+            <div>{% include "./helpers/select_date.html.jinja" %}</div>
         </div>
 
         <div align="center">
