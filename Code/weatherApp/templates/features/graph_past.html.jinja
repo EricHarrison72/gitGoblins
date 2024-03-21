@@ -1,7 +1,9 @@
 {# This template expects the parameter: figure_html - a plotly figure object in html string form#}
 {% extends "base.html.jinja" %}
 
-{% block head %}{% endblock %}
+{% block head %}
+    {% include 'helpers/bootstrap_header_links.html.jinja' %}
+{% endblock %}
 {% block title %}
     Graph
 {% endblock %}
@@ -17,6 +19,9 @@
     {% include 'helpers/select_date.html.jinja' %}
     <label>End date</label>
     {% include 'helpers/select_date.html.jinja' %}
+
+    <label>Location</label>
+    {% include 'helpers/select_single_location.html.jinja' %}
 
     {# embedded graph #}
     {{ figure_html }}
