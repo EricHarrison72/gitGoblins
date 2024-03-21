@@ -87,7 +87,7 @@ def login():
             session.clear()
             session['user_id'] = user['userId']  # Store user ID in session
             
-            return redirect(url_for('views.weather_summary'))
+            return redirect(url_for('views.index'))
 
         flash(error)
 
