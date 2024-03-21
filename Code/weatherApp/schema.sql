@@ -19,7 +19,7 @@ CREATE TABLE User (
     email VARCHAR(50) UNIQUE,
     emailList BOOLEAN,
     password VARCHAR(128),
-	isAdmin boolean DEFAULT FALSE
+	isAdmin BOOLEAN DEFAULT FALSE
 );
 
 

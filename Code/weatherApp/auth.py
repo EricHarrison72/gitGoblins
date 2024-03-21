@@ -19,7 +19,7 @@ from flask import (
 )
 from flask_bcrypt import Bcrypt
 from . import db
-
+passcode = 'goblin'
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 bcrypt = Bcrypt()
 
@@ -131,11 +131,12 @@ def get_last_user_id(datb):
     return last_user_id
 
 
+# admin_register route
 @auth_bp.route('/admin_register', methods=['GET', 'POST'])
 def admin_register():
     # Check if the passcode is correct before rendering the admin register page
-    passcode = request.args.get('passcode')
-    if passcode != 'your_admin_passcode':  # Change this to your actual passcode
+    passcode = session.get('passcode')
+    if passcode != '12':  # Change this to your actual passcode
         flash('Invalid passcode')
         return redirect(url_for('auth.admin_login'))
 
@@ -176,16 +177,30 @@ def admin_register():
 
     return render_template('auth/admin_register.html.jinja')
 
+
+# admin_login route
 @auth_bp.route('/admin_login', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
-        passcode = request.form['passcode']
+        entered_answer = request.form['passcode']
 
-        # Check if the passcode matches
-        if passcode == 'goblin':  # Change this to your actual passcode
-            # Redirect to admin registration page with passcode as parameter
-            return redirect(url_for('auth.admin_register', passcode=passcode))
+        # Check if the entered answer is '12'
+        if entered_answer == '12':
+            # Store the passcode in the session
+            session['passcode'] = entered_answer
+            # Redirect to admin registration page
+            return redirect(url_for('auth.admin_register'))
 
-        flash('Invalid passcode')
+        flash('Incorrect answer')
 
     return render_template('auth/admin_login.html.jinja')
+
+@auth_bp.route('/admin_dashboard')
+def admin_dashboard():
+    # Check if the user is logged in and is an admin
+    if 'user_id' not in session or not session.get('isAdmin'):
+        # Redirect to login page if not logged in or not an admin
+        return redirect(url_for('login'))
+
+    # Render the admin dashboard template
+    return render_template('admin_dashboard.html.jinja')
