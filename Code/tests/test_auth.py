@@ -47,8 +47,8 @@ def test_login(client, app):
         '/auth/login',
         data={'email': 'test_user@gmail.com', 'password': 'password'}
     )
-    # Check if it redirects to the weather summary page
-    assert response.headers["Location"] == "/weather_summary"
+    # Check if it redirects to the home page
+    assert response.headers["Location"] == "/"
 
     # Check if user ID 100 is stored in session
     with client:
