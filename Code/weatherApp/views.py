@@ -62,9 +62,6 @@ def get_weather_icon():
     
     weather_dict = queries.get_weather_data(city_name, date)
     
-    if weather_dict is not None:
-        icon_name = weather.determine_icon_based_on_weather(weather_dict)
-    else:
-        icon_name = 'error'  # Fallback icon if no weather data found
+    icon_name = weather.determine_icon_based_on_weather(weather_dict)
     
     return jsonify({'icon': icon_name})
