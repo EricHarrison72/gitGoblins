@@ -95,7 +95,22 @@ def expected_sun():
             'cloud': 0
         }
     
-def test_determine_icon_based_on_weather(app, expected_error, expected_rain, expected_wind, expected_cloud, expected_partcloud, expected_sun):
+@pytest.fixture()
+def expected_value_error():
+    #Data that should return sun icon
+    return {
+            'city_name': 'Albury', 
+            'date': '2023-01-01', 
+            'temp_high': 10.0, 
+            'temp_low': 2.0, 
+            'rainfall': 0.0, 
+            'raining': 'No', 
+            'wind_speed': 'NA', 
+            'wind_dir': 'N',
+            'cloud': 0
+        }
+    
+def test_determine_icon_based_on_weather(app, expected_error, expected_rain, expected_wind, expected_cloud, expected_partcloud, expected_sun, expected_value_error):
 
     with app.app_context():
         # data for error returns error
@@ -115,3 +130,6 @@ def test_determine_icon_based_on_weather(app, expected_error, expected_rain, exp
         
         # data for sun returns sun
         assert 'sun' == determine_icon_based_on_weather(expected_sun)
+        
+        # data with non-number wind speed results in valueError (ignoring wind) and returns sun
+        assert 'sun' == determine_icon_based_on_weather(expected_value_error)
