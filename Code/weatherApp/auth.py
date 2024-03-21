@@ -129,3 +129,63 @@ def get_last_user_id(datb):
     result = datb.execute("SELECT MAX(userId) FROM User").fetchone()
     last_user_id = result[0] if result[0] is not None else 0
     return last_user_id
+
+
+@auth_bp.route('/admin_register', methods=['GET', 'POST'])
+def admin_register():
+    # Check if the passcode is correct before rendering the admin register page
+    passcode = request.args.get('passcode')
+    if passcode != 'your_admin_passcode':  # Change this to your actual passcode
+        flash('Invalid passcode')
+        return redirect(url_for('auth.admin_login'))
+
+    datb = db.get_db()
+    
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        first_name = request.form.get('first_name', '')
+        last_name = request.form.get('last_name', '')
+        email_list = bool(request.form.get('email_list'))
+
+        error = None
+
+        if not email:
+            error = 'Email is required.'
+        elif not password:
+            error = 'Password is required.'
+
+        if error is None:
+            try:
+                # Get the last userId and increment it by 1
+                last_user_id = get_last_user_id(datb)
+                user_id = last_user_id + 1
+                
+                hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+                datb.execute(
+                    "INSERT INTO User (userId, email, password, firstName, lastName, emailList, isAdmin) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    (user_id, email, hashed_password, first_name, last_name, email_list, True)
+                )
+                datb.commit()
+                flash("Admin registration successful.")
+                return redirect(url_for("auth.login"))
+            except datb.IntegrityError:
+                error = f"User with email {email} is already registered."
+
+        flash(error)
+
+    return render_template('auth/admin_register.html.jinja')
+
+@auth_bp.route('/admin_login', methods=['GET', 'POST'])
+def admin_login():
+    if request.method == 'POST':
+        passcode = request.form['passcode']
+
+        # Check if the passcode matches
+        if passcode == 'goblin':  # Change this to your actual passcode
+            # Redirect to admin registration page with passcode as parameter
+            return redirect(url_for('auth.admin_register', passcode=passcode))
+
+        flash('Invalid passcode')
+
+    return render_template('auth/admin_login.html.jinja')

@@ -18,7 +18,8 @@ CREATE TABLE User (
     lastName VARCHAR(30),
     email VARCHAR(50) UNIQUE,
     emailList BOOLEAN,
-    password VARCHAR(128)
+    password VARCHAR(128),
+	isAdmin boolean DEFAULT FALSE
 );
 
 
