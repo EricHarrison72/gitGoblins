@@ -1,3 +1,10 @@
+# --------------------------------------------------
+# test_weather.py
+'''
+Unit tests for user registration.
+'''
+# --------------------------------------------------
+
 # Import necessary modules for testing
 import pytest
 from flask import session
