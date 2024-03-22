@@ -1,7 +1,6 @@
-{% extends 'base.html.jinja' %}
 <!-- 
 This template expects the following parameters:
-  weather_dict - dictionary with keys:
+  -- weather_dict, with keys:
     - 'city_name',
     - 'date',
     - 'temp_high', 
@@ -11,6 +10,8 @@ This template expects the following parameters:
     - 'wind_speed', 
     - 'wind_dir'
 -->
+{% extends 'base.html.jinja' %}
+{% import 'helpers/selectors.html.jinja' as selectors %}
 
 {% block title %}
   Weather Summary
@@ -23,21 +24,23 @@ This template expects the following parameters:
 {% block content %}
 
   <br>
-  <table class='select-table'>
-    <tr>
-      <th>Date</th>
-      <th>Location</th>
-    </tr>
-    <tr>
-      <td>{% include 'helpers/select_date.html.jinja' %}</td>
-      <td>{% include 'helpers/select_single_location.html.jinja' %}</td>
-      <td>
-        <button onclick="reloadWithArgs_WeatherSummary()">Submit</button>
-      </td>
-    </tr>
-  </table>
+  <div style="overflow-x: auto;">
+    <table class='select-table'>
+      <tr>
+        <th>Location</th>
+        <th>Date</th>
+      </tr>
+      <tr>
+        <td>{{ selectors.select_single_location() }}</td>
+        <td>{{ selectors.select_date() }}</td>
+        <td>
+          <button onclick="reloadWithArgs_WeatherSummary()">Submit</button>
+        </td>
+      </tr>
+    </table>
+  </div>
 
-  <h3>{{weather_dict['city_name']}} {{ weather_dict['date'] }}</h3>
+  <h3>{{weather_dict['city_name']}} — {{ weather_dict['date'] }}</h3>
 
   <font size="+2">{{ weather_dict['temp_high'] }}&deg</font><font size="-2"><sub>high</sub></font> |
   <font size="+2">{{ weather_dict['temp_low'] }}&deg</font><font size="-2"><sub>low</sub></font>
