@@ -1,42 +1,64 @@
-{# 
+{# --------------------------------------------------
 selectors.html.jinja
 ----------------------
 Contains macros for selection menus, including:
 - select_date
 - select_single_location
 - select_multiple_locations
-#}
 
-{% macro select_date(div_id='dateSelect')%}
+Docs:
+- [Jinja2 Docs: Macros](https://jinja.palletsprojects.com/en/3.1.x/templates/#macros)
+-------------------------------------------------- #}
+
+{% macro select_date(div_id='dateSelect', url_arg_date='2017-06-24') %}
+
+    {% set selected_year = url_arg_date[:4] | int %}
+    {% set selected_month = url_arg_date[5:7] | int %}
+    {% set selected_day = url_arg_date[8:] | int %}
+
     <div id="{{ div_id }}">
         <select id="yearSelect">
             {% for year in range(2008, 2018) %}
-            <option value="{{ year }}" {% if year == 2017 %}selected{% endif %}>{{ year }}</option>
+                <option value="{{ year }}" {% if year == selected_year %} selected {% endif %}>
+                        {{ year }}
+                </option>
             {% endfor %}
         </select>
+
         <select id="monthSelect">
-            <option value="1">January</option>
-            <option value="2">February</option>
-            <option value="3">March</option>
-            <option value="4">April</option>
-            <option value="5">May</option>
-            <option value="6" selected>June</option>
-            <option value="7">July</option>
-            <option value="8">August</option>
-            <option value="9">September</option>
-            <option value="10">October</option>
-            <option value="11">November</option>
-            <option value="12">December</option>
+            {% set months = [
+                'January',
+                'February',
+                'March',
+                'April',
+                'May',
+                'June',
+                'July',
+                'August',
+                'September',
+                'October',
+                'November',
+                'December'
+            ] %}
+
+            {% for i in range(months|length) %}
+                <option value="{{ i+1 }}" {% if i+1 == selected_month %} selected {% endif %}>
+                    {{ months[i] }}
+                </option>
+            {% endfor %}
         </select>
+
         <select id="daySelect">
             {% for day in range(1, 32) %}
-            <option value="{{ day }}" {% if day == 24 %}selected{% endif %}>{{ day }}</option>
+                <option value="{{ day }}" {% if day == selected_day %}selected{% endif %}>
+                    {{ day }}
+                </option>
             {% endfor %}
         </select>
     </div>
 {% endmacro %}
 
-{% macro select_single_location() %}
+{% macro select_single_location(url_arg_city='Canberra') %}
     <select id="citySelect">
         <option value="1">Adelaide</option>
         <option value="2">Albany</option>
