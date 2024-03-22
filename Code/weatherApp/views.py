@@ -17,7 +17,8 @@ from flask import (
 from . import (
     graphs,
     queries,
-    weather
+    weather,
+    predictions
 )
 from .auth import login_required
 
@@ -65,3 +66,12 @@ def get_weather_icon():
     icon_name = weather.determine_icon_based_on_weather(weather_dict)
     
     return jsonify({'icon': icon_name})
+
+#This page is used only to run predictions code while creating the model
+@views_bp.route('/api/predict_weather')
+def predict_weather():
+    df = predictions.create_dataframe()
+    df = predictions.process_data(df)
+    predictions.build_model(df)
+    
+    return render_template("index.html.jinja")
