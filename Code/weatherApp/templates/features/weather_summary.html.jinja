@@ -59,6 +59,8 @@ This template expects the following parameters:
     </tr>
   </table>
 
-  <script src="{{ url_for('static', filename='js/submit.js') }}"></script>
+{% endblock %}
 
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/submit.js') }}"></script>
 {% endblock %}

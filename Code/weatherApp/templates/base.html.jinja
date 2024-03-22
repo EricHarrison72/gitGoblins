@@ -34,7 +34,7 @@ FreeCodeCamp "Learn Flask for Python" https://www.youtube.com/watch?v=Z1RJmh_Oqe
     </nav>
     
 
-    <section class="content" vertical-align="center">
+    <section class="content">
         <header>
             <h1>{% block header %}{% endblock %}</h1>
         </header>
@@ -45,6 +45,8 @@ FreeCodeCamp "Learn Flask for Python" https://www.youtube.com/watch?v=Z1RJmh_Oqe
 
         {% block content %}{% endblock %}
     </section>
+
+    {% block scripts %}{% endblock %}
 
 </body>
 </html>
