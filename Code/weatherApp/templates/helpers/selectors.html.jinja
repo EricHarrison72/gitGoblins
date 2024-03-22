@@ -1,0 +1,91 @@
+{# 
+selectors.html.jinja
+----------------------
+Contains macros for selection menus, including:
+- select_date
+- select_single_location
+- select_multiple_locations
+#}
+
+{% macro select_date(div_id='dateSelect')%}
+    <div id="{{ div_id }}">
+        <select id="yearSelect">
+            {% for year in range(2008, 2018) %}
+            <option value="{{ year }}" {% if year == 2017 %}selected{% endif %}>{{ year }}</option>
+            {% endfor %}
+        </select>
+        <select id="monthSelect">
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6" selected>June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+        </select>
+        <select id="daySelect">
+            {% for day in range(1, 32) %}
+            <option value="{{ day }}" {% if day == 24 %}selected{% endif %}>{{ day }}</option>
+            {% endfor %}
+        </select>
+    </div>
+{% endmacro %}
+
+{% macro select_single_location() %}
+    <select id="citySelect">
+        <option value="1">Adelaide</option>
+        <option value="2">Albany</option>
+        <option value="3">Albury</option>
+        <option value="4">Alice Springs</option>
+        <option value="5">Badgerys Creek</option>
+        <option value="6">Ballarat</option>
+        <option value="7">Bendigo</option>
+        <option value="8">Brisbane</option>
+        <option value="9">Cairns</option>
+        <option value="10">Canberra</option>
+        <option value="11">Cobar</option>
+        <option value="12">Coffs Harbour</option>
+        <option value="13">Dartmoor</option>
+        <option value="14">Darwin</option>
+        <option value="15">Gold Coast</option>
+        <option value="16">Hobart</option>
+        <option value="17">Katherine</option>
+        <option value="18">Launceston</option>
+        <option value="19">Melbourne</option>
+        <option value="20">Melbourne Airport</option>
+        <option value="21">Mildura</option>
+        <option value="22">Moree</option>
+        <option value="23">Mount Gambier</option>
+        <option value="24">Mount Ginini</option>
+        <option value="25">Newcastle</option>
+        <option value="26">Nhil</option>
+        <option value="27">Norah Head</option>
+        <option value="28">Norfolk Island</option>
+        <option value="29">Nuriootpa</option>
+        <option value="30">Pearce RAAF</option>
+        <option value="31">Penrith</option>
+        <option value="32">Perth</option>
+        <option value="33">Perth Airport</option>
+        <option value="34">Portland</option>
+        <option value="35">Richmond</option>
+        <option value="36">Sale</option>
+        <option value="37">Salmon Gums</option>
+        <option value="38">Sydney</option>
+        <option value="39">Sydney Airport</option>
+        <option value="40">Townsville</option>
+        <option value="41">Tuggeranong</option>
+        <option value="42">Uluru</option>
+        <option value="43">Wagga Wagga</option>
+        <option value="44">Walpole</option>
+        <option value="45">Watsonia</option>
+        <option value="46">Williamtown</option>
+        <option value="47">Witchcliffe</option>
+        <option value="48">Wollongong</option>
+        <option value="49">Woomera</option>
+    </select>
+{% endmacro %}
