@@ -6,7 +6,7 @@ date_select.html.jinja
 Helper template for a date-selection dropdown menu.
 #}
 
-<div style="margin-bottom: 20px;">
+<div>
     <select id="yearSelect">
         {% for year in range(2008, 2018) %}
         <option value="{{ year }}" {% if year == 2017 %}selected{% endif %}>{{ year }}</option>
