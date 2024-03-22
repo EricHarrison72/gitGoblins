@@ -13,15 +13,20 @@
 {% endblock %}
 
 {% block content %}
-    {# Render date selection drop-down menu #}
+    {# Selection menus #}
     </br>
-    <label>Start date</label>
-    {% include 'helpers/select_date.html.jinja' %}
-    <label>End date</label>
-    {% include 'helpers/select_date.html.jinja' %}
-
-    <label>Location</label>
-    {% include 'helpers/select_single_location.html.jinja' %}
+    <table class="select-table">
+        <tr>
+            <th>Start date</th>
+            <th>End date</th>
+            <th>Location</th>
+        </tr>
+        <tr>
+            <td>{% include 'helpers/select_date.html.jinja' %}</td>
+            <td>{% include 'helpers/select_date.html.jinja' %}</td>
+            <td>{% include 'helpers/select_single_location.html.jinja' %}</td>
+        </tr>
+    </table>
 
     {# embedded graph #}
     {{ figure_html }}
