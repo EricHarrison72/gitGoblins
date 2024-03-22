@@ -34,10 +34,20 @@ table, th, td {
 .select-table {
   border-collapse: collapse;
   border-style: hidden;
+  border-radius: 6px;
+  background-color: #FFCD00;
 }
-.select-table th, .select-table td {
+.select-table th {
   border-style: hidden;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-top:10px;
+  padding-left: 15px;
+  padding-right: 15px;
+  text-align: left;
+}
+.select-table td {
+  border-style: hidden;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom:15px;
   text-align: left;
 }
