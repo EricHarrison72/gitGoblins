@@ -2,8 +2,8 @@
 <!-- 
 This template expects the following parameters:
   weather_dict - dictionary with keys:
-    - 'city_name'
-    - 'date'
+    - 'city_name',
+    - 'date',
     - 'temp_high', 
     - 'temp_low', 
     - 'rainfall', 
@@ -17,16 +17,33 @@ This template expects the following parameters:
 {% endblock %}
 
 {% block header %}
-  {{ weather_dict['city_name'] }}
+  Weather Summary
 {% endblock %}
 
 {% block content %}
-  <h3>{{ weather_dict['date'] }}</h3>
+
+  <br>
+  <table class='select-table'>
+    <tr>
+      <th>Date</th>
+      <th>Location</th>
+    </tr>
+    <tr>
+      <td>{% include 'helpers/select_date.html.jinja' %}</td>
+      <td>{% include 'helpers/select_single_location.html.jinja' %}</td>
+      <td>
+        <button onclick="reloadWithArgs_WeatherSummary()">Submit</button>
+      </td>
+    </tr>
+  </table>
+
+  <h3>{{weather_dict['city_name']}} {{ weather_dict['date'] }}</h3>
 
   <font size="+2">{{ weather_dict['temp_high'] }}&deg</font><font size="-2"><sub>high</sub></font> |
   <font size="+2">{{ weather_dict['temp_low'] }}&deg</font><font size="-2"><sub>low</sub></font>
 
-  <br></br><br></br>
+  <br>
+  <br>
 
   <table>
     <tr>
@@ -38,5 +55,7 @@ This template expects the following parameters:
       <td>Wind direction | <b>{{ weather_dict['wind_dir'] }}</b></td>
     </tr>
   </table>
+
+  <script src="{{ url_for('static', filename='js/submit.js') }}"></script>
 
 {% endblock %}
