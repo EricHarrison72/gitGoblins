@@ -1,6 +1,7 @@
 {# This template expects the parameter: figure_html - a plotly figure object in html string form#}
 {% extends "base.html.jinja" %}
 
+
 {% block head %}
 {% endblock %}
 {% block title %}
@@ -16,18 +17,28 @@
     <br>
     <table class="select-table">
         <tr>
+            <th>Location</th>
             <th>Start date</th>
             <th>End date</th>
-            <th>Location</th>
+            
         </tr>
         <tr>
-            <td>{% include 'helpers/select_date.html.jinja' %}</td>
-            <td>{% include 'helpers/select_date.html.jinja' %}</td>
-            <td>{% include 'helpers/select_single_location.html.jinja' %}</td>
+            <td>{{ selectors.select_single_location() }}</td>
+            <td>{{ selectors.select_date(div_id="startDateSelect", sub_div_id='start_') }}</td>
+            <td>{{ selectors.select_date(div_id="endDateSelect", sub_div_id='end_') }}</td>
+            <td>
+                <button onclick="reloadPageWithArgs(`city_name=${getCityFromSelection()}&start_date=${getDateFromSelection('start_')}&end_date=${getDateFromSelection('end_')}`)">
+                    Submit
+                </button>
+            </td>
         </tr>
     </table>
 
     {# embedded graph #}
     {{ figure_html }}
 
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/submit.js') }}"></script>
 {% endblock %}

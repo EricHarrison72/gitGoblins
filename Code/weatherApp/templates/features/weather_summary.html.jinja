@@ -34,7 +34,10 @@ This template expects the following parameters:
         <td>{{ selectors.select_single_location() }}</td>
         <td>{{ selectors.select_date() }}</td>
         <td>
-          <button onclick="reloadWithArgs_WeatherSummary()">Submit</button>
+
+          <button onclick="reloadPageWithArgs(`city_name=${getCityFromSelection()}&date=${getDateFromSelection()}`)">
+            Submit
+          </button>
         </td>
       </tr>
     </table>
