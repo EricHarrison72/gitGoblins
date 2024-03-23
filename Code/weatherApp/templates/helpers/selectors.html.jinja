@@ -12,6 +12,9 @@ Docs:
 
 {% macro select_date(id_prefix='', url_arg_date='2017-06-24') %}
 
+    {% if url_arg_date == None %}
+        {% set url_arg_date = '2017-06-24' %}
+    {% endif %}
 
     {% set selected_year = url_arg_date[:4] | int %}
     {% set selected_month = url_arg_date[5:7] | int %}
@@ -115,7 +118,7 @@ Docs:
         ] %}
 
         {% for i in range(cities|length) %}
-            <option value="{{ i+1 }}" {% if cities[i] == url_arg_city %} selected {% endif %}>
+            <option value="{{ i+1 }}" {% if cities[i]|replace(' ','') == url_arg_city %} selected {% endif %}>
                 {{ cities[i] }}
             </option>
         {% endfor %}

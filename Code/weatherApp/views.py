@@ -56,7 +56,10 @@ def graph_past():
         'end_date' : request.args.get('end_date')
     }
     
-    if None in url_args.values():
+    if (url_args['city_name'] == None or
+        url_args['start_date'] == None or
+        url_args['end_date'] == None
+        ):
         figure_html = graphs.get_temp_figure_html()
     else:
         figure_html = graphs.get_temp_figure_html(url_args['city_name'], url_args['start_date'], url_args['end_date'])
