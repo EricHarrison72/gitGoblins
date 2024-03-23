@@ -1,3 +1,11 @@
+// -----------------------------------
+// submit.js
+/*
+Script containing the functions neccessary for 
+the submit buttons in selection tables on feature pages.
+Based off of code Josh and Eric wrote.
+*/
+// --------------------------------------
 
 function getDateFromSelection(subDivId='') {
     var year = document.getElementById(subDivId + 'yearSelect');
@@ -14,6 +22,10 @@ function getCityFromSelection() {
     cityName = cityName.replace(/\s+/g, '');
 
     return cityName;
+}
+
+function getCitiesFromSelection() {
+    //TODO - Eric
 }
 
 function reloadPageWithArgs(urlArgs){
