@@ -12,7 +12,7 @@ Docs:
 
 {% macro select_date(id_prefix='', url_arg_date='2017-06-24') %}
 
-    {% if url_arg_date == None %}
+    {% if url_arg_date in [None, 'None', 'No Date'] %}
         {% set url_arg_date = '2017-06-24' %}
     {% endif %}
 
@@ -64,6 +64,11 @@ Docs:
 
 
 {% macro select_single_location(url_arg_city='Canberra') %}
+
+    {% if url_arg_city == None or url_arg_city == 'NO DATA' %}
+        {% set url_arg_city = 'Canberra' %}
+    {% endif %}
+
     <select id="citySelect">
         {% set cities = [
             'Adelaide',

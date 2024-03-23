@@ -40,7 +40,7 @@ def weather_summary():
 
     weather_dict = queries.get_weather_data(city_name, date)
     
-    return render_template("features/weather_summary.html.jinja", weather_dict=weather_dict,)
+    return render_template("features/weather_summary.html.jinja", weather_dict=weather_dict)
 
 @views_bp.route('/map')
 #@login_required
