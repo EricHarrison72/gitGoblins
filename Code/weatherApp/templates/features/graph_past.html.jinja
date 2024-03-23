@@ -1,5 +1,13 @@
-{# This template expects the parameter: figure_html - a plotly figure object in html string form#}
+{# 
+This template expects the following parameters: 
+ -- figure_html - a plotly figure object in html string form
+ -- url_args - a dictionary with the keys: 
+    - city_name
+    - start_date
+    - end_date
+#}
 {% extends "base.html.jinja" %}
+{% import 'helpers/selectors.html.jinja' as selectors %}
 
 
 {% block head %}
@@ -23,9 +31,9 @@
             
         </tr>
         <tr>
-            <td>{{ selectors.select_single_location() }}</td>
-            <td>{{ selectors.select_date(div_id="startDateSelect", sub_div_id='start_') }}</td>
-            <td>{{ selectors.select_date(div_id="endDateSelect", sub_div_id='end_') }}</td>
+            <td>{{ selectors.select_single_location(url_arg_city=url_args['city_name']) }}</td>
+            <td>{{ selectors.select_date(div_id="startDateSelect", sub_div_id='start_', url_arg_date=url_args['start_date']) }}</td>
+            <td>{{ selectors.select_date(div_id="endDateSelect", sub_div_id='end_', url_arg_date=url_args['end_date']) }}</td>
             <td>
                 <button onclick="reloadPageWithArgs(`city_name=${getCityFromSelection()}&start_date=${getDateFromSelection('start_')}&end_date=${getDateFromSelection('end_')}`)">
                     Submit

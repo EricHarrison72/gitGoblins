@@ -1,4 +1,4 @@
-<!-- 
+{#
 This template expects the following parameters:
   -- weather_dict, with keys:
     - 'city_name',
@@ -9,7 +9,7 @@ This template expects the following parameters:
     - 'raining', 
     - 'wind_speed', 
     - 'wind_dir'
--->
+#}
 {% extends 'base.html.jinja' %}
 {% import 'helpers/selectors.html.jinja' as selectors %}
 
@@ -31,8 +31,8 @@ This template expects the following parameters:
         <th>Date</th>
       </tr>
       <tr>
-        <td>{{ selectors.select_single_location() }}</td>
-        <td>{{ selectors.select_date() }}</td>
+        <td>{{ selectors.select_single_location(url_arg_city = weather_dict['city_name']) }}</td>
+        <td>{{ selectors.select_date(url_arg_date = weather_dict['date']) }}</td>
         <td>
 
           <button onclick="reloadPageWithArgs(`city_name=${getCityFromSelection()}&date=${getDateFromSelection()}`)">
