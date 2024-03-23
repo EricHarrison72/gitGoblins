@@ -10,14 +10,15 @@ Docs:
 - [Jinja2 Docs: Macros](https://jinja.palletsprojects.com/en/3.1.x/templates/#macros)
 -------------------------------------------------- #}
 
-{% macro select_date(div_id='dateSelect', sub_div_id='', url_arg_date='2017-06-24') %}
+{% macro select_date(id_prefix='', url_arg_date='2017-06-24') %}
+
 
     {% set selected_year = url_arg_date[:4] | int %}
     {% set selected_month = url_arg_date[5:7] | int %}
     {% set selected_day = url_arg_date[8:] | int %}
 
-    <div id="{{ div_id }}">
-        <select id="{{ sub_div_id }}yearSelect">
+    <div id="{{ id_prefix }}dateSelect">
+        <select id="{{ id_prefix }}yearSelect">
             {% for year in range(2008, 2018) %}
                 <option value="{{ year }}" {% if year == selected_year %} selected {% endif %}>
                         {{ year }}
@@ -25,7 +26,7 @@ Docs:
             {% endfor %}
         </select>
 
-        <select id="{{ sub_div_id }}monthSelect">
+        <select id="{{ id_prefix }}monthSelect">
             {% set months = [
                 'January',
                 'February',
@@ -48,7 +49,7 @@ Docs:
             {% endfor %}
         </select>
 
-        <select id="{{ sub_div_id }}daySelect">
+        <select id="{{ id_prefix }}daySelect">
             {% for day in range(1, 32) %}
                 <option value="{{ day }}" {% if day == selected_day %} selected {% endif %}>
                     {{ day }}

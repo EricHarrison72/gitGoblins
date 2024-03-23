@@ -31,9 +31,9 @@ This template expects the following parameters:
             
         </tr>
         <tr>
-            <td>{{ selectors.select_single_location(url_arg_city=url_args['city_name']) }}</td>
-            <td>{{ selectors.select_date(div_id="startDateSelect", sub_div_id='start_', url_arg_date=url_args['start_date']) }}</td>
-            <td>{{ selectors.select_date(div_id="endDateSelect", sub_div_id='end_', url_arg_date=url_args['end_date']) }}</td>
+            <td>{{ selectors.select_single_location( url_arg_city = url_args['city_name']) }}</td>
+            <td>{{ selectors.select_date( id_prefix = 'start_', url_arg_date = url_args['start_date']) }}</td>
+            <td>{{ selectors.select_date( id_prefix = 'end_', url_arg_date = url_args['end_date']) }}</td>
             <td>
                 <button onclick="reloadPageWithArgs(`city_name=${getCityFromSelection()}&start_date=${getDateFromSelection('start_')}&end_date=${getDateFromSelection('end_')}`)">
                     Submit
