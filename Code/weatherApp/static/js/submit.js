@@ -1,13 +1,26 @@
 
-function reloadWithArgs_WeatherSummary() {
-    var year = document.getElementById('yearSelect');
-    var month = document.getElementById('monthSelect');
-    var day = document.getElementById('daySelect');
-    var date = year.value + '-' + month.value.padStart(2, '0') + '-' + day.value.padStart(2, '0');
+function getDateFromSelection(subDivId='') {
+    var year = document.getElementById(subDivId + 'yearSelect');
+    var month = document.getElementById(subDivId + 'monthSelect');
+    var day = document.getElementById(subDivId + 'daySelect');
 
+    var date = `${ year.value }-${ month.value.padStart(2, '0')}-${ day.value.padStart(2, '0')}`;
+    return date;
+}
+
+function getCityFromSelection() {
     var sel = document.getElementById('citySelect');
     var cityName = sel.options[sel.selectedIndex].text;
     cityName = cityName.replace(/\s+/g, '');
 
-    location.href = `/weather_summary?city_name=${ cityName }&date=${ date }`;
+    return cityName;
 }
+
+function reloadPageWithArgs(urlArgs){
+    currentUrl = location.href;
+
+    urlArray = currentUrl.split('?');
+    newUrl = urlArray[0] + '?' + urlArgs;
+
+    location.href = newUrl;
+  }
