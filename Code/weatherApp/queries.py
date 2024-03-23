@@ -9,7 +9,8 @@ from . import db
 # retrieves weather data given city name and date
 def get_weather_data (city_name, date):
 
-    city_name.replace(' ', '') # (just in case)
+    if city_name != None:
+        city_name.replace(' ', '') # (just in case)
 
     datb = db.get_db()
 
@@ -88,7 +89,8 @@ def _add_space(city_name: str):
 
 def get_temp_in_range(city_name, start_date, end_date):
 
-    city_name.replace(' ', '') # (just in case)
+    if city_name != None:
+        city_name.replace(' ', '') # (just in case)
 
     datb = db.get_db()
 

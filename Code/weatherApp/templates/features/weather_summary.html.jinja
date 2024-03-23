@@ -34,7 +34,6 @@ This template expects the following parameters:
         <td>{{ selectors.select_single_location(url_arg_city = weather_dict['city_name']) }}</td>
         <td>{{ selectors.select_date(url_arg_date = weather_dict['date']) }}</td>
         <td>
-
           <button onclick="reloadPageWithArgs(`city_name=${getCityFromSelection()}&date=${getDateFromSelection()}`)">
             Submit
           </button>
