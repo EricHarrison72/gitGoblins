@@ -19,7 +19,7 @@ from flask import (
 )
 from flask_bcrypt import Bcrypt
 from . import db
-passcode = 'goblin'
+
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 bcrypt = Bcrypt()
 
@@ -34,10 +34,6 @@ def register():
         last_name = request.form.get('last_name', '')
         email_list = bool(request.form.get('email_list'))
 
-        # Get the last userId and increment it by 1
-        last_user_id = get_last_user_id(datb)
-        user_id = last_user_id + 1
-
         error = None
 
         if not email:
@@ -49,8 +45,8 @@ def register():
             try:
                 hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
                 datb.execute(
-                    "INSERT INTO User (userId, email, password, firstName, lastName, emailList) VALUES (?, ?, ?, ?, ?, ?)",
-                    (user_id, email, hashed_password, first_name, last_name, email_list)
+                    "INSERT INTO User (email, password, firstName, lastName, emailList) VALUES (?, ?, ?, ?, ?)",
+                    (email, hashed_password, first_name, last_name, email_list)
                 )
                 datb.commit()
                 flash("Registration successful. You can now log in.")
@@ -63,7 +59,6 @@ def register():
     return render_template('auth/register.html.jinja')
 
 
-#route to login page
 @auth_bp.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
@@ -71,13 +66,11 @@ def login():
         password = request.form['password']
         datb = db.get_db()
         error = None
-        print(email)
-        # Fetch user data including userId based on email
+        
         user = datb.execute(
-            'SELECT userId, password FROM User WHERE email = ?', (email,)
+            'SELECT userId, password, isAdmin FROM User WHERE email = ?', (email,)
         ).fetchone()
-       
-        print(email)
+
         if user is None:
             error = 'Incorrect email.'
         elif not bcrypt.check_password_hash(user['password'], password):
@@ -85,34 +78,35 @@ def login():
 
         if error is None:
             session.clear()
-            session['user_id'] = user['userId']  # Store user ID in session
-            
-            return redirect(url_for('views.weather_summary'))
+            session['user_id'] = user['userId']
+            if user['isAdmin']:
+                return redirect(url_for('auth.admin_dashboard'))
+            else:
+                return redirect(url_for('views.weather_summary'))
 
         flash(error)
 
     return render_template('auth/login.html.jinja')
 
+
 @auth_bp.before_app_request
 def load_logged_in_user():
-    print(session)
     user_id = session.get('user_id')
 
     if user_id is None:
         g.user = None
     else:
         g.user = db.get_db().execute(
-            'SELECT * FROM user WHERE userId = ?', (user_id,)
+            'SELECT * FROM User WHERE userId = ?', (user_id,)
         ).fetchone()
-        
-#logout of session
+
+
 @auth_bp.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('views.index'))
 
-#Checks if a user is loaded and redirects to the login page otherwise. 
-#If a user is loaded the original view is called and continues normally.
+
 def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
@@ -124,24 +118,15 @@ def login_required(view):
     return wrapped_view
 
 
-def get_last_user_id(datb):
-    # Query the database to get the maximum userId
-    result = datb.execute("SELECT MAX(userId) FROM User").fetchone()
-    last_user_id = result[0] if result[0] is not None else 0
-    return last_user_id
-
-
-# admin_register route
 @auth_bp.route('/admin_register', methods=['GET', 'POST'])
 def admin_register():
-    # Check if the passcode is correct before rendering the admin register page
     passcode = session.get('passcode')
-    if passcode != '12':  # Change this to your actual passcode
+    if passcode != '12':
         flash('Invalid passcode')
-        return redirect(url_for('auth.admin_login'))
+        return redirect(url_for('auth.login'))
 
     datb = db.get_db()
-    
+
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
@@ -158,14 +143,10 @@ def admin_register():
 
         if error is None:
             try:
-                # Get the last userId and increment it by 1
-                last_user_id = get_last_user_id(datb)
-                user_id = last_user_id + 1
-                
                 hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
                 datb.execute(
-                    "INSERT INTO User (userId, email, password, firstName, lastName, emailList, isAdmin) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                    (user_id, email, hashed_password, first_name, last_name, email_list, True)
+                    "INSERT INTO User (email, password, firstName, lastName, emailList, isAdmin) VALUES (?, ?, ?, ?, ?, ?)",
+                    (email, hashed_password, first_name, last_name, email_list, True)
                 )
                 datb.commit()
                 flash("Admin registration successful.")
@@ -178,29 +159,65 @@ def admin_register():
     return render_template('auth/admin_register.html.jinja')
 
 
-# admin_login route
-@auth_bp.route('/admin_login', methods=['GET', 'POST'])
-def admin_login():
+@auth_bp.route('/passcode', methods=['GET', 'POST'])
+def passcode():
     if request.method == 'POST':
         entered_answer = request.form['passcode']
 
-        # Check if the entered answer is '12'
         if entered_answer == '12':
-            # Store the passcode in the session
             session['passcode'] = entered_answer
-            # Redirect to admin registration page
-            return redirect(url_for('auth.admin_register'))
+            return redirect(url_for('auth.admin_login'))
 
         flash('Incorrect answer')
 
+    return render_template('auth/passcode.html.jinja')
+
+
+@auth_bp.route('/admin_login', methods=('GET', 'POST'))
+def admin_login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        datb = db.get_db()
+        error = None
+        
+        user = datb.execute(
+            'SELECT userId, password FROM User WHERE email = ? ', (email,)
+        ).fetchone()
+
+        if user is None:
+            error = 'Incorrect email.'
+        elif not bcrypt.check_password_hash(user['password'], password):
+            error = 'Incorrect password.'
+
+        if error is None:
+            session.clear()
+            session['user_id'] = user['userId']
+
+            # Update isAdmin to true for the logged-in user
+            datb.execute(
+                'UPDATE User SET isAdmin = 1 WHERE userId = ?', (user['userId'],)
+            )
+            datb.commit()
+
+            return redirect(url_for('auth.admin_dashboard'))
+
+        flash(error)
+
     return render_template('auth/admin_login.html.jinja')
+
 
 @auth_bp.route('/admin_dashboard')
 def admin_dashboard():
-    # Check if the user is logged in and is an admin
-    if 'user_id' not in session or not session.get('isAdmin'):
-        # Redirect to login page if not logged in or not an admin
-        return redirect(url_for('login'))
+    if 'user_id' not in session:
+        return redirect(url_for('auth.login'))
 
-    # Render the admin dashboard template
+    user_id = session['user_id']
+    user = db.get_db().execute(
+        'SELECT isAdmin FROM User WHERE userId = ?', (user_id,)
+    ).fetchone()
+
+    if user is None or not user['isAdmin']:
+        return redirect(url_for('auth.login'))
+
     return render_template('admin_dashboard.html.jinja')

@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS UsersCities;
 DROP TABLE IF EXISTS WeatherInstance;
 
 
+
 CREATE TABLE City (
 	cityId int,
 	cityName varchar(30),
