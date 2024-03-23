@@ -1,4 +1,5 @@
 {% extends 'base.html.jinja' %}
+{% import 'helpers/selectors.html.jinja' as selectors %}
 
 {% block head %}
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -12,10 +13,24 @@
     Map
 {% endblock %}
 {% block content %}
-    </br>
-    {% include './helpers/select_date.html.jinja'%}
+    <br>
+    <div style="overflow-x: auto;">
+        <table class='select-table'>
+            <tr>
+                <th>Date</th>
+            </tr>
+            <tr>
+                <td>{{ selectors.select_date() }}</td>
+            </tr>
+        </table>
+    </div>
+    <br>
 
     <div id="map" style="height: 80vh; width: 100%;"></div>
+    
+{% endblock %}
+
+{% block scripts %}
     <script src="{{ url_for('static', filename='js/init_map.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
