@@ -30,21 +30,20 @@ document.getElementById = jest.fn().mockImplementation(id => {
         case 'goblin_daySelect':
             return { value: "2"}
 
-        //TODO add case 'citySelect'
+        case 'citySelect':
+            return { 
+                options: ['Canberra'],
+                selectedIndex: 0
+                }
         default:
             return null;
     }
 });
-//test getDateFromSelection
-/*
-- required mocks: date selection menu
-- expected value --- date:str in the form 'yyyy-mm-dd' extracted from selection menus
-1. no parameter
-2. passed paramter id_prefix
-*/
+
+const mockReplace = jest.fn();
 
 describe('getDateFromSelection', () => {
-//------------------------------------
+//--------------------------------------
     // Tests
     // -----
     test('default', () => {
@@ -64,6 +63,19 @@ expected value --- city:str extracted from selection menu
 1. no space city
 2. city name with space
 */
+describe('getCityFromSelection', () => {
+//------------------------------------
+    // Tests
+    // -----
+    test('get a one-word city from selection', () => {
+        expect(getCityFromSelection()).toBe('Canberra');
+    });
+
+    // test('get a two-word city from selection', () => {
+    //     expect(getCityFromSelection()).toBe('Alice Springs');
+    // });
+});
+
 
 describe('reloadPageWithArgs', () => {
 //------------------------------------
