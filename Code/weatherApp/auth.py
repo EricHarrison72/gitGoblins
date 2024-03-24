@@ -42,7 +42,13 @@ def register():
             error = 'Password is required.'
 
         if error is None:
-            try:
+            existing_user = datb.execute(
+                "SELECT 1 FROM User WHERE email = ?", (email,)
+            ).fetchone()
+            
+            if existing_user:
+                error = f"User with email {email} is already registered."
+            else:
                 hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
                 datb.execute(
                     "INSERT INTO User (email, password, firstName, lastName, emailList) VALUES (?, ?, ?, ?, ?)",
@@ -51,8 +57,6 @@ def register():
                 datb.commit()
                 flash("Registration successful. You can now log in.")
                 return redirect(url_for("auth.login"))
-            except datb.IntegrityError:
-                error = f"User with email {email} is already registered."
 
         flash(error)
 
@@ -66,11 +70,10 @@ def login():
         password = request.form['password']
         datb = db.get_db()
         error = None
-        
         user = datb.execute(
             'SELECT userId, password, isAdmin FROM User WHERE email = ?', (email,)
         ).fetchone()
-
+        
         if user is None:
             error = 'Incorrect email.'
         elif not bcrypt.check_password_hash(user['password'], password):
@@ -78,6 +81,7 @@ def login():
 
         if error is None:
             session.clear()
+
             session['user_id'] = user['userId']
             if user['isAdmin']:
                 return redirect(url_for('auth.admin_dashboard'))
