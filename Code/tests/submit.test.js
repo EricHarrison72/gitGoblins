@@ -14,6 +14,27 @@ const {
     reloadPageWithArgs
 } = require('../weatherApp/static/js/submit.js');
 
+document.getElementById = jest.fn().mockImplementation(id => {
+    switch (id) {
+        case 'yearSelect':
+          return { value: "2017" };
+        case 'monthSelect':
+          return { value: "6" };
+        case 'daySelect':
+            return { value: "24" };
+
+        case 'goblin_yearSelect':
+            return { value: "2015" };
+        case 'goblin_monthSelect':
+            return { value: "10"}
+        case 'goblin_daySelect':
+            return { value: "2"}
+
+        //TODO add case 'citySelect'
+        default:
+            return null;
+    }
+});
 //test getDateFromSelection
 /*
 - required mocks: date selection menu
@@ -21,6 +42,20 @@ const {
 1. no parameter
 2. passed paramter id_prefix
 */
+
+describe('getDateFromSelection', () => {
+//------------------------------------
+    // Tests
+    // -----
+    test('default', () => {
+        expect(getDateFromSelection()).toBe('2017-06-24');
+    });
+
+    test('with special id_prefixes', () => {
+        expect(getDateFromSelection('goblin_')).toBe('2015-10-02');
+    });
+});
+
 
 //test getCityFromSelection
 /*
@@ -30,15 +65,8 @@ expected value --- city:str extracted from selection menu
 2. city name with space
 */
 
-//test reloadPageWithArgs
-/* 
-- required mocks: page with url
-expected value --- url after call should match url/args
-1. url has no args
-2. url has args
-*/
-
 describe('reloadPageWithArgs', () => {
+//------------------------------------
 
     // Mocks Setup & Teardown
     // ----------------------
@@ -72,6 +100,4 @@ describe('reloadPageWithArgs', () => {
 
         expect(global.location.href).toBe('https://example.com/page?' + newArgs);
     });
-
-    // Add more tests here if needed to cover other scenarios
 });
