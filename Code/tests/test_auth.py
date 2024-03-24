@@ -114,24 +114,39 @@ def test_passcode(client, app):
         assert 'passcode' in session
         
 #register admin test
-def test_register_admin(client, app):
-    # Ensure that the registration page loads successfully
-    assert client.get('/auth/register').status_code == 200
+def test_admin_register(client, app):
+    # Ensure that the admin register page redirects to the login page due to missing passcode
+    response = client.get('/auth/admin_register', follow_redirects=True)
+    assert response.status_code == 200
+    assert b'Invalid passcode' in response.data
     
-    # Register a new admin user with valid form data
-    response = client.post(
-        '/auth/register', 
-        data={'email': 'admin@test.com', 'password': 'admin123', 'isAdmin': True}
+    # Test admin registration with valid passcode but missing email
+    with client.session_transaction() as session:
+        session['passcode'] = '12'
+    response_missing_email = client.post(
+        '/auth/admin_register',
+        data={'email': '', 'password': 'admin123'}
     )
-    
-    # Check if the registration redirects to the login page
-    assert response.headers["Location"] == "/auth/login"
+    # Check if it stays on the admin register page and displays error message
+    assert b'Email is required.' in response_missing_email.data
 
+    # Test admin registration with valid passcode and all required data
+    with client.session_transaction() as session:
+        session['passcode'] = '12'
+    response_valid_registration = client.post(
+        '/auth/admin_register',
+        data={'email': 'admin@test.com', 'password': 'admin123'}
+    )
+    # Check if it redirects to the login page
+    assert response_valid_registration.headers["Location"] == "/auth/login"
+    
     # Verify that the admin user is successfully registered in the database
     with app.app_context():
         assert get_db().execute(
              "SELECT * FROM user WHERE email = 'admin@test.com'",
         ).fetchone() is not None
+
+
         
 def test_admin_login(client, app):
     # Manually insert admin user into the database with hashed password
