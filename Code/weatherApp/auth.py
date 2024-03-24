@@ -214,7 +214,7 @@ def admin_login():
 @auth_bp.route('/admin_dashboard')
 def admin_dashboard():
     if 'user_id' not in session:
-        return redirect(url_for('weathersummary'))
+        return redirect(url_for('auth.login'))
 
     user_id = session['user_id']
     user = db.get_db().execute(

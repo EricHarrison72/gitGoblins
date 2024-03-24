@@ -173,3 +173,23 @@ def test_admin_login(client, app):
     with client:
         client.get('/')
         assert session['user_id'] == 101
+
+
+def test_admin_dashboard(client, app):
+    # 1. Register an admin account
+    client.post('/auth/admin_register', data={'email': 'admin@example.com', 'password': 'admin_password', 'passcode': '12'})
+    
+    # 2. Ensure that the admin dashboard redirects to the login page when the user is not logged in
+    response_not_logged_in = client.get('/auth/admin_dashboard', follow_redirects=True)
+    assert response_not_logged_in.status_code == 200  # Check if it's redirected
+    assert b'Login' in response_not_logged_in.data  # Check if it's redirected to login page
+    
+    # 3. Simulate logging in as a regular user
+    with client:
+        client.post('/auth/login', data={'email': 'regular_user@example.com', 'password': 'password'})
+        # Ensure that the admin dashboard redirects to the login page for regular users
+        response_regular_user = client.get('/auth/admin_dashboard', follow_redirects=True)
+        assert response_regular_user.status_code == 200
+        assert b'Login' in response_regular_user.data  # Check if it's redirected to login page
+    
+ 
