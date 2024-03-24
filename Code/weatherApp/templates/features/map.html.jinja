@@ -1,0 +1,49 @@
+{% extends 'base.html.jinja' %}
+{% import 'helpers/selectors.html.jinja' as selectors %}
+
+{% block head %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+{% endblock %}
+{% block title %}
+    Map
+{% endblock %}
+
+{% block header %}
+    Map
+{% endblock %}
+{% block content %}
+    <br>
+    <div style="overflow-x: auto;">
+        <table class='select-table'>
+            <tr>
+                <th>Date</th>
+                <th>Locations</th>
+            </tr>
+            <tr>
+                <td>{{ selectors.select_date() }}</td>
+                <td>{{ selectors.select_multiple_locations() }}</td>
+                <td>
+                    <button onclick="reloadPageWithArgs(`date=${getDateFromSelection()}`)">
+                        Submit
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <br>
+
+    <div id="map" style="height: 80vh; width: 100%;"></div>
+    
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/init_map.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Ensure the DOM is fully loaded before calling initMap
+            // Assuming initMap is globally accessible once init_map.js is loaded
+            initMap();
+        });
+    </script>
+{% endblock %}
