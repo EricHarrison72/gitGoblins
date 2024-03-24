@@ -35,12 +35,17 @@ def index():
 @login_required
 def weather_summary():
 
-    city_name = request.args.get('city_name')
-    date = request.args.get('date')
+    url_args = {
+        'city_name' : request.args.get('city_name'),
+        'date' : request.args.get('date')
+    }
 
-    weather_dict = queries.get_weather_data(city_name, date)
+    weather_dict = queries.get_weather_data(url_args['city_name'], url_args['date'])
     
-    return render_template("features/weather_summary.html.jinja", weather_dict=weather_dict)
+    return render_template(
+        "features/weather_summary.html.jinja",
+        weather_dict = weather_dict,
+        url_args = url_args)
 
 @views_bp.route('/map')
 #@login_required

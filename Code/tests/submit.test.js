@@ -6,6 +6,7 @@ Unit tests for submit.js
 Written with some help from ChatGPT 4.
 */
 // -----------------------------
+
 // imports from submit.js
 const {
     getDateFromSelection,
@@ -14,44 +15,31 @@ const {
     reloadPageWithArgs
 } = require('../weatherApp/static/js/submit.js');
 
-document.getElementById = jest.fn().mockImplementation(id => {
-    switch (id) {
-        case 'yearSelect':
-            return { value: "2017" };
-        case 'monthSelect':
-            return { value: "6" };
-        case 'daySelect':
-            return { value: "24" };
+describe('getDateFromSelection', () => {
+//--------------------------------------
 
-        case 'goblin_yearSelect':
-            return { value: "2015" };
-        case 'goblin_monthSelect':
-            return { value: "10" };
-        case 'goblin_daySelect':
-            return { value: "2" };
-        default:
-            return null;
-    }
-});
-
-const setupDocumentGetElementByIdMock = (selectedIndex) => {
+    // Mocks
+    // -----
     document.getElementById = jest.fn().mockImplementation(id => {
         switch (id) {
-            case 'citySelect':
-                return {
-                    options: [{ text: 'Canberra' }, { text: 'Alice Springs' }],
-                    selectedIndex: selectedIndex
-                };
+            case 'yearSelect':
+                return { value: "2017" };
+            case 'monthSelect':
+                return { value: "6" };
+            case 'daySelect':
+                return { value: "24" };
+
+            case 'goblin_yearSelect':
+                return { value: "2015" };
+            case 'goblin_monthSelect':
+                return { value: "10" };
+            case 'goblin_daySelect':
+                return { value: "2" };
             default:
                 return null;
         }
     });
-};
 
-const mockReplace = jest.fn();
-
-describe('getDateFromSelection', () => {
-//--------------------------------------
     // Tests
     // -----
     test('default', () => {
@@ -64,26 +52,47 @@ describe('getDateFromSelection', () => {
 });
 
 
-//test getCityFromSelection
-/*
-- required mocks: city selection menu
-expected value --- city:str extracted from selection menu
-1. no space city
-2. city name with space
-*/
 describe('getCityFromSelection', () => {
 //------------------------------------
+
+    // Mocks
+    // -----
+    const documentGetElementByIdMock = (selectedIndex) => {
+        document.getElementById = jest.fn().mockImplementation(id => {
+            switch (id) {
+                case 'citySelect':
+                    return {
+                        options: [{ text: 'Canberra' }, { text: 'Alice Springs' }],
+                        selectedIndex: selectedIndex
+                    };
+                default:
+                    return null;
+            }
+        });
+};
     // Tests
     // -----
     test('get a one-word city from selection', () => {
-        setupDocumentGetElementByIdMock(0);
+        documentGetElementByIdMock(0);
         expect(getCityFromSelection()).toBe('Canberra');
     });
 
      test('get a two-word city from selection', () => {
-        setupDocumentGetElementByIdMock(1);
+        documentGetElementByIdMock(1);
         expect(getCityFromSelection()).toBe('AliceSprings');
      });
+});
+
+
+describe('getCitiesFromSelection', () => {
+//----------------------------------------
+    //TODO - eric
+    
+    // Mocks
+    //------
+
+    // Tests
+    //------
 });
 
 
