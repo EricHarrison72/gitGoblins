@@ -79,3 +79,17 @@ def test_logout(client, app):
         # Ensure that the user ID is removed from the session
         assert 'user_id' not in session
 
+# Test passcode verification
+def test_passcode(client, app):
+    assert client.get('/auth/passcode').status_code == 200
+
+    # Test with correct passcode
+    with client.session_transaction() as session:
+        session['passcode'] = '12'
+    response = client.post('/auth/passcode', data={'passcode': '12'})
+    assert response.headers["Location"] == "/auth/admin_login"
+
+    # Check if 'passcode' is in session after successful verification
+    with client.session_transaction() as session:
+        assert 'passcode' in session
+        
