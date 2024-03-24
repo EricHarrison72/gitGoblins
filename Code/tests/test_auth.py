@@ -93,3 +93,33 @@ def test_passcode(client, app):
     with client.session_transaction() as session:
         assert 'passcode' in session
         
+#register admin test
+def test_register_admin(client, app):
+    # Ensure that the registration page loads successfully
+    assert client.get('/auth/register').status_code == 200
+    
+    # Register a new admin user with valid form data
+    response = client.post(
+        '/auth/register', 
+        data={'email': 'admin@test.com', 'password': 'admin123', 'isAdmin': True}
+    )
+    
+    # Check if the registration redirects to the login page
+    assert response.headers["Location"] == "/auth/login"
+
+    # Verify that the admin user is successfully registered in the database
+    with app.app_context():
+        assert get_db().execute(
+             "SELECT * FROM user WHERE email = 'admin@test.com'",
+        ).fetchone() is not None
+        
+        
+def test_admin_login_redirect(client):
+    # Access the admin login page
+    response = client.get('/auth/admin_login')
+    assert response.status_code == 200
+
+    # Simulate a successful admin login
+    response = client.post('/auth/admin_login', data={'email': 'admin@example.com', 'password': 'admin123'})
+    assert response.status_code == 200  # Check if it redirects
+    assert response.location == 'http://localhost/admin_dashboard'  # Check if it redirects to the update page
