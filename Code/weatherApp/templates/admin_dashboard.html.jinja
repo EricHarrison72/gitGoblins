@@ -1,11 +1,76 @@
 {% extends 'base.html.jinja' %}
 
+{% block title %}
+    Admin Dashboard
+{% endblock %}
+
 {% block header %}
-  {% block title %}Admin Dashboard{% endblock %}
+    Admin Dashboard
 {% endblock %}
 
 {% block content %}
-  <h1>Welcome to the Admin Dashboard!</h1>
-  <p>This page is only accessible to administrators.</p>
-  <!-- Add your admin-specific content here -->
+    <h1>Welcome to the Admin Dashboard!</h1>
+    <p>This page is only accessible to administrators.</p>
+
+    <!-- Form for updating weather data -->
+    <h2>Update Weather Data</h2>
+    <form id="weatherForm">
+        <label for="city">City:</label>
+        <select id="city" name="city">
+            <!-- Populate options dynamically from database or predefined list -->
+            <!-- Example: -->
+            <option value="1">Adelaide</option>
+            <option value="2">Melbourne</option>
+            <!-- Add more options as needed -->
+        </select><br><br>
+        
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date"><br><br>
+
+        <label for="temp_high">High Temperature:</label>
+        <input type="number" id="temp_high" name="temp_high"><br><br>
+
+        <label for="temp_low">Low Temperature:</label>
+        <input type="number" id="temp_low" name="temp_low"><br><br>
+
+        <label for="rainfall">Rainfall:</label>
+        <input type="number" id="rainfall" name="rainfall"><br><br>
+
+        <label for="raining">Raining:</label>
+        <input type="text" id="raining" name="raining"><br><br>
+
+        <label for="wind_speed">Wind Speed:</label>
+        <input type="number" id="wind_speed" name="wind_speed"><br><br>
+
+        <label for="wind_dir">Wind Direction:</label>
+        <input type="text" id="wind_dir" name="wind_dir"><br><br>
+
+        <label for="cloud">Cloud Cover:</label>
+        <input type="number" id="cloud" name="cloud"><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+    
+    <!-- Script for handling form submission -->
+    <script>
+        document.getElementById("weatherForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            // Collect form data
+            var formData = new FormData(this);
+            // Submit form data via fetch API to the update_weather endpoint
+            fetch('/admin', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message); // Show success message
+                // Optionally, update UI or redirect to another page
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.'); // Show error message
+            });
+        });
+    </script>
 {% endblock %}
