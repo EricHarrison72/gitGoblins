@@ -17,28 +17,36 @@ const {
 document.getElementById = jest.fn().mockImplementation(id => {
     switch (id) {
         case 'yearSelect':
-          return { value: "2017" };
+            return { value: "2017" };
         case 'monthSelect':
-          return { value: "6" };
+            return { value: "6" };
         case 'daySelect':
             return { value: "24" };
 
         case 'goblin_yearSelect':
             return { value: "2015" };
         case 'goblin_monthSelect':
-            return { value: "10"}
+            return { value: "10" };
         case 'goblin_daySelect':
-            return { value: "2"}
-
-        case 'citySelect':
-            return { 
-                options: ['Canberra'],
-                selectedIndex: 0
-                }
+            return { value: "2" };
         default:
             return null;
     }
 });
+
+const setupDocumentGetElementByIdMock = (selectedIndex) => {
+    document.getElementById = jest.fn().mockImplementation(id => {
+        switch (id) {
+            case 'citySelect':
+                return {
+                    options: [{ text: 'Canberra' }, { text: 'Alice Springs' }],
+                    selectedIndex: selectedIndex
+                };
+            default:
+                return null;
+        }
+    });
+};
 
 const mockReplace = jest.fn();
 
@@ -68,12 +76,14 @@ describe('getCityFromSelection', () => {
     // Tests
     // -----
     test('get a one-word city from selection', () => {
+        setupDocumentGetElementByIdMock(0);
         expect(getCityFromSelection()).toBe('Canberra');
     });
 
-    // test('get a two-word city from selection', () => {
-    //     expect(getCityFromSelection()).toBe('Alice Springs');
-    // });
+     test('get a two-word city from selection', () => {
+        setupDocumentGetElementByIdMock(1);
+        expect(getCityFromSelection()).toBe('AliceSprings');
+     });
 });
 
 
