@@ -7,10 +7,10 @@ Based off of code Josh and Eric wrote.
 */
 // --------------------------------------
 
-function getDateFromSelection(subDivId='') {
-    var year = document.getElementById(subDivId + 'yearSelect');
-    var month = document.getElementById(subDivId + 'monthSelect');
-    var day = document.getElementById(subDivId + 'daySelect');
+function getDateFromSelection(id_prefix='') {
+    var year = document.getElementById(id_prefix + 'yearSelect');
+    var month = document.getElementById(id_prefix + 'monthSelect');
+    var day = document.getElementById(id_prefix + 'daySelect');
 
     var date = `${ year.value }-${ month.value.padStart(2, '0')}-${ day.value.padStart(2, '0')}`;
     return date;
@@ -35,4 +35,12 @@ function reloadPageWithArgs(urlArgs){
     newUrl = urlArray[0] + '?' + urlArgs;
 
     location.href = newUrl;
-  }
+}
+
+// export for testing purposes
+module.exports = {
+    getDateFromSelection,
+    getCityFromSelection,
+    getCitiesFromSelection,
+    reloadPageWithArgs
+}
