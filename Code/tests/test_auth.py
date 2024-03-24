@@ -113,13 +113,28 @@ def test_register_admin(client, app):
              "SELECT * FROM user WHERE email = 'admin@test.com'",
         ).fetchone() is not None
         
-        
-def test_admin_login_redirect(client):
-    # Access the admin login page
-    response = client.get('/auth/admin_login')
-    assert response.status_code == 200
+def test_admin_login(client, app):
+    # Manually insert admin user into the database with hashed password
+    with app.app_context():
+        db = get_db()
+        hashed_password = bcrypt.hashpw('admin_password'.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        db.execute(
+            "INSERT INTO user (userId, email, password, isAdmin) VALUES (?, ?, ?, ?)",
+            (101, 'admin@example.com', hashed_password, True)
+        )
+        db.commit()
 
-    # Simulate a successful admin login
-    response = client.post('/auth/admin_login', data={'email': 'admin@example.com', 'password': 'admin123'})
-    assert response.status_code == 200  # Check if it redirects
-    assert response.location == 'http://localhost/admin_dashboard'  # Check if it redirects to the update page
+    # Test admin login
+    response = client.post(
+        '/auth/admin_login',
+        data={'email': 'admin@example.com', 'password': 'admin_password'}
+    )
+    
+    # Check if it redirects to the admin dashboard
+    assert response.status_code == 302  # Check if it redirects
+    assert response.headers["Location"] == "/auth/admin_dashboard"
+
+    # Check if admin user ID is stored in session
+    with client:
+        client.get('/')
+        assert session['user_id'] == 101
