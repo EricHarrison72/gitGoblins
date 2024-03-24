@@ -3,7 +3,7 @@
 /*
 Unit tests for submit.js
 
-Written with some help from Chat-GPT 4.
+Written with some help from ChatGPT 4.
 */
 // -----------------------------
 // imports from submit.js
@@ -38,7 +38,40 @@ expected value --- url after call should match url/args
 2. url has args
 */
 
+describe('reloadPageWithArgs', () => {
 
-test('This is just so the CI doesnt break', () => {
-    expect((1+2)).toBe(3);
+    // Mocks Setup & Teardown
+    // ----------------------
+    const originalLocation = global.location;
+
+    beforeEach(() => {
+        delete global.location;
+        global.location = { href: 'https://example.com/page' };
+    });
+
+    afterEach(() => {
+        // Restore the original location object after each test
+        global.location = originalLocation;
+    });
+
+    // Tests
+    // -----
+    test('add new args to URL (that doesn\'t currently have args)', () => {
+
+        const newArgs = 'param1=value1&param2=value2';
+        reloadPageWithArgs(newArgs);
+
+        expect(global.location.href).toBe('https://example.com/page?' + newArgs);
+    });
+
+    test('replace args of URL (that currently has args)', () => {
+
+        global.location.href += '?oldParam=oldValue';
+        const newArgs = 'param1=value1&param2=value2';
+        reloadPageWithArgs(newArgs);
+
+        expect(global.location.href).toBe('https://example.com/page?' + newArgs);
+    });
+
+    // Add more tests here if needed to cover other scenarios
 });
