@@ -12,21 +12,43 @@ Start Code sources:
 '''
 # ------------------------------------------------------
 from flask import (
-    render_template, Blueprint, request, jsonify
+    render_template, Blueprint, request, jsonify, g
 )
 from . import (
     graphs,
     queries,
-    weather
+    weather, 
+    db
 )
 from .auth import login_required
 
 views_bp = Blueprint('views', __name__)
 
+from datetime import datetime
+
 @views_bp.route('/')
 @login_required
 def index():
-    return render_template("index.html.jinja")
+    datb = db.get_db()
+    user_id = g.user['userId']  # Assuming you have stored user data in the 'g' object
+
+    # Fetch the user's city data from the database
+    user_city_data = datb.execute(
+        "SELECT * FROM City WHERE cityId = (SELECT cityId FROM User WHERE userId = ?)",
+        (user_id,)
+    ).fetchone()
+
+    # Convert the specified date to the string format matching the database
+    specified_date = datetime(2017, 3, 25).strftime('%Y-%m-%d')
+
+    # Fetch the WeatherInstance data for the specified date (March 25, 2017)
+    weather_data = datb.execute(
+        "SELECT * FROM WeatherInstance WHERE cityId = ? AND date = ?",
+        (user_city_data['cityId'], specified_date)
+    ).fetchone()
+
+    return render_template("index.html.jinja", user_city_data=user_city_data, weather_data=weather_data)
+
 
 @views_bp.route('/weather_summary')
 @login_required
