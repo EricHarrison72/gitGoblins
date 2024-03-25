@@ -170,7 +170,7 @@ def passcode():
 
         if entered_answer == '12':
             session['passcode'] = entered_answer
-            return redirect(url_for('auth.admin_login'))
+            return redirect(url_for('auth.admin_register'))
 
         flash('Incorrect answer')
 
