@@ -30,3 +30,51 @@ table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
   }
+
+/*
+https://www.tutorialspoint.com/html-tables-with-fixed-header-on-scroll-in-css
+*/
+.scrollable-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.scrollable-table th,
+.scrollable-table td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.scrollable-table thead th {
+  position: sticky;
+  top: 0;
+  background-color: #f2f2f2;
+  z-index: 1;
+}
+
+.scrollable-table tbody {
+  display: block;
+  height: 300px; /* Adjust height as needed */
+  overflow-y: auto;
+}
+
+.scrollable-table tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.scrollable-table tbody td:first-child {
+  position: sticky;
+  left: 0;
+  background-color: #fff;
+  z-index: 2;
+}
+
+.table-container {
+  overflow-x: auto;
+}
