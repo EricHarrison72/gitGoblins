@@ -90,6 +90,20 @@ def test_get_weather_icon(client, app):
         # Access the weather_icon API
         response = client.get('/api/weather_icon?cityName=Sydney&date=2024-03-20')
         assert response.status_code == 200
+        
+# Test if the index page renders successfully
+def test_index(client, app):
+    with client:
+        # Register a new user
+        client.post('/auth/register', data={'email': 'test@gmail.com', 'password': 'a'})
+        # Attempt to log in with the registered user
+        response_login = client.post('/auth/login', data={'email': 'test@gmail.com', 'password': 'a'})
+        # Check if login was successful
+        assert response_login.status_code == 302  # Check if login was successful
+        
+        # Access the index page
+        response = client.get('/')
+        assert response.status_code == 200
    #graph.py is currently being worked on so this test isn't complete     
 """
 def test_graph(client, app):

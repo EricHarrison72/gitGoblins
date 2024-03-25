@@ -18,30 +18,48 @@ from weatherApp.db import get_db
 # it should redirect to the login URL and the user’s data should be in the database.
 def test_register(client, app):
     assert client.get('/auth/register').status_code == 200
+    
     # Test registering user
     response = client.post(
-        '/auth/register', data={'email': 'test@gmail.com', 'password': 'a'}
+        '/auth/register',
+        data={
+            'email': 'test@gmail.com',
+            'password': 'a',
+            'city_id': '1'  # Provide a valid city_id in the form data
+        }
     )
+    
     # Check if it redirects to login page
     assert response.headers["Location"] == "/auth/login"
     
-    response = client.post(
-        '/auth/register', data={'email': 'test@gmail.com', 'password': 'a'}
+    # Test registering user with duplicate email
+    response_duplicate_email = client.post(
+        '/auth/register',
+        data={
+            'email': 'test@gmail.com',
+            'password': 'a',
+            'city_id': '1'  # Provide a valid city_id in the form data
+        }
     )
+    
     # Check if it redirects to login page
-    assert b'User with email test@gmail.com is already registered.' in response.data
+    assert b'User with email test@gmail.com is already registered.' in response_duplicate_email.data
 
     # Test register with no email
     response_no_email = client.post(
-        '/auth/register', data={'email': '', 'password': 'a'}
+        '/auth/register',
+        data={'email': '', 'password': 'a', 'city_id': '1'}  # Provide a valid city_id
     )
+    
     # Check for correct error message
     assert b'Email is required.' in response_no_email.data
 
     # Test register with no password
     response_no_password = client.post(
-        '/auth/register', data={'email': 'test@gmail.com', 'password': ''}
+        '/auth/register',
+        data={'email': 'test@gmail.com', 'password': '', 'city_id': '1'}  # Provide a valid city_id
     )
+    
     # Check for correct error message
     assert b'Password is required.' in response_no_password.data
 
