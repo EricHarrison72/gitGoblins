@@ -107,7 +107,7 @@ def test_passcode(client, app):
     with client.session_transaction() as session:
         session['passcode'] = '12'
     response = client.post('/auth/passcode', data={'passcode': '12'})
-    assert response.headers["Location"] == "/auth/admin_login"
+    assert response.headers["Location"] == "/auth/admin_register"
 
     # Check if 'passcode' is in session after successful verification
     with client.session_transaction() as session:
