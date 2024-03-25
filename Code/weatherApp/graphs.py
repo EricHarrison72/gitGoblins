@@ -44,6 +44,17 @@ def get_temp_figure_html(city_name='Albury', start_date='2008-12-01', end_date='
         title = "Past Data for "+ city_name,
         labels = {"value": "Temperature (°C)", "variable": "Type"}
         )
+    
+    #in case you want to mess around with this later..
+    #paper_bgcolor=      
+    #plot_bgcolor="white",
+    fig.update_layout(
+        font_family="Roboto",
+        font_color="black",
+        title_font_family="Rubik",
+        title_font_color="black",
+        legend_title_font_color="black"
+    )
 
     # return the chart in html string form so it can be passed to the html template
     return fig.to_html()
