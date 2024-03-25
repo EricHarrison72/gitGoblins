@@ -20,7 +20,9 @@ CREATE TABLE User (
     email VARCHAR(50) UNIQUE,
     emailList BOOLEAN,
     password VARCHAR(128),
-	isAdmin BOOLEAN DEFAULT FALSE
+    isAdmin BOOLEAN DEFAULT FALSE,
+    cityId INT,
+    FOREIGN KEY (cityId) REFERENCES City(cityId) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 
