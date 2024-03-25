@@ -21,8 +21,19 @@
     <label for="email_list">Subscribe to Email List</label>
     <input type="checkbox" name="email_list" id="email_list">
 
+    <!-- Location select menu -->
+    <label>Select City</label>
+    <div>
+        <select class="selectpicker" data-live-search="true" id="city_id" name="city_id">
+            <option value="1">Adelaide</option>
+            <option value="2">Albany</option>
+            <option value="3">Albury</option>
+            <!-- Add more options as needed -->
+        </select>
+    </div>
+    
     <input type="submit" value="Register">
   </form>
 
-  <li><a href="{{ url_for('auth.admin_login') }}">Already have an account?</a>
+  <li><a href="{{ url_for('auth.login') }}">Already have an account?</a>
 {% endblock %}
