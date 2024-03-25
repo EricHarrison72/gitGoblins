@@ -35,20 +35,27 @@ from weatherApp import views
 # Test the weather_summary view when logged in
 def test_weather_summary_authenticated(client, app):
     with client:
-        # Register a new user
-        client.post('/auth/register', data={'email': 'test@gmail.com', 'password': 'a'})
+        # Register a new user with valid data including city_id
+        response = client.post('/auth/register', data={
+            'email': 'test@gmail.com',
+            'password': 'a',
+            'city_id': '1'  # Assuming city_id is provided in the form data
+        })
+        assert response.status_code == 302  # Check if registration is successful and redirects
 
-        # Attempt to log in with the registered user
-        response_login = client.post('/auth/login', data={'email': 'test@gmail.com', 'password': 'a'})
+        # Log in the registered user
+        response_login = client.post('/auth/login', data={
+            'email': 'test@gmail.com',
+            'password': 'a'
+        })
+        assert response_login.status_code == 302  # Check if login is successful and redirects
 
-        # Check if login was successful
-        assert response_login.status_code == 302  # Check if login was successful
-
-        # Access the weather_summary view
+        # Access the weather summary page (assuming '/weather_summary' is the URL for the weather summary)
         response_summary = client.get('/weather_summary')
+        assert response_summary.status_code == 200  # Check if the weather summary page is accessible
 
-        # Check if the response is successful
-        assert response_summary.status_code == 200
+        # Add assertions for the content of the weather summary page if needed
+
 
 def test_weather_summary_not_authenticated(client, app):
     with client:
