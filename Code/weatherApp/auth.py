@@ -213,7 +213,7 @@ def admin_login():
 
         flash(error)
 
-    return render_template('auth/admin_login.html.jinja')
+    return render_template('auth/login.html.jinja')
 
 
 @auth_bp.route('/admin_dashboard')
