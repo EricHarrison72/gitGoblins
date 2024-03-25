@@ -23,6 +23,8 @@ from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, r
 from sklearn.model_selection import RandomizedSearchCV, train_test_split
 from scipy.stats import randint
 
+global df_weather
+
 # Query data from database into a pandas dataframe to be used in the model
 def create_dataframe():
     datb = db.get_db()
@@ -108,3 +110,15 @@ def predict_rain(cityId, date, model):
     
     # Returns 1 if it predicts rain, and 0 if it doesn't predict rain
     return prediction[0]
+
+# Helper function to create model and convert cityName into cityId
+def predict_rain(cityName, date):
+    if df_weather is None:
+        df = create_dataframe()
+        df = process_data(df)
+        rf_model = build_model(df)
+    
+    cityId = db._location_to_id(cityName)
+    
+    # Returns 1 if it predicts rain, and 0 if it doesn't predict rain
+    return predict_rain(cityId, date, rf_model)
