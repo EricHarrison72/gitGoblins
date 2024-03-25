@@ -9,19 +9,18 @@
 {% endblock %}
 
 {% block content %}
-  <h2>City Data for {{ g.user.firstName }} {{ g.user.lastName }}</h2>
+  
   {% if user_city_data %}
-    <p>City ID: {{ user_city_data.cityId }}</p>
-    <p>City Name: {{ user_city_data.cityName }}</p>
-    <p>Latitude: {{ user_city_data.latitude }}</p>
-    <p>Longitude: {{ user_city_data.longitude }}</p>
+    
+    <h2>{{ user_city_data.cityName }}</h2>
+  
   {% else %}
     <p>No city data found for the user.</p>
   {% endif %}
 
-  <h2>Weather Data for March 25, 2017</h2>
+  <h2>March 25, 2017</h2>
   {% if weather_data %}
-    <p>Date: {{ weather_data.date }}</p>
+   
     <p>Temperature Min: {{ weather_data.tempMin }}</p>
     <p>Temperature Max: {{ weather_data.tempMax }}</p>
     <!-- Include other weather data fields as needed -->
