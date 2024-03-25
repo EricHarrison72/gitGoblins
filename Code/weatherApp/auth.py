@@ -139,6 +139,7 @@ def admin_register():
         first_name = request.form.get('first_name', '')
         last_name = request.form.get('last_name', '')
         email_list = bool(request.form.get('email_list'))
+        city_id = request.form['city_id']
 
         error = None
 
@@ -146,13 +147,15 @@ def admin_register():
             error = 'Email is required.'
         elif not password:
             error = 'Password is required.'
+        elif not city_id:
+            error = 'City ID is required.'
 
         if error is None:
             try:
                 hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
                 datb.execute(
-                    "INSERT INTO User (email, password, firstName, lastName, emailList, isAdmin) VALUES (?, ?, ?, ?, ?, ?)",
-                    (email, hashed_password, first_name, last_name, email_list, True)
+                    "INSERT INTO User (email, password, firstName, lastName, emailList, cityId, isAdmin) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    (email, hashed_password, first_name, last_name, email_list, city_id, True)
                 )
                 datb.commit()
                 flash("Admin registration successful.")
@@ -172,7 +175,7 @@ def passcode():
 
         if entered_answer == '12':
             session['passcode'] = entered_answer
-            return redirect(url_for('auth.admin_login'))
+            return redirect(url_for('auth.admin_register'))
 
         flash('Incorrect answer')
 
