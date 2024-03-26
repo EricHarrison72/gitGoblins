@@ -35,6 +35,16 @@ def get_temp_figure_html(city_name='Albury', start_date='2008-12-01', end_date='
     df = DataFrame(queries.get_temp_in_range(city_name, start_date, end_date))
     df.columns=['Date', 'Low', 'High']
 
+    # TODO: currently have no way of showing which dates there is no data for
+
+    # This is so 0s still show up
+    df['Low'].replace(0, 0.1, inplace=True)
+    df['High'].replace(0, 0.1, inplace=True)
+
+    # This is so NAs don't mess up the graph
+    df['Low'].replace('NA', 0, inplace=True)
+    df['High'].replace('NA', 0, inplace=True)
+
     # generate a bar chart from the dataframe
     fig = px.bar(
         df,
@@ -42,8 +52,18 @@ def get_temp_figure_html(city_name='Albury', start_date='2008-12-01', end_date='
         y = ['Low', 'High'],
         barmode = 'group',
         title = "Past Data for "+ city_name,
-        labels = {"value": "Temperature (°C)", "variable": "Type"}
+        labels = {"value": "Temperature (°C)", "variable": "Type"},
         )
+    
+    # TODO: think about deleting this
+    #plotly express hovertemplate: Type=Low<br>Date=%{x}<br>Temperature (°C)=%{y}<extra></extra>
+    # print("plotly express hovertemplate:", fig.data[0].hovertemplate)
+    # fig.update_traces(
+    #     hovertemplate = 
+    #         'Date: %{x}<br>'+
+    #         'Temp: %{y} °C' +
+    #         '<extra></extra>'
+    # )
     
     #in case you want to mess around with this later..
     #paper_bgcolor=      
@@ -56,7 +76,28 @@ def get_temp_figure_html(city_name='Albury', start_date='2008-12-01', end_date='
         legend_title_font_color="black"
     )
 
-    # return the chart in html string form so it can be passed to the html template
     return fig.to_html()
 
-    
+
+
+
+# DATE RANGE ERROR DESCRIPTIONS:
+'''
+If range is entered for which there is no data:
+- ValueError
+
+If range is entered for which start or end has no data:
+- no problems, just won't cut off
+'''
+# MISSING DATAPOINTS ERROR DESCRIPTIONS:
+'''
+If days in the range have NA for high xor low:
+- graph turns into a weird histogram, NA columns left out
+
+If days in the range have NA for both high and low:
+- ?
+
+If all days have a missing datapoint:
+- histogram again, but NAs are included?
+'''
+
