@@ -43,9 +43,12 @@ def weather_summary():
 
     weather_dict = queries.get_weather_data(url_args['city_name'], url_args['date'])
     
+    rain_prediction = predictions.predict_rain(url_args['city_name'], url_args['date'])
+    
     return render_template(
         "features/weather_summary.html.jinja",
         weather_dict = weather_dict,
+        rain_prediction = rain_prediction,
         url_args = url_args)
 
 @views_bp.route('/map')
@@ -92,12 +95,3 @@ def get_weather_icon():
     icon_name = weather.determine_icon_based_on_weather(weather_dict)
     
     return jsonify({'icon': icon_name})
-
-#This page is used only to run predictions code while creating the model
-@views_bp.route('/api/predict_weather')
-def predict_weather():
-    df = predictions.create_dataframe()
-    df = predictions.process_data(df)
-    predictions.build_model(df)
-    
-    return render_template("index.html.jinja")
