@@ -67,7 +67,8 @@ This template expects the following parameters:
   <br>
   <br>
 
-  <h4> {{ rain_prediction }} </h4>
+  {% if rain_prediction == 0 %} Our AI model predicts that it <b>WILL NOT</b> rain tomorrow {% else %} Our AI model predicts that it <b>WILL</b> rain tomorrow {% endif %}
+
 
 {% endblock %}
 
