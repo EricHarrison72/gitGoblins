@@ -79,6 +79,7 @@ def build_model(df):
     # Make predictions
     y_pred = rf_model.predict(X_test)
     
+    # Print scores of model upon initialization
     print("Accuracy:", accuracy_score(y_test, y_pred))
     print("Precision:", precision_score(y_test, y_pred))
     print("Recall:", recall_score(y_test, y_pred))
@@ -92,12 +93,12 @@ def _predict_rain_(city_name, date, model):
     
     # Retrieve cityId for the given cityName
     city_id_query = "SELECT cityId FROM City WHERE cityName = ?"
-    cur = datb.cursor()  # Create a cursor from the database connection
+    cur = datb.cursor() 
     cur.execute(city_id_query, (city_name,))
-    city_id_result = cur.fetchone()  # Fetch the first result
+    city_id_result = cur.fetchone()
     
     if city_id_result is None:
-        return None  # cityName not found in the database
+        return None
     
     city_id = city_id_result[0]  # Extract cityId from the query result
     
@@ -105,7 +106,7 @@ def _predict_rain_(city_name, date, model):
     query = f"SELECT * FROM WeatherInstance WHERE cityId = {city_id} AND date = '{date}'"
     df_input = process_data(pd.read_sql_query(query, datb))
     
-    # Ensure cursor and database connections are properly closed after use
+    # Ensure cursor and database connections are closed after use
     cur.close()
     
     # Drop colums that aren't in prediction model
@@ -124,6 +125,7 @@ def _predict_rain_(city_name, date, model):
     prediction = model.predict(X)
     
     # Returns 1 if it predicts rain, and 0 if it doesn't predict rain
+    # This prediction is for the day AFTER the `date` used
     return prediction[0]
 
 # Helper function to create model and convert cityName into cityId
@@ -139,8 +141,8 @@ def predict_rain(city_name, date):
 def train_and_save_model():
     datb = db.get_db()
 
+    # Create prediction model
     df_weather = create_dataframe(datb)
-
     df_processed = process_data(df_weather)
     rf_model = build_model(df_processed)
     
