@@ -50,7 +50,7 @@ def process_data(df):
     # For categorical data, you might fill missing values with the mode or a placeholder value
     categorical_cols = ['windGustDir', 'windDir9am', 'windDir3pm']
     for col in categorical_cols:
-        df[col].fillna('unknown', inplace=True)
+        df.loc[:, col] = df[col].fillna('unknown')
 
     # Convert 'rainToday' from boolean to int (0 or 1)
     df['rainToday'] = df['rainToday'].map({'Yes': 1, 'No': 0, 'NA': 0}).astype(int)
