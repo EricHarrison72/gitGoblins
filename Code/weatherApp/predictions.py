@@ -10,9 +10,10 @@ Start Code sources:
 '''
 # --------------------------------------------------
 
+import warnings
+
 #Project Data
 from . import db
-import sqlite3
 
 # Data Processing
 import pandas as pd
@@ -20,9 +21,8 @@ import joblib
 
 # Modelling
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, f1_score, ConfusionMatrixDisplay
-from sklearn.model_selection import RandomizedSearchCV, train_test_split
-from scipy.stats import randint
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.model_selection import train_test_split
 
 # Query data from database into a pandas dataframe to be used in the model
 def create_dataframe(datb):
@@ -52,10 +52,15 @@ def process_data(df):
     for col in categorical_cols:
         df.loc[:, col] = df[col].fillna('unknown')
 
-    # Convert 'rainToday' from boolean to int (0 or 1)
-    df['rainToday'] = df['rainToday'].map({'Yes': 1, 'No': 0, 'NA': 0}).astype(int)
-    # Convert 'rainTomorrow' from boolean to int (0 or 1)
-    df['rainTomorrow'] = df['rainTomorrow'].map({'Yes': 1, 'No': 0, 'NA': 0}).astype(int)
+    # Ignore FutureWarnings that this code produces when running the test
+    # We can safely ignore the warnings as the dataset does not use None for missing values, it uses 'NA'
+    # and the warning is only being thrown about problems from this conversion in the future for None type values
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", FutureWarning)
+        
+        # Convert 'rainToday' and 'rainTomorrow' to numeric, replacing 'Yes', 'No', 'NA', and handling None values
+        df['rainToday'] = df['rainToday'].replace({'Yes': 1, 'No': 0, 'NA': 0, None: 0}).fillna(0).astype(int)
+        df['rainTomorrow'] = df['rainTomorrow'].replace({'Yes': 1, 'No': 0, 'NA': 0, None: 0}).fillna(0).astype(int)
     
     # Use hot encoding to convert catigorical data into numerical data
     df = pd.get_dummies(df, columns=['windGustDir', 'windDir9am', 'windDir3pm'])
@@ -128,7 +133,7 @@ def _predict_rain_(city_name, date, model):
     # This prediction is for the day AFTER the `date` used
     return prediction[0]
 
-# Helper function to create model and convert cityName into cityId
+# (Helper function) to create model and convert cityName into cityId
 def predict_rain(city_name, date):
     # Load the model that's saved when running init_db_command
     rf_model = joblib.load('rainfall_prediction_model.pkl')
