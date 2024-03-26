@@ -12,10 +12,11 @@ Start Code sources:
 
 #Project Data
 from . import db
+import sqlite3
 
 # Data Processing
 import pandas as pd
-import numpy as np
+import joblib
 
 # Modelling
 from sklearn.ensemble import RandomForestClassifier
@@ -23,12 +24,8 @@ from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, r
 from sklearn.model_selection import RandomizedSearchCV, train_test_split
 from scipy.stats import randint
 
-global df_weather
-
 # Query data from database into a pandas dataframe to be used in the model
-def create_dataframe():
-    datb = db.get_db()
-    
+def create_dataframe(datb):
     query = "SELECT * FROM WeatherInstance"
     df_weather = pd.read_sql_query(query, datb)
     
@@ -87,23 +84,41 @@ def build_model(df):
     print("Recall:", recall_score(y_test, y_pred))
     print("F1 Score:", f1_score(y_test, y_pred))
     
-    # Generate confusion matrix
-    cm = confusion_matrix(y_test, y_pred)
-    # Visualize the confusion matrix
-    ConfusionMatrixDisplay(cm).plot()
-    
     return rf_model
 
 
-def predict_rain(cityId, date, model):
-    datb = db.get_db
+def _predict_rain_(city_name, date, model):
+    datb = db.get_db()
+    
+    # Retrieve cityId for the given cityName
+    city_id_query = "SELECT cityId FROM City WHERE cityName = ?"
+    cur = datb.cursor()  # Create a cursor from the database connection
+    cur.execute(city_id_query, (city_name,))
+    city_id_result = cur.fetchone()  # Fetch the first result
+    
+    if city_id_result is None:
+        return None  # cityName not found in the database
+    
+    city_id = city_id_result[0]  # Extract cityId from the query result
     
     # Process data for specific date and city to prepare it for the model
-    query = f"SELECT * FROM WeatherInstance WHERE cityId = {cityId} AND date = '{date}'"
+    query = f"SELECT * FROM WeatherInstance WHERE cityId = {city_id} AND date = '{date}'"
     df_input = process_data(pd.read_sql_query(query, datb))
+    
+    # Ensure cursor and database connections are properly closed after use
+    cur.close()
     
     # Drop colums that aren't in prediction model
     X = df_input.drop(['rainTomorrow', 'cityId', 'date'], axis=1, errors='ignore')  # errors='ignore' helps avoid errors if these columns aren't present
+    
+    # Ensure all expected columns are present
+    expected_features = model.feature_names_in_  # This attribute holds the feature names used during fit
+    for feature in expected_features:
+        if feature not in X.columns:
+            X[feature] = 0  # Add missing columns filled with default value (e.g., 0)
+    
+    # Reorder columns to match the training data
+    X = X[expected_features]
     
     # Make the prediction
     prediction = model.predict(X)
@@ -112,13 +127,24 @@ def predict_rain(cityId, date, model):
     return prediction[0]
 
 # Helper function to create model and convert cityName into cityId
-def predict_rain(cityName, date):
-    if df_weather is None:
-        df = create_dataframe()
-        df = process_data(df)
-        rf_model = build_model(df)
-    
-    cityId = db._location_to_id(cityName)
+def predict_rain(city_name, date):
+    # Load the model that's saved when running init_db_command
+    rf_model = joblib.load('rainfall_prediction_model.pkl')
     
     # Returns 1 if it predicts rain, and 0 if it doesn't predict rain
-    return predict_rain(cityId, date, rf_model)
+    return _predict_rain_(city_name, date, rf_model)
+
+
+# This function creates and saves the prediction model, it is only called when running init_db_command
+def train_and_save_model():
+    datb = db.get_db()
+
+    df_weather = create_dataframe(datb)
+
+    df_processed = process_data(df_weather)
+    rf_model = build_model(df_processed)
+    
+    # Save the model to disk
+    joblib.dump(rf_model, 'rainfall_prediction_model.pkl')
+    
+    print("Model trained and saved successfully.")
