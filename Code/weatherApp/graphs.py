@@ -5,70 +5,89 @@ Code for the graphs, using plotly.py
 '''
 '''
 Resources used:
-- [BugBytes, "Django & Plotly" video](https://www.youtube.com/watch?v=TcnWEQMT3_A)
 - [plotly Docs - bar charts](https://plotly.com/python/bar-charts/)
 - [plotly docs - px arguments](https://plotly.com/python/px-arguments/)
+'''
+# ok, let's move it into different grpahs
+'''DESIGN TIME
+get_figure(type, other params)
+type changes... 
+- query method
+- column names
+- replacements
+- graph type
+
+type doesn't change...
+- general graph formatting
+'''
+'''
+Other graphs we want:
+- rainfall amount
+- wind: gust, 9am, 3am, direction?
+ - https://plotly.com/python/wind-rose-charts/
 '''
 # ------------------------------------------
 import plotly.express as px
 from pandas import DataFrame
-
+from abc import ABC, abstractmethod
 from . import queries
 
-# TODO:
-'''
-- embed graph in template with plotly.js 
-- add graphs for different statistics
-- write tests for query and graph stuff
-    - possibly seperate show_graph into more functions to make this easier
+DEFAULT_stat = "temp"
+DEFAULT_city_and_dates = {
+    'city_name': 'Canberra', 
+    'start_date':'2017-06-14',
+    'end_date': '2017-06-24'
+}
+def get_fig(stat=DEFAULT_stat, city_and_dates=DEFAULT_city_and_dates):
 
-- separate into issues:
-1. create basic graph
-2. embed graph
-3. make graphs dynamic
-4. test graphs
-'''
+    match stat:
+        case "temp":
+            fig = PastTemperatureFigure(city_and_dates)
+            return fig.get_html()
+        case _:
+            pass
 
-def get_temp_figure_html(city_name='Albury', start_date='2008-12-01', end_date='2008-12-30'):
+# ==================================
+class PastWeatherFigure(ABC):
+    def __init__(self, city_and_dates):
+        self.city_and_dates = city_and_dates
+        self.dataframe = None
+        self.fig = None
 
-    # convert the SQL query to a pandas dataframe format (plotly needs it)
-    df = DataFrame(queries.get_temp_in_range(city_name, start_date, end_date))
-    df.columns=['Date', 'Low', 'High']
-
-    # TODO: currently have no way of showing which dates there is no data for
-
-    # This is so 0s still show up
-    df['Low'].replace(0, 0.1, inplace=True)
-    df['High'].replace(0, 0.1, inplace=True)
-
-    # This is so NAs don't mess up the graph
-    df['Low'].replace('NA', 0, inplace=True)
-    df['High'].replace('NA', 0, inplace=True)
-
-    # generate a bar chart from the dataframe
-    fig = px.bar(
-        df,
-        x = 'Date',
-        y = ['Low', 'High'],
-        barmode = 'group',
-        title = "Past Data for "+ city_name,
-        labels = {"value": "Temperature (°C)", "variable": "Type"},
-        )
+        self._initialize_dataframe()
+        self._initialize_figure()
+        self._update_fonts()
     
-    # TODO: think about deleting this
-    #plotly express hovertemplate: Type=Low<br>Date=%{x}<br>Temperature (°C)=%{y}<extra></extra>
-    # print("plotly express hovertemplate:", fig.data[0].hovertemplate)
-    # fig.update_traces(
-    #     hovertemplate = 
-    #         'Date: %{x}<br>'+
-    #         'Temp: %{y} °C' +
-    #         '<extra></extra>'
-    # )
+    def get_html(self):
+        return self.fig.to_html()
+   
+    # DATAFRAME METHODS
+     # ----------------
+    def _initialize_dataframe(self):
+        self._fetch_and_convert_data()
+        self._rename_columns()
+        self._handle_missing_data()
+
+    @abstractmethod
+    def _fetch_and_convert_data(self):
+        pass
+
+    @abstractmethod
+    def _rename_columns(self):
+        pass
+
+    @abstractmethod
+    def _handle_missing_data(self):
+        pass
     
-    #in case you want to mess around with this later..
-    #paper_bgcolor=      
-    #plot_bgcolor="white",
-    fig.update_layout(
+    # FIGURE METHODS
+    # ----------------------
+    @abstractmethod
+    def _initialize_figure(self):
+        pass
+
+    def _update_fonts(self):
+        self.fig.update_layout (
         font_family="Roboto",
         font_color="black",
         title_font_family="Rubik",
@@ -76,28 +95,35 @@ def get_temp_figure_html(city_name='Albury', start_date='2008-12-01', end_date='
         legend_title_font_color="black"
     )
 
-    return fig.to_html()
+# =================================
+class PastTemperatureFigure(PastWeatherFigure):
+    def __init__(self, city_and_dates):
+        super().__init__(city_and_dates)
 
+    # OVERRIDE: all abstract methods
+    # ------------------------------
+    def _fetch_and_convert_data(self):
+        self.df = DataFrame(queries.get_temp_in_range(self.city_and_dates))
 
+    def _rename_columns(self):
+        self.df.columns=['Date', 'Low', 'High']
 
+    def _handle_missing_data(self):
+        # TODO: add message explaining 0s and NAs
+        # This is so 0s still show up
+        self.df['Low'].replace(0, 0.1, inplace=True)
+        self.df['High'].replace(0, 0.1, inplace=True)
 
-# DATE RANGE ERROR DESCRIPTIONS:
-'''
-If range is entered for which there is no data:
-- ValueError
+        # This is so NAs don't mess up the graph
+        self.df['Low'].replace('NA', 0, inplace=True)
+        self.df['High'].replace('NA', 0, inplace=True)
 
-If range is entered for which start or end has no data:
-- no problems, just won't cut off
-'''
-# MISSING DATAPOINTS ERROR DESCRIPTIONS:
-'''
-If days in the range have NA for high xor low:
-- graph turns into a weird histogram, NA columns left out
-
-If days in the range have NA for both high and low:
-- ?
-
-If all days have a missing datapoint:
-- histogram again, but NAs are included?
-'''
-
+    def _initialize_figure(self):
+        self.fig = px.bar(
+            self.df,
+            x = 'Date',
+            y = ['Low', 'High'],
+            barmode = 'group',
+            title = "Temperature Over Time — "+ self.city_and_dates['city_name'],
+            labels = {"value": "Temperature (°C)", "variable": "Type"},
+        )

@@ -87,8 +87,12 @@ def _add_space(city_name: str):
 
     return city_name
 
-def get_temp_in_range(city_name, start_date, end_date):
+def get_temp_in_range(city_and_dates):
 
+    city_name = city_and_dates['city_name']
+    start_date = city_and_dates['start_date']
+    end_date = city_and_dates['end_date']
+    
     if city_name != None:
         city_name.replace(' ', '') # (just in case)
 

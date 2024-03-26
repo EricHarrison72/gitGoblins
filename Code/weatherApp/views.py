@@ -65,9 +65,9 @@ def graph_past():
         url_args['start_date'] == None or
         url_args['end_date'] == None
         ):
-        figure_html = graphs.get_temp_figure_html()
+        figure_html = graphs.get_fig()
     else:
-        figure_html = graphs.get_temp_figure_html(url_args['city_name'], url_args['start_date'], url_args['end_date'])
+        figure_html = graphs.get_fig("temp", url_args)
 
     return render_template(
         "features/graph_past.html.jinja", 
