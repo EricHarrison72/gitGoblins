@@ -126,16 +126,18 @@ class PastTemperatureFigure(PastWeatherFigure):
             labels = {"value": "Temperature (°C)", "variable": "Type"},
         )
 
+
 # ========================
 class PastWindFigure(PastWeatherFigure):
     def __init__(self, city_and_dates):
+        self.freq_table = None
         super().__init__(city_and_dates)
 
     # Overide parent method
     def _initialize_dataframe(self):
         super()._initialize_dataframe()
-        self._create_frequency_table()
-        
+        self._initialize_freq_table()
+
     # OVERRIDE: all abstract methods
     # ------------------------------
     def _fetch_and_convert_data(self):
@@ -150,29 +152,38 @@ class PastWindFigure(PastWeatherFigure):
 
     def _initialize_figure(self):
         self.fig = px.bar_polar(
-            self.df, 
-            r="Speed", 
+            self.freq_table, 
+            r="Frequency", 
             theta="Direction",
             color="Speed",
             color_discrete_sequence= px.colors.sequential.Plasma_r,
             title = "Wind Gust Data — "+ self.get_city_name()
         )
-    
-    # NEW Helper METHODS
-    #------------
-    def _create_frequency_table(self):
-        
-        self._cut_speed_into_bins()
-        
-        # TODO: create frequency table with crosstab
-        directions = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE",
-                      "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
-        bin_labels = ['1-10', '11-20', '21-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100', '101-200']
 
-        frequency_table = crosstab(self.df['Direction'], self.df['Speed'])
-        print(frequency_table)
-        # okay this kind fo works... but how to use this frequency table??
-        
+    # NEW Helper METHODS
+    #-----------
+    def _initialize_freq_table(self):
+
+        self._cut_speed_into_bins()
+
+        frequencies = crosstab(self.df['Direction'], self.df['Speed'])
+        frequencies_rows = frequencies.index.to_list()
+        frequencies_columns = frequencies.columns.to_list()
+
+        directions = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
+        bins = ['1-10', '11-20', '21-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100', '101-200']
+
+        freq_data = []
+        for dir in directions:
+            for bin in bins:
+                if ((dir in frequencies_rows) and (bin in frequencies_columns)):
+                    freq_data.append([dir, bin, frequencies.at[dir, bin]])
+                else:
+                    freq_data.append([dir, bin, 0])
+
+        self.freq_table = DataFrame(freq_data)
+        self.freq_table.columns = ['Direction', 'Speed', 'Frequency']
+
     def _cut_speed_into_bins(self):
         speed_bins = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200]
         speeds_as_intervals = DataFrame(cut(self.df['Speed'], speed_bins))['Speed']
@@ -180,7 +191,7 @@ class PastWindFigure(PastWeatherFigure):
         speeds_as_strings = []
         for interval in speeds_as_intervals:
             speeds_as_strings.append(
-                f'{interval.right + 1}-{interval.left}'
+                f'{interval.left + 1}-{interval.right}'
             )
 
         self.df['Speed'] = speeds_as_strings
