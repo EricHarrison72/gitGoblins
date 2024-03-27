@@ -17,7 +17,8 @@ Other graphs we want:
 '''
 # ------------------------------------------
 import plotly.express as px
-from pandas import DataFrame, crosstab
+import plotly.data as plotly_data
+from pandas import DataFrame, crosstab, cut
 from abc import ABC, abstractmethod
 from . import queries
 
@@ -106,7 +107,7 @@ class PastTemperatureFigure(PastWeatherFigure):
         super()._rename_columns(['Date', 'Low', 'High'])
 
     def _handle_missing_data(self):
-        # TODO: add message explaining 0s and NAs
+        # TODO: use .fillna method?
         # This is so 0s still show up
         self.df['Low'].replace(0, 0.1, inplace=True)
         self.df['High'].replace(0, 0.1, inplace=True)
@@ -130,24 +131,21 @@ class PastWindFigure(PastWeatherFigure):
     def __init__(self, city_and_dates):
         super().__init__(city_and_dates)
 
+    # Overide parent method
+    def _initialize_dataframe(self):
+        super()._initialize_dataframe()
+        self._create_frequency_table()
+        
     # OVERRIDE: all abstract methods
     # ------------------------------
     def _fetch_and_convert_data(self):
         super()._fetch_and_convert_data(['WindGustSpeed', 'WindGustDir'])
 
-        # TODO: cut bins for table of frequency, Direction, strength (discrete amounts of speed)
-        # 1st: cut bins based on direction
-        # 2nd: cut bins based on speed
-        '''
-        binned_table = pandas.cut(df.)
-        speed_groups = ['']
-        frequency_df = pandas.crosstab('''
-
     def _rename_columns(self):
         super()._rename_columns(['Date', 'Speed', 'Direction'])
 
     def _handle_missing_data(self):
-        # TODO
+        # TODO use fillna
         pass
 
     def _initialize_figure(self):
@@ -159,3 +157,30 @@ class PastWindFigure(PastWeatherFigure):
             color_discrete_sequence= px.colors.sequential.Plasma_r,
             title = "Wind Gust Data — "+ self.get_city_name()
         )
+    
+    # NEW Helper METHODS
+    #------------
+    def _create_frequency_table(self):
+        
+        self._cut_speed_into_bins()
+        
+        # TODO: create frequency table with crosstab
+        directions = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE",
+                      "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
+        bin_labels = ['1-10', '11-20', '21-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100', '101-200']
+
+        frequency_table = crosstab(self.df['Direction'], self.df['Speed'])
+        print(frequency_table)
+        # okay this kind fo works... but how to use this frequency table??
+        
+    def _cut_speed_into_bins(self):
+        speed_bins = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200]
+        speeds_as_intervals = DataFrame(cut(self.df['Speed'], speed_bins))['Speed']
+
+        speeds_as_strings = []
+        for interval in speeds_as_intervals:
+            speeds_as_strings.append(
+                f'{interval.right + 1}-{interval.left}'
+            )
+
+        self.df['Speed'] = speeds_as_strings
