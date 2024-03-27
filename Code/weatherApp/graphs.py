@@ -38,6 +38,9 @@ def get_fig(url_args=DEFAULT_url_args):
         case "wind":
             fig = PastWindFigure(url_args)
 
+        case "rain":
+            fig = PastRainFigure(url_args)
+
         case _:
             fig = None
 
@@ -108,7 +111,6 @@ class PastTemperatureFigure(PastWeatherFigure):
         super()._rename_columns(['Date', 'Low', 'High'])
 
     def _handle_missing_data(self):
-        # TODO: use .fillna method?
         # This is so 0s still show up
         self.df['Low'].replace(0, 0.1, inplace=True)
         self.df['High'].replace(0, 0.1, inplace=True)
@@ -125,6 +127,33 @@ class PastTemperatureFigure(PastWeatherFigure):
             barmode = 'group',
             title = "Temperature Over Time — "+ self.get_city_name(),
             labels = {"value": "Temperature (°C)", "variable": "Type"},
+        )
+
+
+# =================================
+class PastRainFigure(PastWeatherFigure):
+    def __init__(self, city_and_dates):
+        super().__init__(city_and_dates)
+
+    # OVERRIDE: all abstract methods
+    # ------------------------------
+    def _fetch_and_convert_data(self):
+        super()._fetch_and_convert_data(['Rainfall'])
+
+    def _rename_columns(self):
+        super()._rename_columns(['Date', 'Rainfall'])
+
+    def _handle_missing_data(self):
+        # This is so NAs don't mess up the graph
+        self.df['Rainfall'].replace('NA', 0, inplace=True)
+
+    def _initialize_figure(self):
+        self.fig = px.bar(
+            self.df,
+            x = 'Date',
+            y = 'Rainfall',
+            title = "Rainfall Over Time — "+ self.get_city_name(),
+            labels = {"value": "Rainfall (mm)"},
         )
 
 
