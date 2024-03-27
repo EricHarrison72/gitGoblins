@@ -18,6 +18,8 @@ import os
 from flask import current_app, g
 from flask.cli import with_appcontext
 
+from . import predictions
+
 #Returns current database
 def get_db():
     if 'db' not in g:
@@ -50,6 +52,7 @@ def init_db_command():
     init_db()
     _populate_db()
     click.echo('Initialized and populated the database.')
+    predictions.train_and_save_model()
 
 #Used to initialize database commands in app factory
 def init_app(app):

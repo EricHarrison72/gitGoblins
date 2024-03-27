@@ -161,3 +161,6 @@ cython_debug/
 
 # test template that gets regenerated with every test (i can't figure out how to delete it automatically)
 Code/tests/test_macros.html.jinja
+
+# Rain prediction model (file size is too large for github)
+Code/rainfall_prediction_model.pkl
