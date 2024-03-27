@@ -147,8 +147,14 @@ class PastWindFigure(PastWeatherFigure):
         super()._rename_columns(['Date', 'Speed', 'Direction'])
 
     def _handle_missing_data(self):
-        # TODO use fillna
-        pass
+        # Convert str 'NA's to NA values recognized by pandas
+        self.df['Speed'].replace('NA', None, inplace=True)
+        self.df['Direction'].replace('NA', None, inplace=True)
+
+        self.df.dropna(inplace=True)
+
+        # Convert any floats to ints
+        self.df['Speed'] = self.df['Speed'].astype(int)
 
     def _initialize_figure(self):
         self.fig = px.bar_polar(
@@ -157,11 +163,14 @@ class PastWindFigure(PastWeatherFigure):
             theta="Direction",
             color="Speed",
             color_discrete_sequence= px.colors.sequential.Plasma_r,
-            title = "Wind Gust Data — "+ self.get_city_name()
+            title = f"Wind Gust Data"
+                    + f" — Between {self.city_and_dates['start_date']} and {self.city_and_dates['end_date']}"
+                    + f" — {self.get_city_name()}",
+            width=800
         )
 
     # NEW Helper METHODS
-    #-----------
+    # ------------------
     def _initialize_freq_table(self):
 
         self._cut_speed_into_bins()
@@ -184,9 +193,10 @@ class PastWindFigure(PastWeatherFigure):
         self.freq_table = DataFrame(freq_data)
         self.freq_table.columns = ['Direction', 'Speed', 'Frequency']
 
+    # TODO: some cities randomly cause a conversion to float, which breaks the code
     def _cut_speed_into_bins(self):
         speed_bins = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200]
-        speeds_as_intervals = DataFrame(cut(self.df['Speed'], speed_bins))['Speed']
+        speeds_as_intervals = DataFrame(cut(self.df['Speed'], speed_bins, right=True))['Speed']
 
         speeds_as_strings = []
         for interval in speeds_as_intervals:
