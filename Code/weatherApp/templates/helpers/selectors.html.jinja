@@ -1,0 +1,145 @@
+{# --------------------------------------------------
+selectors.html.jinja
+----------------------
+Contains macros for selection menus, including:
+- select_date
+- select_single_location
+- select_multiple_locations
+
+Docs:
+- [Jinja2 Docs: Macros](https://jinja.palletsprojects.com/en/3.1.x/templates/#macros)
+-------------------------------------------------- #}
+
+{% macro select_date(id_prefix='', url_arg_date='2017-06-24') %}
+
+    {% if url_arg_date in [None, 'None', 'No Date'] %}
+        {% set url_arg_date = '2017-06-24' %}
+    {% endif %}
+
+    {% set selected_year = url_arg_date[:4] | int %}
+    {% set selected_month = url_arg_date[5:7] | int %}
+    {% set selected_day = url_arg_date[8:] | int %}
+
+    <div id="{{ id_prefix }}dateSelect">
+        <select id="{{ id_prefix }}yearSelect">
+            {% for year in range(2008, 2018) %}
+                <option value="{{ year }}" {% if year == selected_year %} selected {% endif %}>
+                        {{ year }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <select id="{{ id_prefix }}monthSelect">
+            {% set months = [
+                'January',
+                'February',
+                'March',
+                'April',
+                'May',
+                'June',
+                'July',
+                'August',
+                'September',
+                'October',
+                'November',
+                'December'
+            ] %}
+
+            {% for i in range(months|length) %}
+                <option value="{{ i+1 }}" {% if i+1 == selected_month %} selected {% endif %}>
+                    {{ months[i] }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <select id="{{ id_prefix }}daySelect">
+            {% for day in range(1, 32) %}
+                <option value="{{ day }}" {% if day == selected_day %} selected {% endif %}>
+                    {{ day }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+{% endmacro %}
+
+
+{% macro select_single_location(url_arg_city='Canberra') %}
+
+    {% if url_arg_city == None or url_arg_city == 'NO DATA' %}
+        {% set url_arg_city = 'Canberra' %}
+    {% endif %}
+
+    <select id="citySelect">
+        {% set cities = [
+            'Adelaide',
+            'Albany',
+            'Albury',
+            'Alice Springs',
+            'Badgerys Creek',
+            'Ballarat',
+            'Bendigo',
+            'Brisbane',
+            'Cairns',
+            'Canberra',
+            'Cobar',
+            'Coffs Harbour',
+            'Dartmoor',
+            'Darwin',
+            'Gold Coast',
+            'Hobart',
+            'Katherine',
+            'Launceston',
+            'Melbourne',
+            'Melbourne Airport',
+            'Mildura',
+            'Moree',
+            'Mount Gambier',
+            'Mount Ginini',
+            'Newcastle',
+            'Nhil',
+            'Norah Head',
+            'Norfolk Island',
+            'Nuriootpa',
+            'Pearce RAAF',
+            'Penrith',
+            'Perth',
+            'Perth Airport',
+            'Portland',
+            'Richmond',
+            'Sale',
+            'Salmon Gums',
+            'Sydney',
+            'Sydney Airport',
+            'Townsville',
+            'Tuggeranong',
+            'Uluru',
+            'Wagga Wagga',
+            'Walpole',
+            'Watsonia',
+            'Williamtown',
+            'Witchcliffe',
+            'Wollongong',
+            'Woomera',
+        ] %}
+
+        {% for i in range(cities|length) %}
+            <option value="{{ i+1 }}" {% if cities[i]|replace(' ','') == url_arg_city %} selected {% endif %}>
+                {{ cities[i] }}
+            </option>
+        {% endfor %}
+
+    </select>
+{% endmacro %}
+
+
+{% macro select_multiple_locations() %}
+    <p>[my pal Eric has TODO this]</p>
+    {#
+        Eric, I'm hoping you can make a PURE HTML/CSS dropdown 
+        checklist of some sort, so that it fits in the select-table.
+
+        This might require defining some custom css classes, but
+        trust me, that will be better than using Bootstrap or some
+        other external library (in the context of this project)
+    #}
+{% endmacro %}

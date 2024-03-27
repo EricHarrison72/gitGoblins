@@ -1,8 +1,8 @@
 /* Code source: where is this from? */
 
-html { font-family: sans-serif; background: #eee; padding: 1rem; }
-body { max-width: 960px; margin: 0 auto; background: white; }
-h1 { font-family: sans-serif; color: #00843D; margin: 1rem 0; }
+html { font-family: 'Roboto', sans-serif; background: #eee }
+body { margin: 0 auto; background: white; }
+h1 { font-family: 'Rubik', sans-serif; font-weight:700; color: #00843D; margin: 1rem 0; }
 a { color: #00843D; }
 hr { border: none; border-top: 1px solid lightgray; }
 nav { background: #FFCD00; display: flex; align-items: center; padding: 0 0.5rem; }
@@ -78,3 +78,25 @@ https://www.tutorialspoint.com/html-tables-with-fixed-header-on-scroll-in-css
 .table-container {
   overflow-x: auto;
 }
+=======
+.select-table {
+  border-collapse: collapse;
+  border-style: hidden;
+  border-radius: 6px;
+  background-color: #FFCD00;
+}
+.select-table th {
+  border-style: hidden;
+  padding-top:10px;
+  padding-left: 15px;
+  padding-right: 15px;
+  text-align: left;
+}
+.select-table td {
+  border-style: hidden;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom:15px;
+  text-align: left;
+}
+

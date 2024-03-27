@@ -10,14 +10,14 @@
 {% endblock %}
 
 {% block content %}
+
     <ul>
       <li><a href="{{ url_for('views.map') }}">Map</a></li>
       <li><a href="{{ url_for('views.weather_summary') }}">Summary</a></li>
-      <li><a href="{{ url_for('views.location_select') }}">Location Select</a></li>
       <li>Current data graph (no page yet)</li>
-      <li><a href="{{ url_for('views.graph') }}">Past Data Graph</a></li>
+      <li><a href="{{ url_for('views.graph_past') }}">Past Data Graph</a></li>
     </ul>
-  
+
 
   {% if user_city_data %}
     
