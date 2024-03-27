@@ -147,14 +147,9 @@ class PastWindFigure(PastWeatherFigure):
         super()._rename_columns(['Date', 'Speed', 'Direction'])
 
     def _handle_missing_data(self):
-        # Convert str 'NA's to NA values recognized by pandas
         self.df['Speed'].replace('NA', None, inplace=True)
         self.df['Direction'].replace('NA', None, inplace=True)
-
         self.df.dropna(inplace=True)
-
-        # Convert any floats to ints
-        self.df['Speed'] = self.df['Speed'].astype(int)
 
     def _initialize_figure(self):
         self.fig = px.bar_polar(
@@ -194,8 +189,9 @@ class PastWindFigure(PastWeatherFigure):
         self.freq_table.columns = ['Direction', 'Speed', 'Frequency']
 
     # TODO: some cities randomly cause a conversion to float, which breaks the code
+        # - Update: it has something to do with nums in least interval
     def _cut_speed_into_bins(self):
-        speed_bins = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200]
+        speed_bins = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200]
         speeds_as_intervals = DataFrame(cut(self.df['Speed'], speed_bins, right=True))['Speed']
 
         speeds_as_strings = []
