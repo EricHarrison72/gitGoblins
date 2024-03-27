@@ -69,26 +69,26 @@ def process_data(df):
 
 def build_model(df):
     #Split data into training and testing data
-    X = df.drop(['rainTomorrow', 'cityId', 'date'], axis=1)  # Exclude non-feature columns
-    y = df['rainTomorrow'] # Target variable
+    input_vars = df.drop(['rainTomorrow', 'cityId', 'date'], axis=1)  # Exclude non-feature columns
+    target_var = df['rainTomorrow']
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    input_train, input_test, target_train, target_test = train_test_split(input_vars, target_var, test_size=0.2, random_state=42)
     
     
     # Initialize the model
     rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
 
     # Train the model
-    rf_model.fit(X_train, y_train)
+    rf_model.fit(input_train, target_train)
 
     # Make predictions
-    y_pred = rf_model.predict(X_test)
+    target_pred = rf_model.predict(input_test)
     
     # Print scores of model upon initialization
-    print("Accuracy:", accuracy_score(y_test, y_pred))
-    print("Precision:", precision_score(y_test, y_pred))
-    print("Recall:", recall_score(y_test, y_pred))
-    print("F1 Score:", f1_score(y_test, y_pred))
+    print("Accuracy:", accuracy_score(target_test, target_pred))
+    print("Precision:", precision_score(target_test, target_pred))
+    print("Recall:", recall_score(target_test, target_pred))
+    print("F1 Score:", f1_score(target_test, target_pred))
     
     return rf_model
 
@@ -115,19 +115,19 @@ def _predict_rain_(city_name, date, model):
     cur.close()
     
     # Drop colums that aren't in prediction model
-    X = df_input.drop(['rainTomorrow', 'cityId', 'date'], axis=1, errors='ignore')  # errors='ignore' helps avoid errors if these columns aren't present
+    prediction_input = df_input.drop(['rainTomorrow', 'cityId', 'date'], axis=1, errors='ignore')  # errors='ignore' helps avoid errors if these columns aren't present
     
     # Ensure all expected columns are present
     expected_features = model.feature_names_in_  # This attribute holds the feature names used during fit
     for feature in expected_features:
-        if feature not in X.columns:
-            X[feature] = 0  # Add missing columns filled with default value (e.g., 0)
+        if feature not in prediction_input.columns:
+            prediction_input[feature] = 0  # Add missing columns filled with default value (e.g., 0)
     
     # Reorder columns to match the training data
-    X = X[expected_features]
+    prediction_input = prediction_input[expected_features]
     
     # Make the prediction
-    prediction = model.predict(X)
+    prediction = model.predict(prediction_input)
     
     # Returns 1 if it predicts rain, and 0 if it doesn't predict rain
     # This prediction is for the day AFTER the `date` used
