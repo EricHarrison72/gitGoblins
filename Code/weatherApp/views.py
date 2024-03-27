@@ -12,7 +12,10 @@ Start Code sources:
 '''
 # ------------------------------------------------------
 from flask import (
-    render_template, Blueprint, request, jsonify
+    render_template,
+    Blueprint,
+    request,
+    jsonify
 )
 from . import (
     graphs,
@@ -32,28 +35,51 @@ def index():
 @login_required
 def weather_summary():
 
-    city_name = request.args.get('city_name')
-    date = request.args.get('date')
+    url_args = {
+        'city_name' : request.args.get('city_name'),
+        'date' : request.args.get('date')
+    }
 
-    weather_dict = queries.get_weather_data(city_name, date)
+    weather_dict = queries.get_weather_data(url_args['city_name'], url_args['date'])
     
-    return render_template("weather_summary.html.jinja", weather_dict=weather_dict)
+    return render_template(
+        "features/weather_summary.html.jinja",
+        weather_dict = weather_dict,
+        url_args = url_args)
 
 @views_bp.route('/map')
 @login_required
 def map():
-    return render_template("map.html.jinja")
+    return render_template("features/map.html.jinja")
 
-@views_bp.route('/graph')
-def graph():
-    figure_html = graphs.get_temp_figure_html()
-    return render_template("graph.html.jinja", figure_html = figure_html)
+@views_bp.route('/graph_past')
+def graph_past():
+
+    url_args = {
+        'city_name' : request.args.get('city_name'),
+        'start_date' : request.args.get('start_date'),
+        'end_date' : request.args.get('end_date')
+    }
+    
+    if (url_args['city_name'] == None or
+        url_args['start_date'] == None or
+        url_args['end_date'] == None
+        ):
+        figure_html = graphs.get_temp_figure_html()
+    else:
+        figure_html = graphs.get_temp_figure_html(url_args['city_name'], url_args['start_date'], url_args['end_date'])
+
+    return render_template(
+        "features/graph_past.html.jinja", 
+        figure_html = figure_html,
+        url_args = url_args)
 
 @views_bp.route('/location_select')
 @login_required
 def location_select():
-    return render_template("location_select.html.jinja")
+    return render_template("features/location_select.html.jinja")
 
+# -----------------
 #This page is used only to determine which weather icon to use on the map as a marker
 @views_bp.route('/api/weather_icon')
 def get_weather_icon():

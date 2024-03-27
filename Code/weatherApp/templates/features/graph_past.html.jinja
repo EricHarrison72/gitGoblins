@@ -1,0 +1,51 @@
+{# 
+This template expects the following parameters: 
+ -- figure_html - a plotly figure object in html string form
+ -- url_args - a dictionary with the keys: 
+    - city_name
+    - start_date
+    - end_date
+#}
+{% extends "base.html.jinja" %}
+{% import 'helpers/selectors.html.jinja' as selectors %}
+
+
+{% block head %}
+{% endblock %}
+{% block title %}
+    Graph
+{% endblock %}
+
+{% block header %}
+    Graph
+{% endblock %}
+
+{% block content %}
+    {# Selection menus #}
+    <br>
+    <table class="select-table">
+        <tr>
+            <th>Location</th>
+            <th>Start date</th>
+            <th>End date</th>
+        </tr>
+        <tr>
+            <td>{{ selectors.select_single_location( url_args['city_name']) }}</td>
+            <td>{{ selectors.select_date( 'start_', url_args['start_date']) }}</td>
+            <td>{{ selectors.select_date( 'end_', url_args['end_date']) }}</td>
+            <td>
+                <button onclick="reloadPageWithArgs(`city_name=${getCityFromSelection()}&start_date=${getDateFromSelection('start_')}&end_date=${getDateFromSelection('end_')}`)">
+                    Submit
+                </button>
+            </td>
+        </tr>
+    </table>
+
+    {# embedded graph #}
+    {{ figure_html }}
+
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/submit.js') }}"></script>
+{% endblock %}
