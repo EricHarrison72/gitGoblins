@@ -62,8 +62,8 @@ def graph_past():
         'end_date' : request.args.get('end_date')
     }
     
-    for arg in url_args:
-        if arg == None:
+    for arg_val in url_args.values():
+        if arg_val == None:
             figure_html = graphs.get_fig()
             break
     else:
