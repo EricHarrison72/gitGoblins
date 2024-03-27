@@ -22,23 +22,24 @@ from pandas import DataFrame, crosstab, cut
 from abc import ABC, abstractmethod
 from . import queries
 
-DEFAULT_stat = "temp"
-DEFAULT_city_and_dates = {
+DEFAULT_url_args = {
+    'stat' : 'temperature',
     'city_name': 'Canberra', 
     'start_date':'2017-06-14',
     'end_date': '2017-06-24'
 }
-def get_fig(stat=DEFAULT_stat, city_and_dates=DEFAULT_city_and_dates):
 
-    match stat:
-        case "temp":
-            fig = PastTemperatureFigure(city_and_dates)
+def get_fig(url_args=DEFAULT_url_args):
+
+    match url_args['stat']:
+        case "temperature":
+            fig = PastTemperatureFigure(url_args)
         
         case "wind":
-            fig = PastWindFigure(city_and_dates)
+            fig = PastWindFigure(url_args)
 
         case _:
-            pass
+            fig = None
 
     return fig.get_html()
 
@@ -161,7 +162,9 @@ class PastWindFigure(PastWeatherFigure):
             title = f"Wind Gust Data"
                     + f" — Between {self.city_and_dates['start_date']} and {self.city_and_dates['end_date']}"
                     + f" — {self.get_city_name()}",
-            width=800
+            labels = {"Speed": "Speed (km/h)"},
+            width=700,
+
         )
 
     # NEW Helper METHODS

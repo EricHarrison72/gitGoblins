@@ -10,6 +10,25 @@ Docs:
 - [Jinja2 Docs: Macros](https://jinja.palletsprojects.com/en/3.1.x/templates/#macros)
 -------------------------------------------------- #}
 
+{% macro select_stat(url_arg_stat='temperature') %}
+
+    {% if url_arg_date in [None, 'None', 'NA'] %}
+        {% set url_arg_stat = 'temperature' %}
+    {% endif %}
+
+    {% set stats = ['temperature', 'wind', 'rain'] %}
+
+    <select id="statSelect">
+        {% for i in range(stats|length) %}
+            <option value="{{ i }}" {% if stats[i] == url_arg_stat %} selected {% endif %}>
+                    {{ stats[i] }}
+            </option>
+        {% endfor %}
+        
+    </div>
+
+{% endmacro %}
+
 {% macro select_date(id_prefix='', url_arg_date='2017-06-24') %}
 
     {% if url_arg_date in [None, 'None', 'No Date'] %}
@@ -130,7 +149,6 @@ Docs:
 
     </select>
 {% endmacro %}
-
 
 {% macro select_multiple_locations() %}
     <p>[my pal Eric has TODO this]</p>

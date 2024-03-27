@@ -56,18 +56,18 @@ def map():
 def graph_past():
 
     url_args = {
+        'stat' : request.args.get('stat'),
         'city_name' : request.args.get('city_name'),
         'start_date' : request.args.get('start_date'),
         'end_date' : request.args.get('end_date')
     }
     
-    if (url_args['city_name'] == None or
-        url_args['start_date'] == None or
-        url_args['end_date'] == None
-        ):
-        figure_html = graphs.get_fig()
+    for arg in url_args:
+        if arg == None:
+            figure_html = graphs.get_fig()
+            break
     else:
-        figure_html = graphs.get_fig("wind", url_args)
+        figure_html = graphs.get_fig(url_args)
 
     return render_template(
         "features/graph_past.html.jinja", 

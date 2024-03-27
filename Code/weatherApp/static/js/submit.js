@@ -28,6 +28,12 @@ function getCitiesFromSelection() {
     //TODO - Eric
 }
 
+function getStatFromSelection() {
+    var sel = document.getElementById('statSelect');
+    var stat = sel.options[sel.selectedIndex].text;
+    return stat;
+}
+
 function reloadPageWithArgs(urlArgs){
     currentUrl = location.href;
 
@@ -42,5 +48,6 @@ module.exports = {
     getDateFromSelection,
     getCityFromSelection,
     getCitiesFromSelection,
+    getStatFromSelection,
     reloadPageWithArgs
 }
