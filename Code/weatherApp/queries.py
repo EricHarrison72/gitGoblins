@@ -50,14 +50,14 @@ def get_weather_data (city_name, date):
 
         # If a city name and date were passed, put that in the dict
         try:
-            weather_data_dict['city_name'] += ' for ' + _add_space(city_name) + ' on this date'
+            weather_data_dict['city_name'] += ' for ' + add_space(city_name) + ' on this date'
             weather_data_dict['date'] = date
         except:
             pass
 
     else:
         weather_data_dict = {
-        'city_name': _add_space(weather_data_row['city_name']), 
+        'city_name': add_space(weather_data_row['city_name']), 
         'date': weather_data_row['date'], 
         'temp_high': weather_data_row['temp_high'], 
         'temp_low': weather_data_row['temp_low'], 
@@ -72,7 +72,7 @@ def get_weather_data (city_name, date):
 
 # helper method that adds a space to the city name if it should have one
 # eg 'AliceSprings' -> 'Alice Springs'
-def _add_space(city_name: str):
+def add_space(city_name: str):
 
     upper_count = 0 # number of uppercase letters in city_name
 

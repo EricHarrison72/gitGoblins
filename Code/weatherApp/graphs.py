@@ -9,17 +9,6 @@ Resources used:
 - [plotly docs - px arguments](https://plotly.com/python/px-arguments/)
 '''
 # ok, let's move it into different grpahs
-'''DESIGN TIME
-get_figure(type, other params)
-type changes... 
-- query method
-- column names
-- replacements
-- graph type
-
-type doesn't change...
-- general graph formatting
-'''
 '''
 Other graphs we want:
 - rainfall amount
@@ -60,6 +49,9 @@ class PastWeatherFigure(ABC):
     
     def get_html(self):
         return self.fig.to_html()
+    
+    def get_city_name(self):
+        return queries.add_space(self.city_and_dates['city_name'])
    
     # DATAFRAME METHODS
      # ----------------
@@ -124,6 +116,6 @@ class PastTemperatureFigure(PastWeatherFigure):
             x = 'Date',
             y = ['Low', 'High'],
             barmode = 'group',
-            title = "Temperature Over Time — "+ self.city_and_dates['city_name'],
+            title = "Temperature Over Time — "+ self.get_city_name(),
             labels = {"value": "Temperature (°C)", "variable": "Type"},
         )

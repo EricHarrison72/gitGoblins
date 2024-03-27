@@ -8,7 +8,7 @@ import pytest
 from weatherApp.queries import (
     get_weather_data,
     get_temp_in_range,
-    _add_space
+    add_space
 )
 
 # --------
@@ -96,8 +96,8 @@ def test_get_weather_data(app, expected_dict_1, expected_dict_2, expected_dict_3
         assert expected_dict_3 == get_weather_data(None, None)
 
 def test_add_space():
-      assert _add_space('AliceSprings') == 'Alice Springs'
-      assert _add_space('NewYorkCity') == 'New York City'
+      assert add_space('AliceSprings') == 'Alice Springs'
+      assert add_space('NewYorkCity') == 'New York City'
 
 def test_get_temp_in_range(app, expected_temp_table):
     
