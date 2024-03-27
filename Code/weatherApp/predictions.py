@@ -2,7 +2,9 @@
 # predictions.py
 '''
 Contains the python code required to build a machine learning
-model to predict rainfall for a specific city and date
+model to predict rainfall for a specific city and date.
+The model makes its prediction based on all the available 
+weather data for that city/date.
 '''
 '''
 Start Code sources:
@@ -24,18 +26,23 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from sklearn.model_selection import train_test_split
 
-# Query data from database into a pandas dataframe to be used in the model
+
 def create_dataframe(datb):
+    '''
+    Query data from database into a pandas dataframe to be used in the model
+    '''
     query = "SELECT * FROM WeatherInstance"
     df_weather = pd.read_sql_query(query, datb)
     
     return df_weather
 
 def process_data(df):
-    # Fill missing numeric values with 0
-    # Note: Some of these are missing because the cities don't have
-    # data for them, this may mess up the prediction accuracy
-    
+    '''
+    - Convert most of the data to numeric types
+    - replace missing numeric values with 0
+      - Note: Some of these are missing because the cities don't have
+        data for them, this may mess up the prediction accuracy
+    '''
     # Convert non-numeric to NaN and fill missing numeric values
     numeric_cols = ['sunshine', 'rainfall', 'evaporation', 'cloud9am', 'cloud3pm', 'pressure9am', 'pressure9am', 'pressure3pm', 'humidity9am', 'humidity3pm', 'windGustSpeed', 'windSpeed9am', 'windSpeed3pm', 'tempMin', 'tempMax']
     for col in numeric_cols:
@@ -73,7 +80,6 @@ def build_model(df):
     target_var = df['rainTomorrow']
 
     input_train, input_test, target_train, target_test = train_test_split(input_vars, target_var, test_size=0.2, random_state=42)
-    
     
     # Initialize the model
     rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
@@ -133,8 +139,11 @@ def _predict_rain_(city_name, date, model):
     # This prediction is for the day AFTER the `date` used
     return prediction[0]
 
-# (Helper function) to create model and convert cityName into cityId
+
 def predict_rain(city_name, date):
+    '''
+    (Helper function) to create model and convert cityName into cityId
+    '''
     # Load the model that's saved when running init_db_command
     rf_model = joblib.load('rainfall_prediction_model.pkl')
     
@@ -142,8 +151,11 @@ def predict_rain(city_name, date):
     return _predict_rain_(city_name, date, rf_model)
 
 
-# This function creates and saves the prediction model, it is only called when running init_db_command
 def train_and_save_model():
+    '''
+    This function creates and saves the prediction model, 
+    it is only called when running `init_db_command` in `db.py`
+    '''
     datb = db.get_db()
 
     # Create prediction model

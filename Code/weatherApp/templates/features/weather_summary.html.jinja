@@ -67,7 +67,14 @@ This template expects the following parameters:
   <br>
   <br>
 
-  {% if rain_prediction == 0 %} Our AI model predicts that it <b>WILL NOT</b> rain tomorrow {% else %} Our AI model predicts that it <b>WILL</b> rain tomorrow {% endif %}
+  {% if rain_prediction == 0 %}
+    {% set will_or_will_not = 'WILL NOT'%}
+  {% else %}
+    {% set will_or_will_not = 'WILL'%}
+  {% endif %}
+
+  <p>Our AI model predicts that it <b>{{ will_or_will_not }}</b> rain tomorrow.</p>
+  
 
 
 {% endblock %}

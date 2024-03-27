@@ -1,5 +1,5 @@
 # ---------------------------------------------------
-# test_queries.py
+# test_predictions.py
 '''
 Contains unit tests for predictions.py
 '''
