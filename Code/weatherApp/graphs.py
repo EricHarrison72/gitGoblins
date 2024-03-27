@@ -17,7 +17,7 @@ Other graphs we want:
 '''
 # ------------------------------------------
 import plotly.express as px
-from pandas import DataFrame
+from pandas import DataFrame, crosstab
 from abc import ABC, abstractmethod
 from . import queries
 
@@ -32,9 +32,14 @@ def get_fig(stat=DEFAULT_stat, city_and_dates=DEFAULT_city_and_dates):
     match stat:
         case "temp":
             fig = PastTemperatureFigure(city_and_dates)
-            return fig.get_html()
+        
+        case "wind":
+            fig = PastWindFigure(city_and_dates)
+
         case _:
             pass
+
+    return fig.get_html()
 
 # ==================================
 class PastWeatherFigure(ABC):
@@ -118,4 +123,39 @@ class PastTemperatureFigure(PastWeatherFigure):
             barmode = 'group',
             title = "Temperature Over Time — "+ self.get_city_name(),
             labels = {"value": "Temperature (°C)", "variable": "Type"},
+        )
+
+# ========================
+class PastWindFigure(PastWeatherFigure):
+    def __init__(self, city_and_dates):
+        super().__init__(city_and_dates)
+
+    # OVERRIDE: all abstract methods
+    # ------------------------------
+    def _fetch_and_convert_data(self):
+        super()._fetch_and_convert_data(['WindGustSpeed', 'WindGustDir'])
+
+        # TODO: cut bins for table of frequency, Direction, strength (discrete amounts of speed)
+        # 1st: cut bins based on direction
+        # 2nd: cut bins based on speed
+        '''
+        binned_table = pandas.cut(df.)
+        speed_groups = ['']
+        frequency_df = pandas.crosstab('''
+
+    def _rename_columns(self):
+        super()._rename_columns(['Date', 'Speed', 'Direction'])
+
+    def _handle_missing_data(self):
+        # TODO
+        pass
+
+    def _initialize_figure(self):
+        self.fig = px.bar_polar(
+            self.df, 
+            r="Speed", 
+            theta="Direction",
+            color="Speed",
+            color_discrete_sequence= px.colors.sequential.Plasma_r,
+            title = "Wind Gust Data — "+ self.get_city_name()
         )

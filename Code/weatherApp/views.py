@@ -67,7 +67,7 @@ def graph_past():
         ):
         figure_html = graphs.get_fig()
     else:
-        figure_html = graphs.get_fig("temp", url_args)
+        figure_html = graphs.get_fig("wind", url_args)
 
     return render_template(
         "features/graph_past.html.jinja", 
