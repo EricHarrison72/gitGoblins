@@ -61,12 +61,12 @@ class PastWeatherFigure(ABC):
         self._handle_missing_data()
 
     @abstractmethod
-    def _fetch_and_convert_data(self):
-        pass
+    def _fetch_and_convert_data(self, db_columns: list):
+        self.df = DataFrame(queries.get_data_in_range(db_columns, self.city_and_dates))
 
     @abstractmethod
-    def _rename_columns(self):
-        pass
+    def _rename_columns(self, new_columns):
+        self.df.columns = new_columns
 
     @abstractmethod
     def _handle_missing_data(self):
@@ -95,10 +95,10 @@ class PastTemperatureFigure(PastWeatherFigure):
     # OVERRIDE: all abstract methods
     # ------------------------------
     def _fetch_and_convert_data(self):
-        self.df = DataFrame(queries.get_temp_in_range(self.city_and_dates))
+        super()._fetch_and_convert_data(['TempMin', 'TempMax'])
 
     def _rename_columns(self):
-        self.df.columns=['Date', 'Low', 'High']
+        super()._rename_columns(['Date', 'Low', 'High'])
 
     def _handle_missing_data(self):
         # TODO: add message explaining 0s and NAs
