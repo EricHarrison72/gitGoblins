@@ -86,7 +86,7 @@ def login():
             if user['isAdmin']:
                 return redirect(url_for('auth.admin_dashboard'))
             else:
-                return redirect(url_for('views.weather_summary'))
+                return redirect(url_for('views.index'))
 
         flash(error)
 
@@ -175,40 +175,6 @@ def passcode():
         flash('Incorrect answer')
 
     return render_template('auth/passcode.html.jinja')
-
-
-@auth_bp.route('/admin_login', methods=('GET', 'POST'))
-def admin_login():
-    if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
-        datb = db.get_db()
-        error = None
-        
-        user = datb.execute(
-            'SELECT userId, password FROM User WHERE email = ? ', (email,)
-        ).fetchone()
-
-        if user is None:
-            error = 'Incorrect email.'
-        elif not bcrypt.check_password_hash(user['password'], password):
-            error = 'Incorrect password.'
-
-        if error is None:
-            session.clear()
-            session['user_id'] = user['userId']
-
-            # Update isAdmin to true for the logged-in user
-            datb.execute(
-                'UPDATE User SET isAdmin = 1 WHERE userId = ?', (user['userId'],)
-            )
-            datb.commit()
-
-            return redirect(url_for('auth.admin_dashboard'))
-
-        flash(error)
-
-    return render_template('auth/admin_login.html.jinja')
 
 
 @auth_bp.route('/admin_dashboard')

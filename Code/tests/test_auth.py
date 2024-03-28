@@ -67,8 +67,22 @@ def test_login(client, app):
         '/auth/login',
         data={'email': 'test_user@gmail.com', 'password': 'password'}
     )
-    # Check if it redirects to the weather summary page
-    assert response.headers["Location"] == "/weather_summary"
+    # Check if it redirects to the home page
+    assert response.headers["Location"] == "/"
+    
+    # Test login with no email
+    response_no_email = client.post(
+        '/auth/login', data={'email': '', 'password': 'a'}
+    )
+    # Check for correct error message
+    assert b'Incorrect email.' in response_no_email.data
+    
+    # Test login with incorrect password
+    response_no_password = client.post(
+        '/auth/login', data={'email': 'test_user@gmail.com', 'password': 'wrongpassword'}
+    )
+    # Check for correct error message
+    assert b'Incorrect password.' in response_no_password.data
 
     # Check if user ID 100 is stored in session
     with client:
@@ -161,7 +175,7 @@ def test_admin_login(client, app):
 
     # Test admin login
     response = client.post(
-        '/auth/admin_login',
+        '/auth/login',
         data={'email': 'admin@example.com', 'password': 'admin_password'}
     )
     
