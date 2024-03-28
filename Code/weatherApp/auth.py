@@ -33,6 +33,7 @@ def register():
         first_name = request.form.get('first_name', '')
         last_name = request.form.get('last_name', '')
         email_list = bool(request.form.get('email_list'))
+        city_id = int(request.form.get('city_id'))  # Get selected cityId from the form
 
         error = None
 
@@ -51,10 +52,13 @@ def register():
             else:
                 hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
                 datb.execute(
-                    "INSERT INTO User (email, password, firstName, lastName, emailList) VALUES (?, ?, ?, ?, ?)",
-                    (email, hashed_password, first_name, last_name, email_list)
+
+                    "INSERT INTO User (email, password, firstName, lastName, emailList, cityId) VALUES (?, ?, ?, ?, ?, ?)",
+                    (email, hashed_password, first_name, last_name, email_list, city_id)
+
                 )
                 datb.commit()
+                print(city_id)
                 flash("Registration successful. You can now log in.")
                 return redirect(url_for("auth.login"))
 
@@ -137,6 +141,7 @@ def admin_register():
         first_name = request.form.get('first_name', '')
         last_name = request.form.get('last_name', '')
         email_list = bool(request.form.get('email_list'))
+        city_id = request.form['city_id']
 
         error = None
 
@@ -145,12 +150,16 @@ def admin_register():
         elif not password:
             error = 'Password is required.'
 
+        elif not city_id:
+            error = 'City ID is required.'
+
         if error is None:
             try:
                 hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
                 datb.execute(
-                    "INSERT INTO User (email, password, firstName, lastName, emailList, isAdmin) VALUES (?, ?, ?, ?, ?, ?)",
-                    (email, hashed_password, first_name, last_name, email_list, True)
+
+                    "INSERT INTO User (email, password, firstName, lastName, emailList, cityId, isAdmin) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    (email, hashed_password, first_name, last_name, email_list, city_id, True)
                 )
                 datb.commit()
                 flash("Admin registration successful.")
@@ -189,5 +198,10 @@ def admin_dashboard():
 
     if user is None or not user['isAdmin']:
         return redirect(url_for('auth.login'))
+    
+        # Fetch cities ordered by cityId
+    cities = db.get_db().execute(
+        'SELECT * FROM City ORDER BY cityId'
+    ).fetchall()
 
-    return render_template('admin_dashboard.html.jinja')
+    return render_template('admin_dashboard.html.jinja', cities=cities)
