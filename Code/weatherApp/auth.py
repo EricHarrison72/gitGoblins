@@ -33,7 +33,10 @@ def register():
         first_name = request.form.get('first_name', '')
         last_name = request.form.get('last_name', '')
         email_list = bool(request.form.get('email_list'))
-        city_id = int(request.form.get('city_id'))  # Get selected cityId from the form
+
+        # Get the last userId and increment it by 1
+        last_user_id = get_last_user_id(datb)
+        user_id = last_user_id + 1
 
         error = None
 
@@ -52,13 +55,10 @@ def register():
             else:
                 hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
                 datb.execute(
-
-                    "INSERT INTO User (email, password, firstName, lastName, emailList, cityId) VALUES (?, ?, ?, ?, ?, ?)",
-                    (email, hashed_password, first_name, last_name, email_list, city_id)
-
+                    "INSERT INTO User (userId, email, password, firstName, lastName, emailList) VALUES (?, ?, ?, ?, ?, ?)",
+                    (user_id, email, hashed_password, first_name, last_name, email_list)
                 )
                 datb.commit()
-                print(city_id)
                 flash("Registration successful. You can now log in.")
                 return redirect(url_for("auth.login"))
 
@@ -67,6 +67,7 @@ def register():
     return render_template('auth/register.html.jinja')
 
 
+#route to login page
 @auth_bp.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
@@ -74,10 +75,12 @@ def login():
         password = request.form['password']
         datb = db.get_db()
         error = None
-        user = datb.execute(
-            'SELECT userId, password, isAdmin FROM User WHERE email = ?', (email,)
-        ).fetchone()
         
+        # Fetch user data including userId based on email
+        user = datb.execute(
+            'SELECT userId, password FROM User WHERE email = ?', (email,)
+        ).fetchone()
+       
         if user is None:
             error = 'Incorrect email.'
         elif not bcrypt.check_password_hash(user['password'], password):
@@ -85,36 +88,34 @@ def login():
 
         if error is None:
             session.clear()
-
-            session['user_id'] = user['userId']
-            if user['isAdmin']:
-                return redirect(url_for('auth.admin_dashboard'))
-            else:
-                return redirect(url_for('views.index'))
+            session['user_id'] = user['userId']  # Store user ID in session
+            
+            return redirect(url_for('views.index'))
 
         flash(error)
 
     return render_template('auth/login.html.jinja')
 
-
 @auth_bp.before_app_request
 def load_logged_in_user():
+    print(session)
     user_id = session.get('user_id')
 
     if user_id is None:
         g.user = None
     else:
         g.user = db.get_db().execute(
-            'SELECT * FROM User WHERE userId = ?', (user_id,)
+            'SELECT * FROM user WHERE userId = ?', (user_id,)
         ).fetchone()
-
-
+        
+#logout of session
 @auth_bp.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('views.index'))
 
-
+#Checks if a user is loaded and redirects to the login page otherwise. 
+#If a user is loaded the original view is called and continues normally.
 def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
@@ -126,82 +127,8 @@ def login_required(view):
     return wrapped_view
 
 
-@auth_bp.route('/admin_register', methods=['GET', 'POST'])
-def admin_register():
-    passcode = session.get('passcode')
-    if passcode != '12':
-        flash('Invalid passcode')
-        return redirect(url_for('auth.login'))
-
-    datb = db.get_db()
-
-    if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
-        first_name = request.form.get('first_name', '')
-        last_name = request.form.get('last_name', '')
-        email_list = bool(request.form.get('email_list'))
-        city_id = request.form['city_id']
-
-        error = None
-
-        if not email:
-            error = 'Email is required.'
-        elif not password:
-            error = 'Password is required.'
-
-        elif not city_id:
-            error = 'City ID is required.'
-
-        if error is None:
-            try:
-                hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
-                datb.execute(
-
-                    "INSERT INTO User (email, password, firstName, lastName, emailList, cityId, isAdmin) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                    (email, hashed_password, first_name, last_name, email_list, city_id, True)
-                )
-                datb.commit()
-                flash("Admin registration successful.")
-                return redirect(url_for("auth.login"))
-            except datb.IntegrityError:
-                error = f"User with email {email} is already registered."
-
-        flash(error)
-
-    return render_template('auth/admin_register.html.jinja')
-
-
-@auth_bp.route('/passcode', methods=['GET', 'POST'])
-def passcode():
-    if request.method == 'POST':
-        entered_answer = request.form['passcode']
-
-        if entered_answer == '12':
-            session['passcode'] = entered_answer
-            return redirect(url_for('auth.admin_register'))
-
-        flash('Incorrect answer')
-
-    return render_template('auth/passcode.html.jinja')
-
-
-@auth_bp.route('/admin_dashboard')
-def admin_dashboard():
-    if 'user_id' not in session:
-        return redirect(url_for('auth.login'))
-
-    user_id = session['user_id']
-    user = db.get_db().execute(
-        'SELECT isAdmin FROM User WHERE userId = ?', (user_id,)
-    ).fetchone()
-
-    if user is None or not user['isAdmin']:
-        return redirect(url_for('auth.login'))
-    
-        # Fetch cities ordered by cityId
-    cities = db.get_db().execute(
-        'SELECT * FROM City ORDER BY cityId'
-    ).fetchall()
-
-    return render_template('admin_dashboard.html.jinja', cities=cities)
+def get_last_user_id(datb):
+    # Query the database to get the maximum userId
+    result = datb.execute("SELECT MAX(userId) FROM User").fetchone()
+    last_user_id = result[0] if result[0] is not None else 0
+    return last_user_id
