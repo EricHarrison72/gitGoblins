@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS UsersCities;
 DROP TABLE IF EXISTS WeatherInstance;
 
 
+
 CREATE TABLE City (
 	cityId int,
 	cityName varchar(30),
@@ -18,7 +19,11 @@ CREATE TABLE User (
     lastName VARCHAR(30),
     email VARCHAR(50) UNIQUE,
     emailList BOOLEAN,
-    password VARCHAR(128)
+    password VARCHAR(128),
+    isAdmin BOOLEAN DEFAULT FALSE,
+    cityId INT,
+    FOREIGN KEY (cityId) REFERENCES City(cityId) ON DELETE SET NULL ON UPDATE CASCADE
+
 );
 
 

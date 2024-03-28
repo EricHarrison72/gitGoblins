@@ -1,0 +1,100 @@
+
+<!--
+  Cities are not connected to int values in the helpers/selectors.html.jinja
+  I'm not going to mess with that code as it is being used for more 
+  important parts.
+  This html just needs to connect users to cities with an int value
+-->
+
+{% extends 'base.html.jinja' %}
+
+{% block title %}
+  Admin Register
+{% endblock %}
+
+{% block header %}
+  Admin Register
+
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="email">Email</label>
+    <input type="email" name="email" id="email" required>
+    
+    <label for="password">Password</label>
+    <input type="password" name="password" id="password" required>
+    
+    <label for="first_name">First Name</label>
+    <input type="text" name="first_name" id="first_name">
+    
+    <label for="last_name">Last Name</label>
+    <input type="text" name="last_name" id="last_name">
+    
+    <label for="email_list">Subscribe to Email List</label>
+    <input type="checkbox" name="email_list" id="email_list">
+
+
+    <!-- Location select menu -->
+    <label>Select City</label>
+    <div>
+      <select class="selectpicker" data-live-search="true" id="city_id" name="city_id">
+        <option value="0">Albury</option>
+        <option value="1">Badgerys Creek</option>
+        <option value="2">Cobar</option>
+        <option value="3">Coffs Harbour</option>
+        <option value="4">Moree</option>
+        <option value="5">Newcastle</option>
+        <option value="6">Norah Head</option>
+        <option value="7">Norfolk Island</option>
+        <option value="8">Penrith</option>
+        <option value="9">Richmond</option>
+        <option value="10">Sydney</option>
+        <option value="11">Sydney Airport</option>
+        <option value="12">Wagga Wagga</option>
+        <option value="13">Williamtown</option>
+        <option value="14">Wollongong</option>
+        <option value="15">Canberra</option>
+        <option value="16">Tuggeranong</option>
+        <option value="17">Mount Ginini</option>
+        <option value="18">Ballarat</option>
+        <option value="19">Bendigo</option>
+        <option value="20">Sale</option>
+        <option value="21">Melbourne Airport</option>
+        <option value="22">Melbourne</option>
+        <option value="23">Mildura</option>
+        <option value="24">Nhil</option>
+        <option value="25">Portland</option>
+        <option value="26">Watsonia</option>
+        <option value="27">Dartmoor</option>
+        <option value="28">Brisbane</option>
+        <option value="29">Cairns</option>
+        <option value="30">Gold Coast</option>
+        <option value="31">Townsville</option>
+        <option value="32">Adelaide</option>
+        <option value="33">Mount Gambier</option>
+        <option value="34">Nuriootpa</option>
+        <option value="35">Woomera</option>
+        <option value="36">Albany</option>
+        <option value="37">Witchcliffe</option>
+        <option value="38">Pearce RAAF</option>
+        <option value="39">Perth Airport</option>
+        <option value="40">Perth</option>
+        <option value="41">Salmon Gums</option>
+        <option value="42">Walpole</option>
+        <option value="43">Hobart</option>
+        <option value="44">Launceston</option>
+        <option value="45">Alice Springs</option>
+        <option value="46">Darwin</option>
+        <option value="47">Katherine</option>
+        <option value="48">Uluru</option>
+    </select>
+  </div>
+  
+    
+
+    <input type="submit" value="Register">
+  </form>
+
+  <li><a href="{{ url_for('auth.login') }}">Already have an account?</a>
+{% endblock %}

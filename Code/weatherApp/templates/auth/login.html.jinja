@@ -1,7 +1,12 @@
 {% extends 'base.html.jinja' %}
 
+{% block title %}
+  Login
+{% endblock %}
+
+
 {% block header %}
-  {% block title %}Login{% endblock %}
+  Login
 {% endblock %}
 
 {% block content %}
@@ -14,4 +19,5 @@
   </form>
 
   <li><a href="{{ url_for('auth.register') }}">Don't have an account?</a></li>
+  <li><a href="{{ url_for('auth.passcode') }}">Admin? Register here</a></li>
 {% endblock %}
