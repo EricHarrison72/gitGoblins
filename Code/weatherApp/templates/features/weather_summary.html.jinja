@@ -64,6 +64,19 @@ This template expects the following parameters:
     </tr>
   </table>
 
+  <br>
+  <br>
+
+  {% if rain_prediction == 0 %}
+    {% set will_or_will_not = 'WILL NOT'%}
+  {% else %}
+    {% set will_or_will_not = 'WILL'%}
+  {% endif %}
+
+  <p>Our AI model predicts that it <b>{{ will_or_will_not }}</b> rain tomorrow.</p>
+  
+
+
 {% endblock %}
 
 {% block scripts %}
