@@ -80,11 +80,13 @@ INSERT INTO UsersCities (userId, cityId) VALUES
 (2, 100);
 
 -- WeatherInstance
-INSERT INTO WeatherInstance (cityId, date, tempMin, tempMax, sunshine, rainfall, evaporation, cloud9am, cloud3pm, pressure9am, pressure3pm, humidity9am, humidity3pm, windGustSpeed, windGustDir, windSpeed9am, windSpeed3pm, windDir9am, windDir3pm, rainToday, rainTomorrow) VALUES
-(99, '2023-01-01', -5.0, 10.0, 8, 0.0, 4.5, 1, 3, 1013.5, 1010.5, 80, 50, 30, 'N', 10, 20, 'N', 'S', 'No', 'No'),
-(99, '2023-01-02', -3.0, 20.0, 4, 1.0, 3.0, 1, 3, 1013.5, 1010.5, 80, 50, 30, 'N', 10, 20, 'N', 'S', 'Yes', 'No'),
-(99, '2023-01-03', -2.0, 30.0, 1, 3.1, 0.1, 1, 3, 1013.5, 1010.5, 80, 50, 30, 'N', 10, 20, 'N', 'S', 'Yes', 'No'),
-(100, '2023-01-02', 0.0, 15.0, 10, 0.0, 5.0, 0, 1, 1015.0, 1012.0, 70, 40, 25, 'E', 5, 15, 'E', 'W', 'No', 'Yes');
+INSERT INTO WeatherInstance
+    (cityId, date,        tempMin, tempMax, sunshine, rainfall, evaporation, cloud9am, cloud3pm, pressure9am, pressure3pm, humidity9am, humidity3pm, windGustSpeed, windGustDir, windSpeed9am, windSpeed3pm, windDir9am, windDir3pm, rainToday, rainTomorrow)
+VALUES
+    (99,    '2023-01-01', -5.0,    10.0,    8,        0.0,      4.5,         1,        3,        1013.5,      1010.5,      80,          50,          30,            'N',         10,           20,          'N',        'S',         'No',      'No'),
+    (99,    '2023-01-02', -3.0,    'NA',    4,        5.0,      3.0,         1,        3,        1013.5,      1010.5,      80,          50,          30,            'N',         10,           20,          'N',        'S',         'Yes',     'No'),
+    (99,    '2023-01-03', 'NA',    30.0,    1,        'NA',     0.1,         1,        3,        1013.5,      1010.5,      80,          50,          30,            'N',         10,           20,          'N',        'S',         'Yes',     'No'),
+    (100,   '2023-01-02', 0.0,     15.0,    10,       0.0,      5.0,         0,        1,        1015.0,      1012.0,      70,          40,          25,            'E',         5,            15,          'E',        'W',         'No',      'Yes');
 
 -- Note: It might seem strange to be entering the strings 'No' and 'Yes' for `rainToday` and 
 -- `rainTomorrow` since those columns are supposed to be booleans, but that's how weatherAUS.csv
