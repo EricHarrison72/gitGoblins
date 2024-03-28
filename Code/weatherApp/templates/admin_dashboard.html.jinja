@@ -1,0 +1,31 @@
+{% extends 'base.html.jinja' %}
+
+{% block title %}
+  Admin Dashboard
+{% endblock %}
+
+{% block header %}
+  Admin Dashboard
+{% endblock %}
+
+{% block content %}
+  <h2>Admin Dashboard</h2>
+  <form id="highTempForm">
+      <label for="city">City:</label>
+      <select class="selectpicker" data-live-search="true" id="citySelect" name="city_name">
+        <option value="1">Adelaide</option>
+        <option value="2">Albany</option>
+        <option value="3">Albury</option>
+      </select><br><br>
+      
+      <label for="date">Date:</label>
+      <input type="date" id="date" name="date"><br><br>
+
+      <label for="temp_high">High Temperature:</label>
+      <input type="number" id="temp_high" name="temp_high"><br><br>
+
+      <button type="submit">Update High Temperature</button>
+  </form>
+
+{% endblock %}
+
