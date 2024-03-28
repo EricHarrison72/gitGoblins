@@ -228,5 +228,10 @@ def admin_dashboard():
 
     if user is None or not user['isAdmin']:
         return redirect(url_for('auth.login'))
+    
+        # Fetch cities ordered by cityId
+    cities = db.get_db().execute(
+        'SELECT * FROM City ORDER BY cityId'
+    ).fetchall()
 
-    return render_template('admin_dashboard.html.jinja')
+    return render_template('admin_dashboard.html.jinja', cities=cities)

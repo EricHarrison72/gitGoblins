@@ -44,7 +44,7 @@ def index():
     ).fetchone()
 
     # Convert the specified date to the string format matching the database
-    specified_date = datetime(2017, 3, 25).strftime('%Y-%m-%d')
+    specified_date = datetime(2017, 6, 24).strftime('%Y-%m-%d')
 
     # Fetch the WeatherInstance data for the specified date (March 25, 2017)
     weather_data = datb.execute(

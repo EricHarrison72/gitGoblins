@@ -6,6 +6,25 @@
 
 {% block content %}
   <h2>Admin Dashboard</h2>
+
+  <!-- Display City Table -->
+  <table>
+    <thead>
+      <tr>
+        <th>City ID</th>
+        <th>City Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for city in cities %}
+      <tr>
+        <td>{{ city.cityId }}</td>
+        <td>{{ city.cityName }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
   <form id="highTempForm">
       <label for="city">City:</label>
       <select class="selectpicker" data-live-search="true" id="citySelect" name="city_name">
@@ -58,4 +77,3 @@
       });
   </script>
 {% endblock %}
-
