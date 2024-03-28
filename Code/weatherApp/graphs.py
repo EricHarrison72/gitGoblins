@@ -129,6 +129,10 @@ class PastTemperatureFigure(PastWeatherFigure):
             labels = {"value": "Temperature (°C)", "variable": "Type"},
         )
 
+        self.fig.update_traces(
+            marker_line_width=0.1
+        )
+
 
 # =================================
 class PastRainFigure(PastWeatherFigure):
