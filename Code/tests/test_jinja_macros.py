@@ -98,6 +98,29 @@ def test_select_multiple_locations_defaults(template_name):
 def test_select_multiple_locations_params(template_name):
     pass
 
+# ] select statistic tests [
+def test_select_stat_defaults(template_name):
+    rendered = get_rendered_template(
+        "{{ selectors.select_stat() }}",
+        template_name
+    )
+
+    default_id = 'statSelect'
+    assert ((f"<select id='{default_id}'>" in rendered) or
+            (f'<select id="{default_id}">' in rendered))
+
+    default_selected_stat_id = '0' # for temperature
+    assert f'<option value="{default_selected_stat_id}"  selected >' in rendered
+
+def test_select_stat_params(template_name):
+    rendered = get_rendered_template(
+        "{{ selectors.select_stat(url_arg_stat='wind') }}",
+        template_name
+    )
+
+    expected_selected_stat_id = '1' # for wind
+    assert f'<option value="{expected_selected_stat_id}"  selected >' in rendered
+
 # ]---------------------------
 # SOME HELPER FUNCTIONS
 # (this just doesn't make sense as a fixture since it takes arguments)
