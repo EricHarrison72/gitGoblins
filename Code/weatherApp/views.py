@@ -52,7 +52,7 @@ def map():
     return render_template("features/map.html.jinja")
 
 @views_bp.route('/graphs')
-def graphs():
+def graph():
 
     url_args = {
         'stat' : request.args.get('stat'),
