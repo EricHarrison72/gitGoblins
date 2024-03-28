@@ -51,8 +51,8 @@ def weather_summary():
 def map():
     return render_template("features/map.html.jinja")
 
-@views_bp.route('/graph_past')
-def graph_past():
+@views_bp.route('/graphs')
+def graphs():
 
     url_args = {
         'stat' : request.args.get('stat'),
@@ -69,7 +69,7 @@ def graph_past():
         figure_html = graphs.get_graph_html(url_args)
 
     return render_template(
-        "features/graph_past.html.jinja", 
+        "features/graphs.html.jinja", 
         figure_html = figure_html,
         url_args = url_args)
 

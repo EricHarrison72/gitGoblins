@@ -27,13 +27,13 @@ def get_graph_html(url_args=DEFAULT_url_args):
 
     match url_args['stat']:
         case "temperature":
-            graph = PastTemperatureGraph(url_args)
+            graph = TemperatureGraph(url_args)
         
         case "wind":
-            graph = PastWindGraph(url_args)
+            graph = WindGraph(url_args)
 
         case "rain":
-            graph = PastRainGraph(url_args)
+            graph = RainGraph(url_args)
 
         case _:
             graph = None
@@ -41,7 +41,7 @@ def get_graph_html(url_args=DEFAULT_url_args):
     return graph.get_html()
 
 # ==================================
-class PastWeatherGraph(ABC):
+class WeatherGraph(ABC):
     def __init__(self, city_and_dates):
         self.city_and_dates = city_and_dates
         self.dataframe = None
@@ -92,7 +92,7 @@ class PastWeatherGraph(ABC):
     )
 
 # =================================
-class PastTemperatureGraph(PastWeatherGraph):
+class TemperatureGraph(WeatherGraph):
     def __init__(self, city_and_dates):
         super().__init__(city_and_dates)
 
@@ -129,7 +129,7 @@ class PastTemperatureGraph(PastWeatherGraph):
 
 
 # =================================
-class PastRainGraph(PastWeatherGraph):
+class RainGraph(WeatherGraph):
     def __init__(self, city_and_dates):
         super().__init__(city_and_dates)
 
@@ -156,7 +156,7 @@ class PastRainGraph(PastWeatherGraph):
 
 
 # ========================
-class PastWindGraph(PastWeatherGraph):
+class WindGraph(WeatherGraph):
     def __init__(self, city_and_dates):
         self.freq_table = None
         super().__init__(city_and_dates)
