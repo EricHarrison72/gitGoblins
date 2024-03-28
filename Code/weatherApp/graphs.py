@@ -23,25 +23,25 @@ DEFAULT_url_args = {
     'end_date': '2017-06-24'
 }
 
-def get_fig_html(url_args=DEFAULT_url_args):
+def get_graph_html(url_args=DEFAULT_url_args):
 
     match url_args['stat']:
         case "temperature":
-            fig = PastTemperatureFigure(url_args)
+            graph = PastTemperatureGraph(url_args)
         
         case "wind":
-            fig = PastWindFigure(url_args)
+            graph = PastWindGraph(url_args)
 
         case "rain":
-            fig = PastRainFigure(url_args)
+            graph = PastRainGraph(url_args)
 
         case _:
-            fig = None
+            graph = None
 
-    return fig.get_html()
+    return graph.get_html()
 
 # ==================================
-class PastWeatherFigure(ABC):
+class PastWeatherGraph(ABC):
     def __init__(self, city_and_dates):
         self.city_and_dates = city_and_dates
         self.dataframe = None
@@ -66,11 +66,11 @@ class PastWeatherFigure(ABC):
 
     @abstractmethod
     def _fetch_and_convert_data(self, db_columns: list):
-        self.df = DataFrame(queries.get_data_in_range(db_columns, self.city_and_dates))
+        self.dataframe = DataFrame(queries.get_data_in_range(db_columns, self.city_and_dates))
 
     @abstractmethod
     def _rename_columns(self, new_columns):
-        self.df.columns = new_columns
+        self.dataframe.columns = new_columns
 
     @abstractmethod
     def _handle_missing_data(self):
@@ -92,7 +92,7 @@ class PastWeatherFigure(ABC):
     )
 
 # =================================
-class PastTemperatureFigure(PastWeatherFigure):
+class PastTemperatureGraph(PastWeatherGraph):
     def __init__(self, city_and_dates):
         super().__init__(city_and_dates)
 
@@ -106,16 +106,16 @@ class PastTemperatureFigure(PastWeatherFigure):
 
     def _handle_missing_data(self):
         # This is so 0s still show up
-        self.df['Low'].replace(0, 0.1, inplace=True)
-        self.df['High'].replace(0, 0.1, inplace=True)
+        self.dataframe['Low'].replace(0, 0.1, inplace=True)
+        self.dataframe['High'].replace(0, 0.1, inplace=True)
 
         # This is so NAs don't mess up the graph
-        self.df['Low'].replace('NA', 0, inplace=True)
-        self.df['High'].replace('NA', 0, inplace=True)
+        self.dataframe['Low'].replace('NA', 0, inplace=True)
+        self.dataframe['High'].replace('NA', 0, inplace=True)
 
     def _initialize_figure(self):
         self.fig = px.bar(
-            self.df,
+            self.dataframe,
             x = 'Date',
             y = ['Low', 'High'],
             barmode = 'group',
@@ -129,7 +129,7 @@ class PastTemperatureFigure(PastWeatherFigure):
 
 
 # =================================
-class PastRainFigure(PastWeatherFigure):
+class PastRainGraph(PastWeatherGraph):
     def __init__(self, city_and_dates):
         super().__init__(city_and_dates)
 
@@ -143,11 +143,11 @@ class PastRainFigure(PastWeatherFigure):
 
     def _handle_missing_data(self):
         # This is so NAs don't mess up the graph
-        self.df['Rainfall'].replace('NA', 0, inplace=True)
+        self.dataframe['Rainfall'].replace('NA', 0, inplace=True)
 
     def _initialize_figure(self):
         self.fig = px.bar(
-            self.df,
+            self.dataframe,
             x = 'Date',
             y = 'Rainfall',
             title = "Rainfall Over Time — "+ self.get_city_name(),
@@ -156,7 +156,7 @@ class PastRainFigure(PastWeatherFigure):
 
 
 # ========================
-class PastWindFigure(PastWeatherFigure):
+class PastWindGraph(PastWeatherGraph):
     def __init__(self, city_and_dates):
         self.freq_table = None
         super().__init__(city_and_dates)
@@ -175,9 +175,9 @@ class PastWindFigure(PastWeatherFigure):
         super()._rename_columns(['Date', 'Speed', 'Direction'])
 
     def _handle_missing_data(self):
-        self.df['Speed'].replace('NA', None, inplace=True)
-        self.df['Direction'].replace('NA', None, inplace=True)
-        self.df.dropna(inplace=True)
+        self.dataframe['Speed'].replace('NA', None, inplace=True)
+        self.dataframe['Direction'].replace('NA', None, inplace=True)
+        self.dataframe.dropna(inplace=True)
 
     def _initialize_figure(self):
         self.fig = px.bar_polar(
@@ -200,7 +200,7 @@ class PastWindFigure(PastWeatherFigure):
 
         self._cut_speed_into_bins()
 
-        frequencies = crosstab(self.df['Direction'], self.df['Speed'])
+        frequencies = crosstab(self.dataframe['Direction'], self.dataframe['Speed'])
         frequencies_rows = frequencies.index.to_list()
         frequencies_columns = frequencies.columns.to_list()
 
@@ -222,7 +222,7 @@ class PastWindFigure(PastWeatherFigure):
         # - Update: it has something to do with nums in least interval
     def _cut_speed_into_bins(self):
         speed_bins = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200]
-        speeds_as_intervals = DataFrame(cut(self.df['Speed'], speed_bins, right=True))['Speed']
+        speeds_as_intervals = DataFrame(cut(self.dataframe['Speed'], speed_bins, right=True))['Speed']
 
         speeds_as_strings = []
         for interval in speeds_as_intervals:
@@ -230,4 +230,4 @@ class PastWindFigure(PastWeatherFigure):
                 f'{interval.left + 1}-{interval.right}'
             )
 
-        self.df['Speed'] = speeds_as_strings
+        self.dataframe['Speed'] = speeds_as_strings

@@ -63,10 +63,10 @@ def graph_past():
     
     for arg_val in url_args.values():
         if arg_val == None:
-            figure_html = graphs.get_fig_html()
+            figure_html = graphs.get_graph_html()
             break
     else:
-        figure_html = graphs.get_fig_html(url_args)
+        figure_html = graphs.get_graph_html(url_args)
 
     return render_template(
         "features/graph_past.html.jinja", 
