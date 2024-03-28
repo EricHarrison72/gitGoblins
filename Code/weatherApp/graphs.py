@@ -7,17 +7,11 @@ Code for the graphs, using plotly.py
 Resources used:
 - [plotly Docs - bar charts](https://plotly.com/python/bar-charts/)
 - [plotly docs - px arguments](https://plotly.com/python/px-arguments/)
-'''
-# ok, let's move it into different grpahs
-'''
-Other graphs we want:
-- rainfall amount
-- wind: gust, 9am, 3am, direction?
- - https://plotly.com/python/wind-rose-charts/
+- [plotly docs - wind rose charts](https://plotly.com/python/wind-rose-charts/)
+- Lots of pandas docs
 '''
 # ------------------------------------------
 import plotly.express as px
-import plotly.data as plotly_data
 from pandas import DataFrame, crosstab, cut
 from abc import ABC, abstractmethod
 from . import queries
