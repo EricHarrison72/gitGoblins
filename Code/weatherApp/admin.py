@@ -1,4 +1,8 @@
-'''admin.py'''
+
+'''admin.py
+THIS IS A DRAFT FOR ADMIN
+'''
+
 
 from flask import Blueprint, request, jsonify
 from . import db

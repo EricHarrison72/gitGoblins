@@ -52,8 +52,10 @@ def register():
             else:
                 hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
                 datb.execute(
+
                     "INSERT INTO User (email, password, firstName, lastName, emailList, cityId) VALUES (?, ?, ?, ?, ?, ?)",
                     (email, hashed_password, first_name, last_name, email_list, city_id)
+
                 )
                 datb.commit()
                 print(city_id)
@@ -147,6 +149,7 @@ def admin_register():
             error = 'Email is required.'
         elif not password:
             error = 'Password is required.'
+
         elif not city_id:
             error = 'City ID is required.'
 
@@ -154,6 +157,7 @@ def admin_register():
             try:
                 hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
                 datb.execute(
+
                     "INSERT INTO User (email, password, firstName, lastName, emailList, cityId, isAdmin) VALUES (?, ?, ?, ?, ?, ?, ?)",
                     (email, hashed_password, first_name, last_name, email_list, city_id, True)
                 )
@@ -180,40 +184,6 @@ def passcode():
         flash('Incorrect answer')
 
     return render_template('auth/passcode.html.jinja')
-
-
-@auth_bp.route('/admin_login', methods=('GET', 'POST'))
-def admin_login():
-    if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
-        datb = db.get_db()
-        error = None
-        
-        user = datb.execute(
-            'SELECT userId, password FROM User WHERE email = ? ', (email,)
-        ).fetchone()
-
-        if user is None:
-            error = 'Incorrect email.'
-        elif not bcrypt.check_password_hash(user['password'], password):
-            error = 'Incorrect password.'
-
-        if error is None:
-            session.clear()
-            session['user_id'] = user['userId']
-
-            # Update isAdmin to true for the logged-in user
-            datb.execute(
-                'UPDATE User SET isAdmin = 1 WHERE userId = ?', (user['userId'],)
-            )
-            datb.commit()
-
-            return redirect(url_for('auth.admin_dashboard'))
-
-        flash(error)
-
-    return render_template('auth/login.html.jinja')
 
 
 @auth_bp.route('/admin_dashboard')
