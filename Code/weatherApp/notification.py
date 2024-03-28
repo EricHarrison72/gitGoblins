@@ -6,6 +6,7 @@ Code for the email notification system using FlaskMail
 '''
 Resources used:
 - [Educative, "How to send emails with API in Flask-Mail"](https://www.educative.io/answers/how-to-send-emails-with-api-in-flask-mail)
+- [Flask-Mail Documentation](https://pythonhosted.org/Flask-Mail/)
 '''
 # ------------------------------------------
 
