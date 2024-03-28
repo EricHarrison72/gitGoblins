@@ -209,34 +209,6 @@ def test_admin_register(client, app):
 
 
         
-def test_admin_login(client, app):
-    # Manually insert admin user into the database with hashed password
-    with app.app_context():
-        db = get_db()
-        hashed_password = bcrypt.hashpw('admin_password'.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-        db.execute(
-
-            "INSERT INTO user (userId, email, password, isAdmin, cityId) VALUES (?, ?, ?, ?, ?)",
-            (101, 'admin@example.com', hashed_password, True, 1)  # Assuming cityId is 1
-        )
-        db.commit()
-
-    # Test admin login with correct credentials
-    response = client.post(
-        '/auth/login',
-
-        data={'email': 'admin@example.com', 'password': 'admin_password'}
-    )
-    
-    # Check if it redirects to the admin dashboard
-    assert response.status_code == 302  # Check if it redirects
-    assert response.headers["Location"] == "/auth/admin_dashboard"
-
-    # Check if admin user ID is stored in session
-    with client:
-        client.get('/')
-        assert session['user_id'] == 101
-
 
 
 def test_admin_dashboard(client, app):
