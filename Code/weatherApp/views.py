@@ -1,10 +1,9 @@
 # ------------------------------------------------------
 # views.py
 '''
-Contains all current view methods, which do some logic and
-then call render_template().
-- hello_world(): home page
-- weather_summary(): basic weather summary (not dynamic)
+Contains view methods for feature and home pages, which
+route URLs to the correct HTML template (and maybe do a 
+little logic in between).
 '''
 '''
 Start Code sources:
@@ -60,18 +59,18 @@ def map():
 def graph_past():
 
     url_args = {
+        'stat' : request.args.get('stat'),
         'city_name' : request.args.get('city_name'),
         'start_date' : request.args.get('start_date'),
         'end_date' : request.args.get('end_date')
     }
     
-    if (url_args['city_name'] == None or
-        url_args['start_date'] == None or
-        url_args['end_date'] == None
-        ):
-        figure_html = graphs.get_temp_figure_html()
+    for arg_val in url_args.values():
+        if arg_val == None:
+            figure_html = graphs.get_fig_html()
+            break
     else:
-        figure_html = graphs.get_temp_figure_html(url_args['city_name'], url_args['start_date'], url_args['end_date'])
+        figure_html = graphs.get_fig_html(url_args)
 
     return render_template(
         "features/graph_past.html.jinja", 
