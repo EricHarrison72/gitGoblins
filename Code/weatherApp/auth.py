@@ -88,7 +88,7 @@ def login():
             if user['isAdmin']:
                 return redirect(url_for('auth.admin_dashboard'))
             else:
-                return redirect(url_for('views.weather_summary'))
+                return redirect(url_for('views.index'))
 
         flash(error)
 
