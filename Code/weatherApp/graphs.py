@@ -23,7 +23,7 @@ DEFAULT_url_args = {
     'end_date': '2017-06-24'
 }
 
-def get_fig(url_args=DEFAULT_url_args):
+def get_fig_html(url_args=DEFAULT_url_args):
 
     match url_args['stat']:
         case "temperature":
@@ -58,7 +58,7 @@ class PastWeatherFigure(ABC):
         return queries.add_space(self.city_and_dates['city_name'])
    
     # DATAFRAME METHODS
-     # ----------------
+    # ----------------
     def _initialize_dataframe(self):
         self._fetch_and_convert_data()
         self._rename_columns()

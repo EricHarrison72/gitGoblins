@@ -1,10 +1,9 @@
 # ------------------------------------------------------
 # views.py
 '''
-Contains all current view methods, which do some logic and
-then call render_template().
-- hello_world(): home page
-- weather_summary(): basic weather summary (not dynamic)
+Contains view methods for feature and home pages, which
+route URLs to the correct HTML template (and maybe do a 
+little logic in between).
 '''
 '''
 Start Code sources:
@@ -64,10 +63,10 @@ def graph_past():
     
     for arg_val in url_args.values():
         if arg_val == None:
-            figure_html = graphs.get_fig()
+            figure_html = graphs.get_fig_html()
             break
     else:
-        figure_html = graphs.get_fig(url_args)
+        figure_html = graphs.get_fig_html(url_args)
 
     return render_template(
         "features/graph_past.html.jinja", 
