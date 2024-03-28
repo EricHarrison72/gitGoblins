@@ -7,7 +7,8 @@ Contains unit tests for queries.py
 import pytest
 from weatherApp.queries import (
     get_weather_data,
-    #get_temp_in_range,
+    get_data_in_range,
+    _generate_column_script,
     add_space
 )
 
@@ -89,7 +90,18 @@ def test_add_space():
       assert add_space('AliceSprings') == 'Alice Springs'
       assert add_space('NewYorkCity') == 'New York City'
 
-# def test_get_temp_in_range(app, expected_temp_table):
+# TODO
+'''
+nontesting:
+- handle incorrect date range error (in query and graphs)
+
+testing:
+- for multiple columns (temp), for one column (rain):
+    - 1. with valid city and dates - check return vals -- MOST IMPORTANT
+    - 2. without valid city and dates - check error response
+- for invalid column - check error response? maybe
+'''
+# def test_get_data_in_range(app, expected_temp_table):
     
 #     with app.app_context():
 #         real_temp_table = get_temp_in_range('Springfield', '2023-01-01', '2023-01-03')
@@ -98,5 +110,13 @@ def test_add_space():
 #         for key in expected_temp_table[i].keys():
 #             assert expected_temp_table[i][key] == real_temp_table[i][key]
 
+def test_generate_column_script(app):
+    expected_column_script_A = 'Column1,Column2,Column3'
+    assert (_generate_column_script(['Column1', 'Column2', 'Column3'])
+            == expected_column_script_A)
+    
+    expected_column_script_B = 'Column1,Column4'
+    assert (_generate_column_script(['Column1', 'Column4'])
+            == expected_column_script_B)
 # --------
 
