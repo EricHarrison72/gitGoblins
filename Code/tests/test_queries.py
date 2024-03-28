@@ -165,7 +165,7 @@ def test_get_data_in_range__valid_query(app, valid_info):
                 == real_single_col_table [row][key]
             )
 
-def test_get_data_in_range__invalid_query(app, expected_temp_table):
+def test_get_data_in_range__invalid_query(app):
     '''
     Test not yet implemented because responding to invalid queries is not
     yet part of get_data_in_range (this is a TDD reminder to do that tho).
