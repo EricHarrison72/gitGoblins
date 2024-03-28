@@ -12,6 +12,7 @@ const {
     getDateFromSelection,
     getCityFromSelection,
     getCitiesFromSelection,
+    getStatFromSelection,
     reloadPageWithArgs
 } = require('../weatherApp/static/js/submit.js');
 
@@ -93,6 +94,31 @@ describe('getCitiesFromSelection', () => {
 
     // Tests
     //------
+});
+
+describe('getStatFromSelection', () => {
+//--------------------------------------
+    // Mocks
+    // -----
+    const documentGetElementByIdMock = (selectedIndex) => {
+        document.getElementById = jest.fn().mockImplementation(id => {
+            switch (id) {
+                case 'statSelect':
+                    return {
+                        options: [{ text: 'wind' }],
+                        selectedIndex: selectedIndex
+                    };
+                default:
+                    return null;
+            }
+        });
+    };
+    // Tests
+    // -----
+    test('get a stat (string) from the stat selection menu', () => {
+        documentGetElementByIdMock(0);
+        expect(getStatFromSelection()).toBe('wind');
+    });
 });
 
 
