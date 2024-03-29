@@ -1,4 +1,5 @@
-from datetime import datetime
+'''admin.py'''
+
 from flask import Blueprint, request, jsonify, redirect, url_for
 from . import db
 
@@ -36,4 +37,6 @@ def admin():
         return jsonify({'error': error_message}), 400
     except Exception as e:
         error_message = 'An error occurred while updating high temperature: {}'.format(str(e))
+        print("Exception:", e)  # Add this line to log the exception
         return jsonify({'error': error_message}), 500
+

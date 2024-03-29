@@ -1,36 +1,55 @@
-# test_admin.py
-
-from weatherApp.admin import admin_bp  # Adjust import as needed
-from weatherApp.db import get_db  # Adjust import as needed
+import unittest
+from unittest.mock import MagicMock, patch
 from flask import Flask
 
-def test_admin_route(client):
-    app = Flask(__name__)
-    app.register_blueprint(admin_bp)
+from weatherApp.admin import admin_bp
 
-    # Mocking request data
-    mock_request_data = {
-        'city_id': 1,
-        'tempMin': 10.0,
-        'tempMax': 20.0,
-        'date': '2024-03-29'
-    }
 
-    # Mocking database
-    class MockDB:
-        def execute(self, query, params):
-            return None  # Mocking execute method
+class TestAdminBlueprint(unittest.TestCase):
+    def setUp(self):
+        self.app = Flask(__name__)
+        self.app.register_blueprint(admin_bp)
+        self.client = self.app.test_client()
 
-        def commit(self):
-            pass  # Mocking commit method
+    @patch('weatherApp.admin.db.get_db')
+    def test_admin_endpoint(self, mock_get_db):
+        mock_cursor = MagicMock()
+        mock_fetchone = MagicMock(return_value=('CityName',))
+        mock_cursor.fetchone = mock_fetchone
+        mock_datb = MagicMock()
+        mock_datb.execute.return_value = mock_cursor
+        mock_get_db.return_value = mock_datb
+        
+        with self.app.test_request_context('/admin', method='POST',
+                                   data={'city_id': '1', 'tempMin': '10.0', 'tempMax': '20.0', 'date': '2024-03-29'}):
+            response = self.client.post('/admin')
 
-    # Patching db.get_db
-    with app.app_context():
-        app.config['TESTING'] = True
-        app.config['DEBUG'] = False
-        app.config['DATABASE'] = MockDB()
+        print(response.data)  # Add this line for debugging
+        
+        self.assertEqual(response.status_code, 302)  # Redirect status code
+        mock_get_db.assert_called_once()
+        mock_datb.execute.assert_called_once()  # Assertion corrected here
+        mock_fetchone.assert_called_once()
+        mock_datb.commit.assert_called_once()
 
-        response = client.post('/admin', data=mock_request_data)
-        assert response.status_code == 404  # Check if it redirects
+    def test_admin_endpoint_invalid_input(self):
+        with self.app.test_request_context('/admin', method='POST',
+                                       data={'city_id': '1', 'tempMin': 'abc', 'tempMax': '20.0', 'date': '2024-03-29'}):
+            response = self.client.post('/admin')
+            self.assertEqual(response.status_code, 400 if 'Invalid input value' in response.json.get('error', '') else 500)
 
-    
+
+    @patch('weatherApp.admin.db.get_db')
+    def test_admin_endpoint_error(self, mock_get_db):
+        mock_datb = MagicMock()
+        mock_datb.execute.side_effect = Exception("Mocked exception")
+        mock_get_db.return_value = mock_datb
+
+        with self.app.test_request_context('/admin', method='POST',
+                                           data={'city_id': '1', 'tempMin': '10.0', 'tempMax': '20.0', 'date': '2024-03-29'}):
+            response = self.client.post('/admin')
+            self.assertEqual(response.status_code, 500)
+
+
+if __name__ == '__main__':
+    unittest.main()
