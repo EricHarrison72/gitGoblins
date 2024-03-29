@@ -26,55 +26,17 @@
     </tbody>
   </table>
 
-  <form id="highTempForm">
-      <label for="city">City:</label>
-      <select class="selectpicker" data-live-search="true" id="citySelect" name="city_name">
-        <option value="1">Adelaide</option>
-        <option value="2">Albany</option>
-        <option value="3">Albury</option>
-      </select><br><br>
-      
-      <label for="date">Date:</label>
-      <input type="date" id="date" name="date"><br><br>
+  <form id="highTempForm" method="post" action="/admin">
+    <label for="city">City:</label>
+    <select class="selectpicker" data-live-search="true" id="city" name="city_id">
+      {% for city in cities %}
+      <option value="{{ city.cityId }}">{{ city.cityName }}</option>
+      {% endfor %}
+    </select>
 
-      <label for="temp_high">High Temperature:</label>
-      <input type="number" id="temp_high" name="temp_high"><br><br>
+    <label for="temp_high">High Temperature:</label>
+    <input type="number" id="temp_high" name="temp_high" required><br><br>
 
-      <button type="submit">Update High Temperature</button>
+    <button type="submit">Update High Temperature</button>
   </form>
-
-  <script>
-      document.getElementById("highTempForm").addEventListener("submit", function(event) {
-          event.preventDefault(); // Prevent the default form submission
-          // Collect form data
-          var formData = new FormData(this);
-          // Submit form data via fetch API to the admin endpoint
-          fetch('/admin', {
-              method: 'POST',
-              body: formData
-          })
-          .then(response => response.json())
-          .then(data => {
-              // Show success message
-              alert(data.message);
-              // Fetch cityId based on cityName
-              fetch(`/get_city_id?city_name=${formData.get('city_name')}`)
-              .then(response => response.json())
-              .then(cityData => {
-                  const cityId = cityData.city_id;
-                  const date = formData.get('date');
-                  // Redirect to weather_summary page with updated date and location
-                  window.location.href = `/weather_summary?city_id=${cityId}&date=${date}`;
-              })
-              .catch(error => {
-                  console.error('Error:', error);
-                  alert('An error occurred while fetching city data. Please try again.');
-              });
-          })
-          .catch(error => {
-              console.error('Error:', error);
-              alert('An error occurred. Please try again.'); // Show error message
-          });
-      });
-  </script>
 {% endblock %}

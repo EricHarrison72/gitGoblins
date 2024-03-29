@@ -1,40 +1,34 @@
-
-'''admin.py
-THIS IS A DRAFT FOR ADMIN
-'''
-
-
-from flask import Blueprint, request, jsonify
+from datetime import datetime
+from flask import Blueprint, request, jsonify, redirect, url_for
 from . import db
 
 admin_bp = Blueprint('admin', __name__)
 
 @admin_bp.route('/admin', methods=['POST'])
 def admin():
-    data = request.form
-
-    city_name = data.get('city_name')
-    date = data.get('date')
-    temp_high = data.get('temp_high')
-
     try:
-        # Retrieve the cityId corresponding to the provided city name
-        city_id = db.get_db().execute('SELECT cityId FROM City WHERE cityName = ?', (city_name,)).fetchone()
-        if city_id is not None:
-            city_id = city_id[0]  # Extract cityId from the result tuple
-
-            # Update high temperature
+        datb = db.get_db()
+        if request.method == 'POST':
+            city_id = int(request.form['city_id'])
+            temp_high = float(request.form['temp_high'])
+            specified_date = datetime(2017, 6, 24).strftime('%Y-%m-%d')  # Set date using specified format
             print(city_id)
             print(temp_high)
-            db.execute('''
-                INSERT INTO WeatherInstance (cityId, date, tempMax)
-                VALUES (?, ?, ?)
-                ON CONFLICT(cityId, date) DO UPDATE SET 
-                    tempMax=excluded.tempMax
-            ''', (city_id, date, temp_high))
+            # Update high temperature using UPDATE statement
+            datb.execute('''
+                UPDATE WeatherInstance
+                SET tempMax = ?
+                WHERE cityId = ? AND date = ?
+            ''', (temp_high, city_id, specified_date))
 
-            return jsonify({'message': 'High temperature updated successfully'}), 200
-        else:
-            return jsonify({'error': 'City not found'}), 404
+            # Commit the changes to the database
+            datb.commit()
+
+            # Redirect to weather_summary route with cityId and date parameters
+            return redirect(url_for('views.weather_summary', city_id=city_id, date=specified_date))
+    except ValueError as ve:
+        error_message = 'Invalid input value: {}'.format(str(ve))
+        return jsonify({'error': error_message}), 400
     except Exception as e:
-        return jsonify({'error': str(e)}), 400
+        error_message = 'An error occurred while updating high temperature: {}'.format(str(e))
+        return jsonify({'error': error_message}), 500
