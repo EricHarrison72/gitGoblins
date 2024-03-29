@@ -11,7 +11,7 @@ def admin():
         if request.method == 'POST':
             city_id = int(request.form['city_id'])
             temp_high = float(request.form['temp_high'])
-            specified_date = datetime(2017, 6, 24).strftime('%Y-%m-%d')  # Set date using specified format
+            specified_date = request.form['date']  # Set date using specified format
             print(city_id)
             print(temp_high)
             # Update high temperature using UPDATE statement
