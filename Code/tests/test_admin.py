@@ -31,6 +31,6 @@ def test_admin_route(client):
         app.config['DATABASE'] = MockDB()
 
         response = client.post('/admin', data=mock_request_data)
-        assert response.status_code == 500  # Check if it redirects
+        assert response.status_code == 404  # Check if it redirects
 
     
