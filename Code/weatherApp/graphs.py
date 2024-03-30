@@ -52,7 +52,7 @@ class WeatherGraph(ABC):
         self._update_fonts()
     
     def get_html(self):
-        return self.fig.to_html()
+        return self.fig.to_html(full_html=False)
     
     def get_city_name(self):
         return queries.add_space(self.city_and_dates['city_name'])
@@ -95,6 +95,7 @@ class WeatherGraph(ABC):
 class TemperatureGraph(WeatherGraph):
     def __init__(self, city_and_dates):
         super().__init__(city_and_dates)
+        print(self.get_html())
 
     # OVERRIDE: all abstract methods
     # ------------------------------
@@ -132,6 +133,7 @@ class TemperatureGraph(WeatherGraph):
 class RainGraph(WeatherGraph):
     def __init__(self, city_and_dates):
         super().__init__(city_and_dates)
+        print(self.fig)
 
     # OVERRIDE: all abstract methods
     # ------------------------------

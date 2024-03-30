@@ -30,14 +30,20 @@ class ExpectedGraph:
     def __init__(
         self,
         city_and_dates,
+        got_city_name,
         dataframe,
         fig,
     ):
         self.city_and_dates = city_and_dates
+        self.got_city_name = got_city_name
         self.dataframe = dataframe
         self.fig = fig
 
 class GraphTest():
+    '''Note:
+    - test_get_html() is not included, because I can't test
+      how the html will look in the browser.
+    '''
     def __init__(self, expected: ExpectedGraph, real: WeatherGraph):
         self.expected = expected
         self.real = real
@@ -54,16 +60,18 @@ class GraphTest():
 
         for col in expected_df.keys():
             for row in range( len(expected_df[col])):
-                assert (expected_df[col][row] == real_df[col][row])
+                assert (real_df[col][row] == expected_df[col][row])
                 
     def test_figure(self):
-        assert 1 == 2
+        expected_fig = self.expected.fig
+        real_fig = self.real.fig['data']
 
-    def test_get_html(self):
-        pass
+        for i in range(len(expected_fig)):
+            for key in expected_fig[i].keys():
+                assert (real_fig[i][key] == expected_fig[i][key])
 
     def test_get_city_name(self):
-        pass
+        assert (self.real.get_city_name() == self.expected.got_city_name)
 
 @pytest.fixture()
 def given_city_and_dates():
@@ -72,23 +80,34 @@ def given_city_and_dates():
         'start_date': '2023-01-01',
         'end_date': '2023-01-03'
     }
-# ======================================
+# ======================================================================
 
 # TEMPERATURE GRAPH - FIXTURES & SUPPORT
 # --------------------------------------
 @pytest.fixture()
 def expected_temp_graph(given_city_and_dates):
     city_and_dates = given_city_and_dates
+    got_city_name = given_city_and_dates['city_name']
 
     expected_dataframe = {
         'Date': ['2023-01-01', '2023-01-02', '2023-01-03'],
         'Low':  [-5.0        , -3.0        , 0           ],
         'High': [10.0        , 0           , 30.0        ]
     }
-    expected_fig = None
+    expected_fig = [
+        {
+            'name': 'Low',
+            'type': 'bar'
+        },
+        {
+            'name':'High',
+            'type':'bar'
+        }
+    ]
 
     return ExpectedGraph(
         city_and_dates,
+        got_city_name,
         expected_dataframe,
         expected_fig
     )
@@ -110,19 +129,100 @@ def test_TemperatureGraph_dataframe(temp_graph_tests):
 def test_TemperatureGraph_figure(temp_graph_tests):
     temp_graph_tests.test_figure()
 
-def test_TemperatureGraph_get_html(temp_graph_tests):
-    temp_graph_tests.test_get_html()
-
 def test_TemperatureGraph_get_city_name(temp_graph_tests):
     temp_graph_tests.test_get_city_name()
 
+# =============================================================
 
+# RAIN GRAPH - FIXTURES & SUPPORT
+# -----------------------------
+@pytest.fixture()
+def expected_rain_graph(given_city_and_dates):
+    city_and_dates = given_city_and_dates
+    got_city_name = given_city_and_dates['city_name']
 
+    expected_dataframe = {
+        'Date':     ['2023-01-01', '2023-01-02', '2023-01-03'],
+        'Rainfall': [0.0         , 5.0         , 0.0         ],
+    }
+    expected_fig = [
+        {'type': 'bar'}
+    ]
+
+    return ExpectedGraph(
+        city_and_dates,
+        got_city_name,
+        expected_dataframe,
+        expected_fig
+    )
+
+@pytest.fixture()
+def real_rain_graph(app, given_city_and_dates):
+    with app.app_context():
+        return RainGraph(given_city_and_dates)
+
+@pytest.fixture()
+def rain_graph_tests(expected_rain_graph, real_rain_graph):
+    return GraphTest(expected_rain_graph, real_rain_graph)
+
+# RAIN GRAPH - TESTS
+# ------------------
+def test_RainGraph_dataframe(rain_graph_tests):
+    rain_graph_tests.test_dataframe()
+
+def test_RainGraph_figure(rain_graph_tests):
+    rain_graph_tests.test_figure()
+
+def test_RainGraph_get_city_name(rain_graph_tests):
+    rain_graph_tests.test_get_city_name()
+
+# =============================================================
+
+# WIND GRAPH - FIXTURES & SUPPORT
+# -----------------------------
+@pytest.fixture()
+def expected_wind_graph(given_city_and_dates):
+    city_and_dates = given_city_and_dates
+    got_city_name = given_city_and_dates['city_name']
+
+    expected_dataframe = {
+        'Date':      ['2023-01-01', '2023-01-02', '2023-01-03'],
+        'Speed':     [0.0         , 5.0         , 0.0         ], # groups
+        'Direction': [''          , ''          , ''          ]
+    }
+    expected_fig = [
+        {'type': 'bar'}
+    ]
+
+    return ExpectedGraph(
+        city_and_dates,
+        got_city_name,
+        expected_dataframe,
+        expected_fig
+    )
+
+@pytest.fixture()
+def real_wind_graph(app, given_city_and_dates):
+    with app.app_context():
+        return WindGraph(given_city_and_dates)
+
+@pytest.fixture()
+def wind_graph_tests(expected_wind_graph, real_wind_graph):
+    return GraphTest(expected_wind_graph, real_wind_graph)
+
+# WIND GRAPH - TESTS
+# ------------------
+# def test_WindGraph_dataframe(wind_graph_tests):
+#     wind_graph_tests.test_dataframe()
+
+# def test_WindGraph_figure(wind_graph_tests):
+#     wind_graph_tests.test_figure()
+
+# def test_WindGraph_get_city_name(wind_graph_tests):
+#     wind_graph_tests.test_get_city_name()
 
 # TODO
 '''
-- repeat above tests for Wind and Rain 
-- actually to make this proper I'm gonna have to do some inheritance with this one boys
 - also remember to write test for get_fig_html
     - maybe split into two functions; get_fig and get_fig_html?
 '''
