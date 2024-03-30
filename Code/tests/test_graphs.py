@@ -243,6 +243,7 @@ def test_WindGraph_figure(wind_graph_tests):
 #         return expected_freq_table
 
 # TODO - get this working - current problem is .at[] doesn't work
+    # OR DON'T - graphs.py has 89% coverage now... and frequency stuff is covered
 def test_WindGraph_freq_table( real_wind_graph):
     # real_freq = real_wind_graph.freq_table
     # expected_filled_freq = 1
