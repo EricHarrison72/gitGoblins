@@ -52,3 +52,22 @@ table, th, td {
   text-align: left;
 }
 
+/* Update CSS to align the checkbox */
+.content form { 
+  margin: 1em 0; 
+  display: flex; 
+  flex-direction: column; 
+}
+
+/* Add new styles for the checkbox */
+.content label { 
+  font-weight: bold; 
+  margin-bottom: 0.5em; 
+  display: flex; /* Make the label and checkbox align horizontally */
+  align-items: center; /* Align items vertically in the flex container */
+}
+
+/* Style the checkbox */
+.content input[type=checkbox] { 
+  margin-right: 0.5em; /* Add some spacing between the checkbox and label */
+}

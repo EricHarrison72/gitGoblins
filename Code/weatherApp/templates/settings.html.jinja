@@ -11,21 +11,12 @@
 {% block content %}
   <h2>User Settings</h2>
 
-  <form id="userSettingsForm" method="post" action="/update_settings">
-    <label for="firstName">First Name:</label>
-    <input type="text" id="firstName" name="firstName" value="{{ user.firstName }}"><br><br>
-
-    <label for="lastName">Last Name:</label>
-    <input type="text" id="lastName" name="lastName" value="{{ user.lastName }}"><br><br>
-
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" value="{{ user.email }}"><br><br>
-
-    <label for="emailList">Subscribe to Email List:</label>
-    <input type="checkbox" id="emailList" name="emailList" {% if user.emailList %} checked {% endif %}><br><br>
-
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password"><br><br>
+  <form id="userSettingsForm" method="post" action="{{ url_for('views.settings') }}">
+    <div style="display: flex; align-items: center;">
+      <label for="emailList">Email List:</label>
+      <input type="checkbox" id="emailList" name="emailList" {% if user.emailList %} checked {% endif %}>
+    </div>
+    <br>
 
     <label for="cityId">City:</label>
     <select id="cityId" name="cityId">
@@ -37,3 +28,4 @@
     <button type="submit">Update Settings</button>
   </form>
 {% endblock %}
+
