@@ -180,10 +180,6 @@ def test_admin_register(client, app):
             'city_id': '1'  # Provide a valid city ID
         }
     )
-    
-
-    # Check if it stays on the admin register page and displays error message
-
 
     # Test admin registration with valid passcode and all required data
     with client.session_transaction() as session:
