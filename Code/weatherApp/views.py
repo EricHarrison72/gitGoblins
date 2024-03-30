@@ -12,11 +12,13 @@ Start Code sources:
 '''
 # ------------------------------------------------------
 from flask import (
+    redirect,
     render_template,
     Blueprint,
     request,
     jsonify,
-    g
+    g,
+    url_for
 )
 from . import (
     graphs,
@@ -117,3 +119,42 @@ def get_weather_icon():
     icon_name = weather.determine_icon_based_on_weather(weather_dict)
     
     return jsonify({'icon': icon_name})
+
+
+@views_bp.route('/settings', methods=['GET', 'POST'])
+@login_required
+def user_settings():
+    if request.method == 'POST':
+        # Get form data
+        first_name = request.form.get('firstName')
+        last_name = request.form.get('lastName')
+        email = request.form.get('email')
+        email_list = request.form.get('emailList') == 'on'  # Checkbox value
+        password = request.form.get('password')
+        city_id = int(request.form.get('cityId'))
+
+        # Update user settings in the database
+        try:
+            user_id = g.user['userId']  # Get user ID from g.user
+            # Your database update logic here using user_id and form data
+            # For example:
+            # db.update_user_settings(user_id, first_name, last_name, email, email_list, password, city_id)
+            # Replace db.update_user_settings with your actual database function
+            
+            # Redirect to settings page or any other page after successful update
+            return redirect(url_for('views.user_settings'))
+        except Exception as e:
+            error_message = 'An error occurred while updating user settings: {}'.format(str(e))
+            return render_template('error.html', error_message=error_message)
+
+    # If method is GET, render the settings page
+    # You need to pass user data and city data to the template
+    # For example:
+    # user = db.get_user_settings(user_id)
+    # cities = db.get_cities()
+    # Replace db.get_user_settings and db.get_cities with your actual database functions
+    user_id = g.user['userId']  # Get user ID from g.user
+    user = db.get_user_settings(user_id)  # Get user data from database
+    cities = db.get_cities()  # Get city data from database
+
+    return render_template('settings.html', user=user, cities=cities)
