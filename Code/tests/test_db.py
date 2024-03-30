@@ -104,10 +104,14 @@ def test_populate_db(app):
     assert db1 != None
     assert db2 != None
     
-    # Test updating user settings in the database
-def test_update_user_settings_db(client, app):
+# test_db.py
+
+import pytest
+from weatherApp import db
+
+# Test updating user settings in the database
+def test_update_user_settings_db(app, client):
     with app.app_context():
-        db = get_db()
         # Register a new user with valid data including city_id
         response = client.post('/auth/register', data={
             'email': 'test@gmail.com',
