@@ -19,14 +19,21 @@ class TestAdminBlueprint(unittest.TestCase):
         mock_datb = MagicMock()
         mock_datb.execute.return_value = mock_cursor
         mock_get_db.return_value = mock_datb
-        
+
         with self.app.test_request_context('/admin', method='POST',
-                                   data={'city_id': '1', 'tempMin': '10.0', 'tempMax': '20.0', 'date': '2024-03-29'}):
+                                           data={'city_id': '1', 'tempMin': '10.0', 'tempMax': '20.0', 'date': '2024-03-29'}):
             response = self.client.post('/admin')
 
-        print(response.data)  # Add this line for debugging
-        
-        self.assertEqual(response.status_code, 302)  # Redirect status code
+            # Ensure that the database methods are called with the correct parameters
+            mock_datb.execute.assert_called_once_with('''
+                UPDATE WeatherInstance
+                SET tempMin = ?, tempMax = ?
+                WHERE cityId = ? AND date = ?
+            ''', ('10.0', '20.0', '1', '2024-03-29'))
+            mock_datb.commit.assert_called_once()
+
+        # Verify that the response status code is 302
+        self.assertEqual(response.status_code, 302)
         mock_get_db.assert_called_once()
         mock_datb.execute.assert_called_once()  # Assertion corrected here
         mock_fetchone.assert_called_once()
