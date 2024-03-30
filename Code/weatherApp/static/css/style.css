@@ -51,3 +51,25 @@ table, th, td {
   padding-bottom:15px;
   text-align: left;
 }
+
+.button-style {
+  background-color: #FFCD00;
+  color: #00843D;
+  border: 2px solid black;
+  padding: 20px 20px; /* Adjusts button size */
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 25px;
+  margin: 5px auto; /* Adjusts button spacing */
+  cursor: pointer;
+  border-radius: 15px; /* Rounded corners */
+  width: 80%; /* Sets a specific width for all buttons */
+  max-width: 400px; /* Adjusts maximum width */
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
