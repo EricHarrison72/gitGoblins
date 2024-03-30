@@ -33,7 +33,18 @@ def register():
         first_name = request.form.get('first_name', '')
         last_name = request.form.get('last_name', '')
         email_list = bool(request.form.get('email_list'))
-        city_id = int(request.form.get('city_id'))  # Get selected cityId from the form
+        
+        # Check if city_id is provided in the form data
+        city_id = request.form.get('city_id')
+        if city_id is None:
+            flash('City ID is required.')
+            return redirect(url_for('auth.register'))
+
+        try:
+            city_id = int(city_id)
+        except ValueError:
+            flash('City ID must be a valid integer.')
+            return redirect(url_for('auth.register'))
 
         error = None
 
@@ -52,10 +63,8 @@ def register():
             else:
                 hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
                 datb.execute(
-
                     "INSERT INTO User (email, password, firstName, lastName, emailList, cityId) VALUES (?, ?, ?, ?, ?, ?)",
                     (email, hashed_password, first_name, last_name, email_list, city_id)
-
                 )
                 datb.commit()
                 print(city_id)
@@ -65,6 +74,7 @@ def register():
         flash(error)
 
     return render_template('auth/register.html.jinja')
+
 
 
 @auth_bp.route('/login', methods=('GET', 'POST'))

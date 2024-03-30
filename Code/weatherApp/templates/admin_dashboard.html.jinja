@@ -8,23 +8,6 @@
 {% block content %}
   <h2>Admin Dashboard</h2>
 
-  <!-- Display City Table -->
-  <table>
-    <thead>
-      <tr>
-        <th>City ID</th>
-        <th>City Name</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for city in cities %}
-      <tr>
-        <td>{{ city.cityId }}</td>
-        <td>{{ city.cityName }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
 
   <form id="highTempForm" method="post" action="/admin">
     <div class="row">
@@ -52,6 +35,6 @@
       </div>
       
 
-    <button type="submit">Update High Temperature</button>
+    <button type="submit">Update Temperature</button>
   </form>
 {% endblock %}

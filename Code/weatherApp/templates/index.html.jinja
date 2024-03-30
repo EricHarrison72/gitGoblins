@@ -15,6 +15,7 @@
     <li>Current data graph (no page yet)</li>
 <li><a href = "{{ url_for('views.graph_past') }}">Past Data Graph</a></li>
 <li><a href = "{{ url_for('views.settings') }}">Settings</a></li>
+<li><a href="{{ url_for('auth.admin_dashboard') }}">Admin Dashboard</a></li>
   </ul>
 
   {% if user_city_data %}
