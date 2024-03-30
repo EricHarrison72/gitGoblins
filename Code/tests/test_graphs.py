@@ -129,7 +129,7 @@ def test_TemperatureGraph_dataframe(temp_graph_tests):
 def test_TemperatureGraph_figure(temp_graph_tests):
     temp_graph_tests.test_figure()
 
-def test_TemperatureGraph_get_city_name(temp_graph_tests):
+def test_WeatherGraph_get_city_name(temp_graph_tests):
     temp_graph_tests.test_get_city_name()
 
 # =============================================================
@@ -173,9 +173,6 @@ def test_RainGraph_dataframe(rain_graph_tests):
 def test_RainGraph_figure(rain_graph_tests):
     rain_graph_tests.test_figure()
 
-def test_RainGraph_get_city_name(rain_graph_tests):
-    rain_graph_tests.test_get_city_name()
-
 # =============================================================
 
 # WIND GRAPH - FIXTURES & SUPPORT
@@ -187,11 +184,11 @@ def expected_wind_graph(given_city_and_dates):
 
     expected_dataframe = {
         'Date':      ['2023-01-01', '2023-01-02', '2023-01-03'],
-        'Speed':     [0.0         , 5.0         , 0.0         ], # groups
-        'Direction': [''          , ''          , ''          ]
+        'Speed':     ['11-20'     , '31-40'     , '101-200'   ],
+        'Direction': ['W'         , 'NNE'      , 'SW'         ]
     }
     expected_fig = [
-        {'type': 'bar'}
+        {'type': 'barpolar'}
     ]
 
     return ExpectedGraph(
@@ -212,14 +209,55 @@ def wind_graph_tests(expected_wind_graph, real_wind_graph):
 
 # WIND GRAPH - TESTS
 # ------------------
-# def test_WindGraph_dataframe(wind_graph_tests):
-#     wind_graph_tests.test_dataframe()
+def test_WindGraph_dataframe(wind_graph_tests):
+    wind_graph_tests.test_dataframe()
 
-# def test_WindGraph_figure(wind_graph_tests):
-#     wind_graph_tests.test_figure()
+def test_WindGraph_figure(wind_graph_tests):
+    wind_graph_tests.test_figure()
 
-# def test_WindGraph_get_city_name(wind_graph_tests):
-#     wind_graph_tests.test_get_city_name()
+# @pytest.fixture()
+# def expected_freq_table():
+#         directions =  ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
+#         bins =  ['1-10', '11-20', '21-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100', '101-200'],
+        
+#         expected_freq_table = {
+#             'Direction': [],
+#             'Speed': [],
+#             'Frequency': []
+#         }
+
+#         for dir in directions:
+#             for bin in bins:
+#                 expected_freq_table['Direction'].append(dir)
+#                 expected_freq_table['Speed'].append(bin)
+#                 expected_freq_table['Frequency'].append(0)
+
+#         w_11_20 = 12*1 # W has idx 12 in directions, 11-20 has idx 1 in bins
+#         nne_31_40 = 1*3 # NNE has idx 1 in directions, 31-40 has idx 3 in bins
+#         sw_101_200 = 10*10 # SW has idx 10 in directions, 101-200 has idx 10 in bins
+
+#         expected_freq_table['Frequency'][w_11_20] = 1
+#         expected_freq_table['Frequency'][nne_31_40] = 1
+#         expected_freq_table['Frequency'][sw_101_200] = 1
+
+#         return expected_freq_table
+
+# TODO - get this working - current problem is .at[] doesn't work
+def test_WindGraph_freq_table( real_wind_graph):
+    # real_freq = real_wind_graph.freq_table
+    # expected_filled_freq = 1
+    # expected_empty_freq = 0
+
+    # assert real_freq.at['W', '11-20'] == expected_filled_freq
+    # assert real_freq.at['NNE', '31-40'] == expected_filled_freq
+    # assert real_freq.at['SW', '101-200'] == expected_filled_freq
+
+    # assert real_freq.at['W', '31-40'] == expected_empty_freq
+
+    # # for col in expected_ft.keys():
+    # #         for row in range( len(expected_ft[col])):
+    # #             assert (real_ft[col][row] == expected_ft[col][row])
+    pass
 
 # TODO
 '''

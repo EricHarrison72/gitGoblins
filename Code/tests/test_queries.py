@@ -41,8 +41,8 @@ def expected_weather_dict():
             'temp_low': -5.0,
             'rainfall': 0.0,
             'raining': 'No',
-            'wind_speed': 30,
-            'wind_dir': 'N',
+            'wind_speed': 12,
+            'wind_dir': 'W',
             'cloud': 3
         },
          # (There is no data for Albury in the test DB)
