@@ -17,11 +17,11 @@ from flask import current_app
 
 def send_email(to, subject, template):
     '''
-    - sends an email notification to recipients in a list of emails "to", with the subject header of "subject", using an HTML template of "template"
+    - sends an email notification to recipients in a list of emails "to", with the subject header of "Weather Alert for (subject)", using an HTML template of "template"
     '''
     msg = Message(
-        subject,
-        recipients = [to],
+        "Weather Alert for" + subject,
+        recipients = to,
         html = template,
         sender = current_app.config['MAIL_DEFAULT_SENDER']
     )

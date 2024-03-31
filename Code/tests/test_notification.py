@@ -16,11 +16,11 @@ from weatherApp.notification import (
 # Creating fixtures for testing
 @pytest.fixture()
 def test_subject():
-    return "testing"
+    return "Canberra"
 
 @pytest.fixture()
 def test_to():
-    return 'gitgoblins4@gmail.com'
+    return ['gitgoblins4@gmail.com']
 
 @pytest.fixture()
 def test_template():
@@ -32,5 +32,5 @@ def test_send_email(app, test_to, test_subject, test_template):
         with mail.record_messages() as outbox:
             send_email(test_to, test_subject, test_template)
             assert len(outbox) == 1
-            assert outbox[0].subject == "testing"
+            assert outbox[0].subject == "Weather Alert for Canberra"
         
