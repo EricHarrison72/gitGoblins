@@ -26,7 +26,6 @@ from . import (
     weather,
     predictions,
     db,
-  
 )
 from .auth import login_required
 from datetime import datetime
@@ -53,8 +52,21 @@ def index():
         "SELECT * FROM WeatherInstance WHERE cityId = ? AND date = ?",
         (user_city_data['cityId'], specified_date)
     ).fetchone()
+    
+    # Fetch cityName from the City table for specific cityId
+    city_name_row = datb.execute(
+    "SELECT cityName FROM City WHERE cityId = ?",
+    (user_city_data['cityId'],)
+    ).fetchone()
 
-    return render_template("index.html.jinja", user_city_data=user_city_data, weather_data=weather_data)
+    # Extract the cityName string from the row object
+    city_name = city_name_row['cityName']
+
+    # Get the main weather icon for this city/date
+    weather_dict = queries.get_weather_data(city_name, specified_date)
+    weather_icon = weather.determine_icon_based_on_weather(weather_dict)
+    
+    return render_template("index.html.jinja", user_city_data=user_city_data, weather_data=weather_data, weather_icon=weather_icon)
 
 
 @views_bp.route('/weather_summary')

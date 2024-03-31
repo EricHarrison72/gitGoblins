@@ -52,6 +52,27 @@ table, th, td {
   text-align: left;
 }
 
+.button-style {
+  background-color: #FFCD00;
+  color: #00843D;
+  border: 2px solid black;
+  padding: 15px 20px; /* Adjusts button size */
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 25px;
+  margin: 5px auto; /* Adjusts button spacing */
+  cursor: pointer;
+  border-radius: 15px; /* Rounded corners */
+  width: 80%; /* Sets a specific width for all buttons */
+  max-width: 300px; /* Adjusts maximum width */
+}
+
+.button-container {
+  display: flex;
+  flex-direction: row;
+}
+
 /* Update CSS to align the checkbox */
 .content form { 
   margin: 1em 0; 
@@ -70,4 +91,11 @@ table, th, td {
 /* Style the checkbox */
 .content input[type=checkbox] { 
   margin-right: 0.5em; /* Add some spacing between the checkbox and label */
+}
+
+.centered-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
