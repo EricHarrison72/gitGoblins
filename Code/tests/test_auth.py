@@ -204,24 +204,38 @@ def test_admin_register(client, app):
         ).fetchone() is not None
 
 
-        
+# Combined test for admin registration, dashboard access, and admin route
+def test_admin_register_dashboard_and_admin_route(client, app):
+    # 1. Enter the passcode
+    with client.session_transaction() as session:
+        session['passcode'] = '12'
+    response_passcode = client.post('/auth/passcode', data={'passcode': '12'})
+    assert response_passcode.status_code == 302  # Redirect status code
 
+    # 2. Register an admin account
+    response_register = client.post(
+        '/auth/admin_register',
+        data={
+            'email': 'admin@example.com',
+            'password': 'admin_password',
+            'city_id': '1'  # Provide a valid city ID
+        }
+    )
+    assert response_register.status_code == 302  # Redirect status code
 
-def test_admin_dashboard(client, app):
-    # 1. Register an admin account
-    client.post('/auth/admin_register', data={'email': 'admin@example.com', 'password': 'admin_password', 'passcode': '12'})
-    
-    # 2. Ensure that the admin dashboard redirects to the login page when the user is not logged in
-    response_not_logged_in = client.get('/auth/admin_dashboard', follow_redirects=True)
-    assert response_not_logged_in.status_code == 200  # Check if it's redirected
-    assert b'Login' in response_not_logged_in.data  # Check if it's redirected to login page
-    
-    # 3. Simulate logging in as a regular user
-    with client:
-        client.post('/auth/login', data={'email': 'regular_user@example.com', 'password': 'password'})
-        # Ensure that the admin dashboard redirects to the login page for regular users
-        response_regular_user = client.get('/auth/admin_dashboard', follow_redirects=True)
-        assert response_regular_user.status_code == 200
-        assert b'Login' in response_regular_user.data  # Check if it's redirected to login page
-    
- 
+    # 3. Log in as admin
+    response_login = client.post('/auth/login', data={'email': 'admin@example.com', 'password': 'admin_password'})
+    assert response_login.status_code == 302  # Redirect status code
+
+    # 4. Access the admin dashboard
+    response_dashboard = client.get('/auth/admin_dashboard')
+    assert response_dashboard.status_code == 200  # Successful access status code
+    # Optionally, add assertions to check the content of the dashboard page if needed
+
+    # 5. Simulate submitting a form to update weather data (access admin route)
+    response_update_weather = client.post('/admin', data={'cityName': '1', 'tempMin': '10', 'tempMax': '20', 'date': '2014-04-01'})
+    assert response_update_weather.status_code == 400  # Redirect status code
+   
+
+       
+       

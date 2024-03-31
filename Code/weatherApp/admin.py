@@ -1,11 +1,11 @@
 '''admin.py'''
 
-from flask import Blueprint, app, request, jsonify, redirect, url_for
+from flask import Blueprint, request, jsonify, redirect, url_for
 from . import db
 
 admin_bp = Blueprint('admin', __name__)
 
-@admin_bp.route('/admin', methods=['POST'])
+@admin_bp.route('/admin', methods=['GET','POST'])
 def admin():
     try:
         datb = db.get_db()
@@ -14,10 +14,7 @@ def admin():
             temp_min = float(request.form['tempMin'])
             temp_max = float(request.form['tempMax'])
             specified_date = request.form['date']  
-
-            # Input validation
-            if temp_min < -273.15 or temp_max < -273.15:
-                raise ValueError("Temperature cannot be below absolute zero.")
+            
 
             # Fetch cityName from cityId
             cursor = datb.execute("SELECT cityName FROM City WHERE cityId = ?", (city_id,))
@@ -38,7 +35,5 @@ def admin():
     except ValueError as ve:
         error_message = 'Invalid input value: {}'.format(str(ve))
         return jsonify({'error': error_message}), 400
-    except Exception as e:
-        error_message = 'An error occurred while updating weather data: {}'.format(str(e))
-        app.logger.error(error_message)  # Log the error
-        return jsonify({'error': 'An unexpected error occurred.'}), 500
+   
+
