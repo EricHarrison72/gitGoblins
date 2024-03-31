@@ -27,12 +27,16 @@ bcrypt = Bcrypt()
 @auth_bp.route('/register', methods=('GET', 'POST'))
 def register():
     datb = db.get_db()
+    # Retrieve city data from the database
+    cities = datb.execute("SELECT cityId, cityName FROM City").fetchall()
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
         first_name = request.form.get('first_name', '')
         last_name = request.form.get('last_name', '')
         email_list = bool(request.form.get('email_list'))
+        
+        
         
         # Check if city_id is provided in the form data
         city_id = request.form.get('city_id')
@@ -73,7 +77,7 @@ def register():
 
         flash(error)
 
-    return render_template('auth/register.html.jinja')
+    return render_template('auth/register.html.jinja', cities = cities)
 
 
 
@@ -143,7 +147,10 @@ def admin_register():
         flash('Invalid passcode')
         return redirect(url_for('auth.login'))
 
-    datb = db.get_db()
+    datb = db.get_db()  # Assuming get_db() function retrieves the database connection
+
+    # Retrieve city data from the database
+    cities = datb.execute("SELECT cityId, cityName FROM City").fetchall()
 
     if request.method == 'POST':
         email = request.form['email']
@@ -167,7 +174,6 @@ def admin_register():
             try:
                 hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
                 datb.execute(
-
                     "INSERT INTO User (email, password, firstName, lastName, emailList, cityId, isAdmin) VALUES (?, ?, ?, ?, ?, ?, ?)",
                     (email, hashed_password, first_name, last_name, email_list, city_id, True)
                 )
@@ -179,7 +185,8 @@ def admin_register():
 
         flash(error)
 
-    return render_template('auth/admin_register.html.jinja')
+    return render_template('auth/admin_register.html.jinja', cities=cities)
+
 
 
 @auth_bp.route('/passcode', methods=['GET', 'POST'])
