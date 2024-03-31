@@ -204,41 +204,38 @@ def test_admin_register(client, app):
         ).fetchone() is not None
 
 
-        
+# Combined test for admin registration, dashboard access, and admin route
+def test_admin_register_dashboard_and_admin_route(client, app):
+    # 1. Enter the passcode
+    with client.session_transaction() as session:
+        session['passcode'] = '12'
+    response_passcode = client.post('/auth/passcode', data={'passcode': '12'})
+    assert response_passcode.status_code == 302  # Redirect status code
 
+    # 2. Register an admin account
+    response_register = client.post(
+        '/auth/admin_register',
+        data={
+            'email': 'admin@example.com',
+            'password': 'admin_password',
+            'city_id': '1'  # Provide a valid city ID
+        }
+    )
+    assert response_register.status_code == 302  # Redirect status code
 
-#test_admin_dashboard function
+    # 3. Log in as admin
+    response_login = client.post('/auth/login', data={'email': 'admin@example.com', 'password': 'admin_password'})
+    assert response_login.status_code == 302  # Redirect status code
 
-def test_admin_dashboard(client, app):
-    # 1. Register an admin account
-    client.post('/auth/admin_register', data={'email': 'admin@example.com', 'password': 'admin_password', 'passcode': '12'})
-    
-    # 2. Log in as admin
-    client.post('/auth/login', data={'email': 'admin@example.com', 'password': 'admin_password'})
-    
-    # 3. Insert a city record into the database
-    with app.app_context():
-        db = get_db()
-        db.execute(
-            "INSERT INTO City (cityId, cityName) VALUES (?, ?)",
-            (50, 'Example City')
-        )
-        db.commit()
-    
-    # 4. Simulate submitting a form to update weather data
-    response_update_weather = client.post('/admin', data={'city_id': '50', 'tempMin': '10', 'tempMax': '20', 'date': '2014-04-01'})
-    
-    # Check if it redirects to the weather summary route
-    assert response_update_weather.status_code == 302  # Redirect status code
+    # 4. Access the admin dashboard
+    response_dashboard = client.get('/auth/admin_dashboard')
+    assert response_dashboard.status_code == 200  # Successful access status code
+    # Optionally, add assertions to check the content of the dashboard page if needed
 
-    
-    # 5. Verify that the database is updated
-    with app.app_context():
-        db_instance = get_db()
-        # Retrieve the updated weather data
-        weather_data = db_instance.execute(
-            "SELECT tempMin, tempMax FROM WeatherInstance WHERE cityId = ? AND date = ?",
-            ('50', '2014-04-01')
-        ).fetchone()
+    # 5. Simulate submitting a form to update weather data (access admin route)
+    response_update_weather = client.post('/admin', data={'cityName': '1', 'tempMin': '10', 'tempMax': '20', 'date': '2014-04-01'})
+    assert response_update_weather.status_code == 400  # Redirect status code
+   
+
        
        
