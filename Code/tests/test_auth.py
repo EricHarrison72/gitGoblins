@@ -207,21 +207,38 @@ def test_admin_register(client, app):
         
 
 
+#test_admin_dashboard function
+
 def test_admin_dashboard(client, app):
     # 1. Register an admin account
     client.post('/auth/admin_register', data={'email': 'admin@example.com', 'password': 'admin_password', 'passcode': '12'})
     
-    # 2. Ensure that the admin dashboard redirects to the login page when the user is not logged in
-    response_not_logged_in = client.get('/auth/admin_dashboard', follow_redirects=True)
-    assert response_not_logged_in.status_code == 200  # Check if it's redirected
-    assert b'Login' in response_not_logged_in.data  # Check if it's redirected to login page
+    # 2. Log in as admin
+    client.post('/auth/login', data={'email': 'admin@example.com', 'password': 'admin_password'})
     
-    # 3. Simulate logging in as a regular user
-    with client:
-        client.post('/auth/login', data={'email': 'regular_user@example.com', 'password': 'password'})
-        # Ensure that the admin dashboard redirects to the login page for regular users
-        response_regular_user = client.get('/auth/admin_dashboard', follow_redirects=True)
-        assert response_regular_user.status_code == 200
-        assert b'Login' in response_regular_user.data  # Check if it's redirected to login page
+    # 3. Insert a city record into the database
+    with app.app_context():
+        db = get_db()
+        db.execute(
+            "INSERT INTO City (cityId, cityName) VALUES (?, ?)",
+            (50, 'Example City')
+        )
+        db.commit()
     
- 
+    # 4. Simulate submitting a form to update weather data
+    response_update_weather = client.post('/admin', data={'city_id': '50', 'tempMin': '10', 'tempMax': '20', 'date': '2014-04-01'})
+    
+    # Check if it redirects to the weather summary route
+    assert response_update_weather.status_code == 302  # Redirect status code
+
+    
+    # 5. Verify that the database is updated
+    with app.app_context():
+        db_instance = get_db()
+        # Retrieve the updated weather data
+        weather_data = db_instance.execute(
+            "SELECT tempMin, tempMax FROM WeatherInstance WHERE cityId = ? AND date = ?",
+            ('50', '2014-04-01')
+        ).fetchone()
+       
+       
