@@ -1,18 +1,3 @@
-{#
-This template expects the following parameters:
-  -- weather_dict, with keys:
-    - 'city_name',
-    - 'date',
-    - 'temp_high', 
-    - 'temp_low', 
-    - 'rainfall', 
-    - 'raining', 
-    - 'wind_speed', 
-    - 'wind_dir'
-  -- url_args dict, with keys
-    - 'city_name'
-    - 'date'
-#}
 {% extends 'base.html.jinja' %}
 {% import 'helpers/selectors.html.jinja' as selectors %}
 
@@ -67,7 +52,6 @@ This template expects the following parameters:
   <br>
   <br>
 
-
   {% if rain_prediction == 0 %}
     {% set will_or_will_not = 'WILL NOT' %}
   {% elif rain_prediction == 1 %}
@@ -82,7 +66,88 @@ This template expects the following parameters:
     <p>Our AI model predicts that it <b>{{ will_or_will_not }}</b> rain tomorrow.</p>
   {% endif %}
   
-
+  <div class="table-container">
+    <table class="scrollable-table">
+      <tbody>
+          <tr>
+            <td>Temperature Max</td>
+            <td>{{ weather_dict['temp_high'] }}</td>
+          </tr>
+          <tr>
+            <td>Temperature Min</td>
+            <td>{{ weather_dict['temp_low'] }}</td>
+          </tr>
+          <tr>
+            <td>Sunshine</td>
+            <td>{{ weather_dict['sunshine'] }}</td>
+          </tr>
+          <tr>
+            <td>Rainfall</td>
+            <td>{{ weather_dict['rainfall'] }}</td>
+          </tr>
+          <tr>
+            <td>Evaporation</td>
+            <td>{{ weather_dict['evaporation'] }}</td>
+          </tr>
+          <tr>
+            <td>Cloud 9am</td>
+            <td>{{ weather_dict['cloud9am'] }}</td>
+          </tr>
+          <tr>
+            <td>Cloud 3pm</td>
+            <td>{{ weather_dict['cloud'] }}</td>
+          </tr>
+          <tr>
+            <td>Pressure 9am</td>
+            <td>{{ weather_dict['pressure9am'] }}</td>
+          </tr>
+          <tr>
+            <td>Pressure 3pm</td>
+            <td>{{ weather_dict['pressure3pm'] }}</td>
+          </tr>
+          <tr>
+            <td>Humidity 9am</td>
+            <td>{{ weather_dict['humidity9am'] }}</td>
+          </tr>
+          <tr>
+            <td>Humidity 3pm</td>
+            <td>{{ weather_dict['humidity3pm'] }}</td>
+          </tr>
+          <tr>
+            <td>Wind Gust Speed</td>
+            <td>{{ weather_dict['wind_speed'] }}</td>
+          </tr>
+          <tr>
+            <td>Wind Gust Dir</td>
+            <td>{{ weather_dict['wind_dir'] }}</td>
+          </tr>
+          <tr>
+            <td>Wind Speed 9am</td>
+            <td>{{ weather_dict['windSpeed9am'] }}</td>
+          </tr>
+          <tr>
+            <td>Wind Speed 3pm</td>
+            <td>{{ weather_dict['windSpeed3pm'] }}</td>
+          </tr>
+          <tr>
+            <td>Wind Dir 9am</td>
+            <td>{{ weather_dict['windDir9am'] }}</td>
+          </tr>
+          <tr>
+            <td>Wind Dir 3pm</td>
+            <td>{{ weather_dict['windDir3pm'] }}</td>
+          </tr>
+          <tr>
+            <td>Rain Today</td>
+            <td>{{ weather_dict['raining'] }}</td>
+          </tr>
+          <tr>
+            <td>Rain Tomorrow</td>
+            <td>{{ weather_dict['rainTomorrow'] }}</td>
+          </tr>
+      </tbody>
+    </table>
+  </div>
 
 {% endblock %}
 
