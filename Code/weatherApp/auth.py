@@ -202,6 +202,7 @@ def passcode():
 
     return render_template('auth/passcode.html.jinja')
 
+from datetime import datetime
 
 @auth_bp.route('/admin_dashboard')
 def admin_dashboard():
@@ -216,9 +217,12 @@ def admin_dashboard():
     if user is None or not user['isAdmin']:
         return redirect(url_for('auth.login'))
     
-        # Fetch cities ordered by cityId
+    # Fetch cities ordered by cityId
     cities = db.get_db().execute(
         'SELECT * FROM City ORDER BY cityId'
     ).fetchall()
 
-    return render_template('admin_dashboard.html.jinja', cities=cities)
+    # Define the date in the desired format
+    url_args = {'city_name': 'Sydney', 'date': datetime(2017, 6, 24).strftime('%Y-%m-%d')}
+
+    return render_template('admin_dashboard.html.jinja', cities=cities, url_args=url_args)
