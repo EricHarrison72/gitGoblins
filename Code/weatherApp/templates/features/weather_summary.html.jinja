@@ -67,13 +67,20 @@ This template expects the following parameters:
   <br>
   <br>
 
+
   {% if rain_prediction == 0 %}
-    {% set will_or_will_not = 'WILL NOT'%}
+    {% set will_or_will_not = 'WILL NOT' %}
+  {% elif rain_prediction == 1 %}
+    {% set will_or_will_not = 'WILL' %}
   {% else %}
-    {% set will_or_will_not = 'WILL'%}
+    {% set error_detected = true %}
   {% endif %}
 
-  <p>Our AI model predicts that it <b>{{ will_or_will_not }}</b> rain tomorrow.</p>
+  {% if error_detected %}
+    <p>There was an error while performing the AI prediction.</p>
+  {% else %}
+    <p>Our AI model predicts that it <b>{{ will_or_will_not }}</b> rain tomorrow.</p>
+  {% endif %}
   
 
 

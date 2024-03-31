@@ -1,0 +1,40 @@
+{% extends 'base.html.jinja' %}
+
+{% block title %}
+  Admin Dashboard
+{% endblock %}
+
+
+{% block content %}
+  <h2>Admin Dashboard</h2>
+
+
+  <form id="highTempForm" method="post" action="/admin">
+    <div class="row">
+      <div class="col-md-6">
+        <label for="city">City:</label>
+        <select class="selectpicker" data-live-search="true" id="city" name="city_id">
+          {% for city in cities %}
+          <option value="{{ city.cityId }}">{{ city.cityName }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required>
+      </div>
+    </div><br>
+    <div class="row">
+      <div class="col-md-4">
+        <label for="tempMin">Temperature Min:</label>
+        <input type="number" id="tempMin" name="tempMin" required>
+      </div>
+      <div class="col-md-4">
+        <label for="tempMax">Temperature Max:</label>
+        <input type="number" id="tempMax" name="tempMax" required>
+      </div>
+      
+
+    <button type="submit">Update Temperature</button>
+  </form>
+{% endblock %}

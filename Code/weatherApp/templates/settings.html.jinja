@@ -1,0 +1,31 @@
+{% extends 'base.html.jinja' %}
+
+{% block title %}
+  User Settings
+{% endblock %}
+
+{% block header %}
+  User Settings
+{% endblock %}
+
+{% block content %}
+  <h2>User Settings</h2>
+
+  <form id="userSettingsForm" method="post" action="{{ url_for('views.settings') }}">
+    <div style="display: flex; align-items: center;">
+      <label for="emailList">Email List:</label>
+      <input type="checkbox" id="emailList" name="emailList" {% if user.emailList %} checked {% endif %}>
+    </div>
+    <br>
+
+    <label for="cityId">City:</label>
+    <select id="cityId" name="cityId">
+      {% for city in cities %}
+        <option value="{{ city.cityId }}" {% if user.cityId == city.cityId %} selected {% endif %}>{{ city.cityName }}</option>
+      {% endfor %}
+    </select><br><br>
+
+    <button type="submit">Update Settings</button>
+  </form>
+{% endblock %}
+
