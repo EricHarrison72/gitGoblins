@@ -9,6 +9,7 @@
 {% endblock %}
 
 {% block content %}
+<font size="+2">
 
 <ul>
     <div class="button-container">
@@ -21,16 +22,28 @@
   
     <div class="centered-content">
       {% if user_city_data %}
-
+      <font size="+3">
         <h2>{{ user_city_data.cityName }}</h2>
-
+      </font>
       {% else %}
         <p>No city data found for the user.</p>
       {% endif %}
 
+      {% if weather_icon == 'sun' %}
+        <img src="{{ url_for('static', filename='img/marker_sun.png') }}" alt="Sunny" width="110" height="90">
+      {% elif weather_icon == 'rain' %}
+        <img src="{{ url_for('static', filename='img/marker_rain.png') }}" alt="Rainy" width="110" height="90">
+      {% elif weather_icon == 'wind' %}
+        <img src="{{ url_for('static', filename='img/marker_wind.png') }}" alt="Windy" width="140" height="90">
+      {% elif weather_icon == 'cloud' %}
+        <img src="{{ url_for('static', filename='img/marker_cloud.png') }}" alt="Cloudy" width="120" height="90"> 
+      {% elif weather_icon == 'partcloud' %}
+        <img src="{{ url_for('static', filename='img/marker_partcloud.png') }}" alt="Partly Cloudy" width="130" height="90">  
+      {% else %}
+        <img src="{{ url_for('static', filename='img/marker_error.png') }}" alt="Error" width="70" height="70">  
+      {% endif %}
+      
       <h4>June 24, 2017</h4>
-
-
 
       <div class="table-container">
         <table class="scrollable-table">
@@ -51,77 +64,52 @@
             {% endif %}
 
             &nbsp;&nbsp;&nbsp;
-            {{ weather_data.rainfall }} %
-            <br><br>
 
-              <tr>
-                <td>Sunshine</td>
-                <td>{{ weather_data.sunshine }}</td>
-              </tr>
-              <tr>
-                <td>Rainfall</td>
-                <td>{{ weather_data.rainToday }}</td>
-              </tr>
-              <tr>
-                <td>Evaporation</td>
-                <td>{{ weather_data.evaporation }}</td>
-              </tr>
-              <tr>
-                <td>Cloud 9am</td>
-                <td>{{ weather_data.cloud9am }}</td>
-              </tr>
-              <tr>
-                <td>Cloud 3pm</td>
-                <td>{{ weather_data.cloud3pm }}</td>
-              </tr>
-              <tr>
-                <td>Pressure 9am</td>
-                <td>{{ weather_data.pressure9am }}</td>
-              </tr>
-              <tr>
-                <td>Pressure 3pm</td>
-                <td>{{ weather_data.pressure3pm }}</td>
-              </tr>
-              <tr>
-                <td>Humidity 9am</td>
-                <td>{{ weather_data.humidity9am }}</td>
-              </tr>
-              <tr>
-                <td>Humidity 3pm</td>
-                <td>{{ weather_data.humidity3pm }}</td>
-              </tr>
-              <tr>
-                <td>Wind Gust Speed</td>
-                <td>{{ weather_data.windGustSpeed }}</td>
-              </tr>
-              <tr>
-                <td>Wind Gust Dir</td>
-                <td>{{ weather_data.windGustDir }}</td>
-              </tr>
-              <tr>
-                <td>Wind Speed 9am</td>
-                <td>{{ weather_data.windSpeed9am }}</td>
-              </tr>
-              <tr>
-                <td>Wind Speed 3pm</td>
-                <td>{{ weather_data.windSpeed3pm }}</td>
-              </tr>
-              <tr>
-                <td>Wind Dir 9am</td>
-                <td>{{ weather_data.windDir9am }}</td>
-              </tr>
-              <tr>
-                <td>Wind Dir 3pm</td>
-                <td>{{ weather_data.windDir3pm }}</td>
-              </tr>
-              <tr>
-                <td>Rain Today</td>
-                <td>{{ weather_data.rainToday }}</td>
-              </tr>
-              <tr>
-                <td>Rain Tomorrow</td>
-                <td>{{ weather_data.rainTomorrow }}</td>
-              </tr>
+            {{ weather_data.rainfall }} mm
+
+            <br><br>
+            
+            {% set wind_dir = weather_data.windGustDir %}
+            {% if wind_dir == 'E' %}
+              <img src="{{ url_for('static', filename='img/arrows/E.png') }}" alt="East" width="30" height="30">
+            {% elif wind_dir == 'ENE' %}
+              <img src="{{ url_for('static', filename='img/arrows/ENE.png') }}" alt="East-Northeast" width="30" height="30">
+            {% elif wind_dir == 'ESE' %}
+              <img src="{{ url_for('static', filename='img/arrows/ESE.png') }}" alt="East-Southeast" width="30" height="30">
+            {% elif wind_dir == 'N' %}
+              <img src="{{ url_for('static', filename='img/arrows/N.png') }}" alt="North" width="30" height="30">
+            {% elif wind_dir == 'NE' %}
+              <img src="{{ url_for('static', filename='img/arrows/NE.png') }}" alt="Northeast" width="30" height="30">
+            {% elif wind_dir == 'NNE' %}
+              <img src="{{ url_for('static', filename='img/arrows/NNE.png') }}" alt="North-Northeast" width="30" height="30">
+            {% elif wind_dir == 'NNW' %}
+              <img src="{{ url_for('static', filename='img/arrows/NNW.png') }}" alt="North-Northwest" width="30" height="30">
+            {% elif wind_dir == 'NW' %}
+              <img src="{{ url_for('static', filename='img/arrows/NW.png') }}" alt="Northwest" width="30" height="30">
+            {% elif wind_dir == 'S' %}
+              <img src="{{ url_for('static', filename='img/arrows/S.png') }}" alt="South" width="30" height="30">
+            {% elif wind_dir == 'SE' %}
+              <img src="{{ url_for('static', filename='img/arrows/SE.png') }}" alt="Southeast" width="30" height="30">
+            {% elif wind_dir == 'SSE' %}
+              <img src="{{ url_for('static', filename='img/arrows/SSE.png') }}" alt="South-Southeast" width="30" height="30">
+            {% elif wind_dir == 'SSW' %}
+              <img src="{{ url_for('static', filename='img/arrows/SSW.png') }}" alt="South-Southwest" width="30" height="30">
+            {% elif wind_dir == 'SW' %}
+              <img src="{{ url_for('static', filename='img/arrows/SW.png') }}" alt="Southwest" width="30" height="30">
+            {% elif wind_dir == 'W' %}
+              <img src="{{ url_for('static', filename='img/arrows/W.png') }}" alt="West" width="30" height="30">
+            {% elif wind_dir == 'WNW' %}
+              <img src="{{ url_for('static', filename='img/arrows/WNW.png') }}" alt="West-Northwest" width="30" height="30">
+            {% elif wind_dir == 'WSW' %}
+              <img src="{{ url_for('static', filename='img/arrows/WSW.png') }}" alt="West-Southwest" width="30" height="30">
+            {% else %}
+              <img src="{{ url_for('static', filename='img/marker_error.png') }}" alt="Not Available" width="30" height="30">
+            {% endif %}
+
+            
+            &nbsp;&nbsp;&nbsp;
+            {{ weather_data.windGustSpeed }}km/h
+
             {% else %}
               <tr>
                 <td colspan="2">No weather data found for the specified date.</td>
