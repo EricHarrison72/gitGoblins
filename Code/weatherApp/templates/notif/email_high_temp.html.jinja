@@ -1,0 +1,20 @@
+{# 
+This template expects the following parameters: 
+ -- email_args - a dictionary with the keys: 
+    - city_name         The name of the city
+    - data_point_one    The data for the weather event
+#}
+<!DOCTYPE html>
+<html lang="en">
+<html>
+    <body>
+        <h1>Weather alert for {{ city_name }}.</h1>
+      	<br>
+      	<p>
+          Hello, you are receiving this alert because {{ city_name }} is expecting high temperatures.
+      	</p>
+     	 <p>
+      	  Expect a temperature high of {{ data_point_one }}&degC.
+      	</p>
+    </body>
+</html>
