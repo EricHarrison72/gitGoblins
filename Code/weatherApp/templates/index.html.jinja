@@ -14,7 +14,109 @@
     <li><a href = "{{ url_for('views.weather_summary') }}">Summary</a></li>
     <li>Current data graph (no page yet)</li>
 <li><a href = "{{ url_for('views.graph_past') }}">Past Data Graph</a></li>
+<li><a href = "{{ url_for('views.settings') }}">Settings</a></li>
+<li><a href="{{ url_for('auth.admin_dashboard') }}">Admin Dashboard</a></li>
   </ul>
+
+  {% if user_city_data %}
+
+  <h2>{{ user_city_data.cityName }}</h2>
+
+{% else %}
+  <p>No city data found for the user.</p>
+{% endif %}
+
+<h2>June 24, 2017</h2>
+
+<div class="table-container">
+  <table class="scrollable-table">
+    <tbody>
+      {% if weather_data %}
+        <tr>
+          <td>Temperature Max</td>
+          <td>{{ weather_data.tempMax }}</td>
+        </tr>
+        <tr>
+          <td>Temperature Min</td>
+          <td>{{ weather_data.tempMin }}</td>
+        </tr>
+        <tr>
+          <td>Sunshine</td>
+          <td>{{ weather_data.sunshine }}</td>
+        </tr>
+        <tr>
+          <td>Rainfall</td>
+          <td>{{ weather_data.rainfall }}</td>
+        </tr>
+        <tr>
+          <td>Evaporation</td>
+          <td>{{ weather_data.evaporation }}</td>
+        </tr>
+        <tr>
+          <td>Cloud 9am</td>
+          <td>{{ weather_data.cloud9am }}</td>
+        </tr>
+        <tr>
+          <td>Cloud 3pm</td>
+          <td>{{ weather_data.cloud3pm }}</td>
+        </tr>
+        <tr>
+          <td>Pressure 9am</td>
+          <td>{{ weather_data.pressure9am }}</td>
+        </tr>
+        <tr>
+          <td>Pressure 3pm</td>
+          <td>{{ weather_data.pressure3pm }}</td>
+        </tr>
+        <tr>
+          <td>Humidity 9am</td>
+          <td>{{ weather_data.humidity9am }}</td>
+        </tr>
+        <tr>
+          <td>Humidity 3pm</td>
+          <td>{{ weather_data.humidity3pm }}</td>
+        </tr>
+        <tr>
+          <td>Wind Gust Speed</td>
+          <td>{{ weather_data.windGustSpeed }}</td>
+        </tr>
+        <tr>
+          <td>Wind Gust Dir</td>
+          <td>{{ weather_data.windGustDir }}</td>
+        </tr>
+        <tr>
+          <td>Wind Speed 9am</td>
+          <td>{{ weather_data.windSpeed9am }}</td>
+        </tr>
+        <tr>
+          <td>Wind Speed 3pm</td>
+          <td>{{ weather_data.windSpeed3pm }}</td>
+        </tr>
+        <tr>
+          <td>Wind Dir 9am</td>
+          <td>{{ weather_data.windDir9am }}</td>
+        </tr>
+        <tr>
+          <td>Wind Dir 3pm</td>
+          <td>{{ weather_data.windDir3pm }}</td>
+        </tr>
+        <tr>
+          <td>Rain Today</td>
+          <td>{{ weather_data.rainToday }}</td>
+        </tr>
+        <tr>
+          <td>Rain Tomorrow</td>
+          <td>{{ weather_data.rainTomorrow }}</td>
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="2">No weather data found for the specified date.</td>
+        </tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+
 {% endblock %}
 
 

@@ -133,6 +133,12 @@ def test_predict_rain_integration(app):
         prediction = predict_rain(city_name, date)
         assert prediction in [0, 1], "Prediction should be 0 or 1"
         
+        city_name = 'Springfield'
+        date = '2027-01-01'
+        
+        prediction = predict_rain(city_name, date)
+        assert prediction == 'Error', "Prediction should be Error"
+        
 
 # Using patch to mock specific functions used in the test_and_save function
 # This test doesn't really test much, it just ensures the function makes it to the end and helps with coverage

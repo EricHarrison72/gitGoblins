@@ -146,9 +146,12 @@ def predict_rain(city_name, date):
     '''
     # Load the model that's saved when running init_db_command
     rf_model = joblib.load('rainfall_prediction_model.pkl')
-    
-    # Returns 1 if it predicts rain, and 0 if it doesn't predict rain
-    return _predict_rain_(city_name, date, rf_model)
+    try:
+        # Returns 1 if it predicts rain, and 0 if it doesn't predict rain
+        return _predict_rain_(city_name, date, rf_model)
+    except ValueError:
+        # If the city/date has no data it produces a ValueError and returns 'Error'
+        return 'Error'
 
 
 def train_and_save_model():
