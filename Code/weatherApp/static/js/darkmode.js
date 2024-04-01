@@ -1,5 +1,3 @@
-// darkmode.js
-
 function toggleDarkMode() {
     const body = document.getElementById('body');
     const darkModeEnabled = localStorage.getItem('darkMode') === 'enabled';
@@ -20,7 +18,17 @@ function saveDarkModePreference() {
     });
 }
 
+// Call toggleDarkMode on page load
 document.addEventListener('DOMContentLoaded', function() {
-    saveDarkModePreference();
     toggleDarkMode();
 });
+
+// Call toggleDarkMode whenever dark mode preference changes
+window.addEventListener('storage', function(event) {
+    if (event.key === 'darkMode') {
+        toggleDarkMode();
+    }
+});
+
+// Save dark mode preference when toggled
+saveDarkModePreference();

@@ -38,6 +38,7 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="{{ url_for('static', filename='js/darkmode.js') }}"></script> 
     <script src="{{ url_for('static', filename='js/init_map.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
