@@ -7,6 +7,7 @@ function toggleDarkMode() {
     } else {
         body.classList.remove('dark-mode');
     }
+    
 }
 
 function saveDarkModePreference() {
