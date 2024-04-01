@@ -1,4 +1,5 @@
 {% extends 'base.html.jinja' %}
+{% import 'helpers/selectors.html.jinja' as selectors %}
 
 {% block title %}
   Admin Dashboard
@@ -8,44 +9,76 @@
 {% block content %}
   <h2>Admin Dashboard</h2>
 
-  <form id="highTempForm" method="post" action="/admin">
-    <div style="overflow-x: auto;">
-      <table class='select-table'>
+  <div align="center">
+
+    <!--  section for changing weather data   -->
+
+    <div style="display: inline-block">
+     <form id="highTempForm" method="post" action="/admin">
+        <div style="overflow-x: auto;">
+          <table class='select-table'>
+            <tr>
+              <th>City:</th>
+              <th>Date:</th>
+              <th></th>
+            </tr>
+            <tr>
+              <td>
+                <select class="selectpicker" data-live-search="true" id="city" name="city_id">
+                  {% for city in cities %}
+                  <option value="{{ city.cityId }}">{{ city.cityName }}</option>
+                  {% endfor %}
+                </select>
+              </td>
+              <td>
+                <input type="date" id="date" name="date" required min="2008-01-01" max="2017-06-24" value="{{ url_args['date'] }}">
+              </td>
+              <td>
+                <button onclick="reloadPageWithArgs(`city_name=${getCityFromSelection()}&date=${getDateFromSelection()}`)">
+                  Submit
+                </button>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+       <div class="row">
+          <div class="col-md-4">
+            <label for="tempMin">Temperature Min:</label>
+            <input type="number" id="tempMin" name="tempMin" required>
+          </div>
+          <div class="col-md-4">
+            <label for="tempMax">Temperature Max:</label>
+            <input type="number" id="tempMax" name="tempMax" required>
+          </div>
+        </div>
+        <button type="submit">Update Temperature</button>
+      </form>
+    </div>
+
+    <!--  section for changing weather data   -->
+
+    <div style="display: inline-block">
+      <form id ="alertForm" method="post" action ="/admin">
+
+      <div style="overflow-x: auto;">
+      <table class="select-table">
         <tr>
-          <th>City:</th>
-          <th>Date:</th>
-          <th></th>
+          <th>Select City</th>
+          <th>Alert Type</th>
         </tr>
         <tr>
+          <td>{{ selectors.select_single_location( url_args['city_name']) }}</td>
+          <td>{{ selectors.select_weather_event( url_args['weather_alert']) }}</td>
           <td>
-            <select class="selectpicker" data-live-search="true" id="city" name="city_id">
-              {% for city in cities %}
-              <option value="{{ city.cityId }}">{{ city.cityName }}</option>
-              {% endfor %}
-            </select>
-          </td>
-          <td>
-            <input type="date" id="date" name="date" required min="2008-01-01" max="2017-06-24" value="{{ url_args['date'] }}">
-          </td>
-          <td>
-            <button onclick="reloadPageWithArgs(`city_name=${getCityFromSelection()}&date=${getDateFromSelection()}`)">
-              Submit
-            </button>
+            <input type="submit" value="Send Alert">
           </td>
         </tr>
       </table>
-    </div>
 
-    <div class="row">
-      <div class="col-md-4">
-        <label for="tempMin">Temperature Min:</label>
-        <input type="number" id="tempMin" name="tempMin" required>
-      </div>
-      <div class="col-md-4">
-        <label for="tempMax">Temperature Max:</label>
-        <input type="number" id="tempMax" name="tempMax" required>
+      </form>
+
       </div>
     </div>
-    <button type="submit">Update Temperature</button>
-  </form>
+  </div>
 {% endblock %}
