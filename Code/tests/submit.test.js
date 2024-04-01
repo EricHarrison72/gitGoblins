@@ -11,7 +11,6 @@ Written with some help from ChatGPT 4.
 const {
     getDateFromSelection,
     getCityFromSelection,
-    getCitiesFromSelection,
     getStatFromSelection,
     reloadPageWithArgs
 } = require('../weatherApp/static/js/submit.js');

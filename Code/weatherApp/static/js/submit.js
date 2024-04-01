@@ -43,7 +43,6 @@ function reloadPageWithArgs(urlArgs){
 module.exports = {
     getDateFromSelection,
     getCityFromSelection,
-    getCitiesFromSelection,
     getStatFromSelection,
     reloadPageWithArgs
 }
