@@ -7,31 +7,42 @@ Contains unit tests for queries.py
 import pytest
 from weatherApp.queries import (
     get_weather_data,
-    get_temp_in_range,
-    _add_space
+    get_data_in_range,
+    _generate_column_script,
+    add_space
 )
+# ==================================
+# SMALLER TESTS
+# -------------
+def test_add_space():
+      assert add_space('AliceSprings') == 'Alice Springs'
+      assert add_space('NewYorkCity') == 'New York City'
 
-# --------
-# FIXTURES
-'''
-Note: I had to split these dicts into 3 separate fixtures because the old fixture
-built incorrectly on GitHub Actions, causing integration tests to fail
-'''
+def test_generate_column_script(app):
+    expected_column_script_A = 'Column1,Column2,Column3'
+    assert (_generate_column_script(['Column1', 'Column2', 'Column3'])
+            == expected_column_script_A)
+    
+    expected_column_script_B = 'Column1,Column4'
+    assert (_generate_column_script(['Column1', 'Column4'])
+            == expected_column_script_B)
 
-# Expected dict for: params passed, data exists
+# =======================================
+# get_weather_data FIXTURES
+# -------------------------
 @pytest.fixture()
-def expected_dict_1():
-    # data that I know is in test DB
-
+def expected_weather_dict():
     return {
+         # (data that I know is in test DB)
+        'params passed, data exists': {
             'city_name': 'Springfield', 
             'date': '2023-01-01', 
             'temp_high': 10.0, 
             'temp_low': -5.0, 
             'rainfall': 0.0, 
             'rain_today': 'No', 
-            'wind_speed': 30, 
-            'wind_dir': 'N',
+            'wind_speed': 12, 
+            'wind_dir': 'W',
             'cloud_3pm': 3,
             'sunshine': 8,
             'evaporation': 4.5,
@@ -44,14 +55,10 @@ def expected_dict_1():
             'wind_speed_3pm': 20,
             'wind_dir_9am': 'N',
             'wind_dir_3pm': 'S',
-            'rain_tomorrow': 'No'
-        }
-
-# Expected dict for: params passed, no data exists
-@pytest.fixture()
-def expected_dict_2():
-        # There is no data for Albury in the test DB
-        return {
+            'rain_tomorrow': 'Yes'
+        },
+        # (There is no data for Albury in the test DB)
+        'params passed, no data exists': {
             'city_name': 'NO DATA for Albury on this date', 
             'date': '2007-12-01', 
             'temp_low': 0,
@@ -73,12 +80,8 @@ def expected_dict_2():
             'wind_dir_3pm': '?',
             'rain_today': '?',
             'rain_tomorrow': '?'
-        }
-
-# Expected dict for: 'None' params passed
-@pytest.fixture()
-def expected_dict_3():
-        return {
+        },
+        '`None` params passed': {
             'city_name': 'NO DATA',
             'date': 'No Date',
             'temp_low': 0,
@@ -101,49 +104,106 @@ def expected_dict_3():
             'rain_today': '?',
             'rain_tomorrow': '?'
         }
+    }
 
-# Note
+# get_weather_data TESTS
+# ----------------------
+def test_get_weather_data(app, expected_weather_dict):
+
+    with app.app_context():
+        assert (expected_weather_dict['params passed, data exists']
+                == get_weather_data('Springfield', '2023-01-01'))
+
+        assert (expected_weather_dict['params passed, no data exists']
+                == get_weather_data('Albury', '2007-12-01'))
+
+        assert (expected_weather_dict['`None` params passed']
+                == get_weather_data(None, None))
+
+# =======================================
+# TODO
 '''
-Since sqlite queries return Sqlite3.Row objects that are hard to mock,
-it make the most sence to make the expected tables dictionaries and
-to then iterate over each item in both the expected dictionary and real
-row, testing equality for each pair of items instead of for the whole object.
+nontesting:
+- handle incorrect date range error (in query and graphs)
+
+testing:
+- for multiple columns (temp), for one column (rain):
+    - 1. with valid city and dates - check return vals -- MOST IMPORTANT
+    - 2. without valid city and dates - check error response
+- for invalid column - check error response? maybe
 '''
+# get_data_in_range FIXTURES
+# -------------------------
+class ValidInfo:
+    def __init__(
+        self,
+        city_and_dates,
+        multiple_cols,
+        single_col,
+        expected_mult_col_table,
+        expected_single_col_table
+    ):
+        self.city_and_dates = city_and_dates 
+        self.multiple_cols = multiple_cols
+        self.single_col = single_col
+        self.expected_mult_col_table = expected_mult_col_table
+        self.expected_single_col_table = expected_single_col_table
+
 @pytest.fixture()
-def expected_temp_table():
-     return [
-          {'date':'2023-01-01', 'temp_low': -5.0, 'temp_high' : 10.0},
-          {'date':'2023-01-02', 'temp_low': -3.0, 'temp_high' : 20.0},
-          {'date':'2023-01-03', 'temp_low': -2.0, 'temp_high' : 30.0}
-     ]
+def valid_info():
+    multiple_cols = ['tempMin', 'tempMax']
+    single_col = ['rainfall']
 
-# --------
-# TESTS
+    city_and_dates = {
+        'city_name': 'Springfield',
+        'start_date': '2023-01-01',
+        'end_date': '2023-01-03'
+    }
+    expected_mult_col_table = [
+        {'date':'2023-01-01', 'tempMin': -5.0, 'tempMax' : 10.0},
+        {'date':'2023-01-02', 'tempMin': -3.0, 'tempMax' : 'NA'},
+        {'date':'2023-01-03', 'tempMin': 'NA', 'tempMax' : 30.0}
+    ]
+    expected_single_col_table= [
+        {'date':'2023-01-01', 'rainfall': 0.0},
+        {'date':'2023-01-02', 'rainfall': 5.0},
+        {'date':'2023-01-03', 'rainfall': 'NA'}
+    ]
 
-def test_get_weather_data(app, expected_dict_1, expected_dict_2, expected_dict_3):
+    return ValidInfo(
+        city_and_dates,
+        multiple_cols,
+        single_col,
+        expected_mult_col_table,
+        expected_single_col_table
+    )
+
+# get_data_in_range TESTS
+#------------------------
+def test_get_data_in_range__valid_query(app, valid_info):
 
     with app.app_context():
-        # params passed, data exists
-        assert expected_dict_1 == get_weather_data('Springfield', '2023-01-01')
+        real_mult_col_table = get_data_in_range(valid_info.multiple_cols, valid_info.city_and_dates)
+        real_single_col_table = get_data_in_range(valid_info.single_col, valid_info.city_and_dates)
 
-        # params passed, no data exists
-        assert expected_dict_2 == get_weather_data('Albury', '2007-12-01')
+    num_rows = len( valid_info.expected_mult_col_table)
 
-        #'None' params passed
-        assert expected_dict_3 == get_weather_data(None, None)
+    for row in range(num_rows):
+        for key in valid_info.expected_mult_col_table [row].keys():
+            assert (
+                valid_info.expected_mult_col_table [row][key]
+                == real_mult_col_table [row][key]
+            )
 
-def test_add_space():
-      assert _add_space('AliceSprings') == 'Alice Springs'
-      assert _add_space('NewYorkCity') == 'New York City'
+        for key in valid_info.expected_single_col_table [row].keys():
+            assert (
+                valid_info.expected_single_col_table [row][key]
+                == real_single_col_table [row][key]
+            )
 
-def test_get_temp_in_range(app, expected_temp_table):
-    
-    with app.app_context():
-        real_temp_table = get_temp_in_range('Springfield', '2023-01-01', '2023-01-03')
-
-    for i in range(len(expected_temp_table)):
-        for key in expected_temp_table[i].keys():
-            assert expected_temp_table[i][key] == real_temp_table[i][key]
-
-# --------
-
+def test_get_data_in_range__invalid_query(app):
+    '''
+    Test not yet implemented because responding to invalid queries is not
+    yet part of get_data_in_range (this is a TDD reminder to do that tho).
+    '''
+    pass

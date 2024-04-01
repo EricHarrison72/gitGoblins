@@ -6,8 +6,10 @@ Contains methods to retrieve data from the database
 # ----------------------------------
 from . import db
 
-# retrieves weather data given city name and date
-def get_weather_data (city_name, date):
+def get_weather_data (city_name: str, date: str):
+    '''
+    retrieves weather data given city name and date
+    '''
 
     if city_name != None:
         city_name.replace(' ', '') # (just in case)
@@ -75,14 +77,14 @@ def get_weather_data (city_name, date):
 
         # If a city name and date were passed, put that in the dict
         try:
-            weather_data_dict['city_name'] += ' for ' + _add_space(city_name) + ' on this date'
+            weather_data_dict['city_name'] += ' for ' + add_space(city_name) + ' on this date'
             weather_data_dict['date'] = date
         except:
             pass
 
     else:
         weather_data_dict = {
-        'city_name': _add_space(weather_data_row['city_name']), 
+        'city_name': add_space(weather_data_row['city_name']), 
         'date': weather_data_row['date'], 
         'temp_low': weather_data_row['temp_low'], 
         'temp_high': weather_data_row['temp_high'], 
@@ -107,9 +109,12 @@ def get_weather_data (city_name, date):
 
     return weather_data_dict
 
-# helper method that adds a space to the city name if it should have one
-# eg 'AliceSprings' -> 'Alice Springs'
-def _add_space(city_name: str):
+
+def add_space(city_name: str):
+    '''
+    - Helper method that adds a space to the city name if it should have one
+    - eg 'AliceSprings' -> 'Alice Springs'
+    '''
 
     upper_count = 0 # number of uppercase letters in city_name
 
@@ -124,24 +129,38 @@ def _add_space(city_name: str):
 
     return city_name
 
-def get_temp_in_range(city_name, start_date, end_date):
+
+def get_data_in_range(columns: list, city_and_dates: dict):
+    '''
+    - Returns requested data columns for one city between two dates
+    - used in graphs.py for past graph stuff
+    '''
+    city_name = city_and_dates['city_name']
+    start_date = city_and_dates['start_date']
+    end_date = city_and_dates['end_date']
 
     if city_name != None:
         city_name.replace(' ', '') # (just in case)
 
     datb = db.get_db()
-
-    #SQL query to get data for specific city
-    #weather_data is an sqlite3 Row object
-    temp_in_range = datb.execute('''
+    query = datb.execute(f'''
         SELECT
-            WeatherInstance.date, 
-            WeatherInstance.tempMin AS temp_low,
-            WeatherInstance.tempMax AS temp_high
+            date,
+            {_generate_column_script(columns)}
         FROM WeatherInstance
         JOIN City ON WeatherInstance.cityId = City.cityId
         WHERE City.cityName = ? AND date BETWEEN ? AND ?
     ''', (city_name,start_date, end_date)).fetchall()
 
-    return temp_in_range
+    return query
+
+def _generate_column_script(columns: list):
+    '''
+    Helper method that turns a list of columns into sql script snippet
+    '''
+    column_script = ''
+    for column in columns:
+        column_script += f'{column},'
+
+    return column_script[:-1] # (sliced to get rid of last comma)
 
