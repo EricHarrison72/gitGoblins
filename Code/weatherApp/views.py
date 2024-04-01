@@ -82,10 +82,14 @@ def weather_summary():
     
     rain_prediction = predictions.predict_rain(url_args['city_name'], url_args['date'])
     
+    weather_dict = queries.get_weather_data(url_args['city_name'], url_args['date'])
+    weather_icon = weather.determine_icon_based_on_weather(weather_dict)
+     
     return render_template(
         "features/weather_summary.html.jinja",
         weather_dict = weather_dict,
         rain_prediction = rain_prediction,
+        weather_icon = weather_icon,
         url_args = url_args)
 
 @views_bp.route('/map')
