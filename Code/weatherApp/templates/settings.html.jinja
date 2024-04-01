@@ -25,7 +25,16 @@
       {% endfor %}
     </select><br><br>
 
-    <button type="submit">Update Settings</button>
+    <div class="button-container">
+      <button type="submit" class="button-style">Update Settings</button>
+      <label class="switch">
+        <input type="checkbox" id="darkModeToggle">
+        <span class="slider round"></span>
+      </label>
+    </div>
   </form>
 {% endblock %}
 
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/darkmode.js') }}"></script>
+{% endblock %}
