@@ -5,6 +5,7 @@ Contains macros for selection menus, including:
 - select_date
 - select_single_location
 - select_multiple_locations
+- select_weather_event
 
 Docs:
 - [Jinja2 Docs: Macros](https://jinja.palletsprojects.com/en/3.1.x/templates/#macros)
@@ -142,4 +143,26 @@ Docs:
         trust me, that will be better than using Bootstrap or some
         other external library (in the context of this project)
     #}
+{% endmacro %}
+
+{% macro select_weather_event(url_arg_event='HighTemperature') %}
+
+    {% if url_arg_event == None %}
+        {% set url_arg_event = 'HighTemperature' %}
+    {% endif %}
+
+    <select id="eventSelect">
+        {% set events = [
+            'High Temperature',
+            'Low Temperature',
+            'Wind',
+            'Rain'
+        ] %}
+
+        {% for i in range(events|length) %}
+            <option value="{{ i+1 }}" {% if events[i]|replace(' ','') == url_arg_event %} selected {% endif %}>
+                {{ events[i] }}
+            </option>
+        {% endfor %}
+    </select>
 {% endmacro %}
