@@ -22,16 +22,29 @@ built incorrectly on GitHub Actions, causing integration tests to fail
 @pytest.fixture()
 def expected_dict_1():
     # data that I know is in test DB
+
     return {
             'city_name': 'Springfield', 
             'date': '2023-01-01', 
             'temp_high': 10.0, 
             'temp_low': -5.0, 
             'rainfall': 0.0, 
-            'raining': 'No', 
+            'rain_today': 'No', 
             'wind_speed': 30, 
             'wind_dir': 'N',
-            'cloud': 3
+            'cloud_3pm': 3,
+            'sunshine': 8,
+            'evaporation': 4.5,
+            'cloud_9am': 1,
+            'pressure_9am': 1013.5,
+            'pressure_3pm': 1010.5,
+            'humidity_9am': 80,
+            'humidity_3pm': 50,
+            'wind_speed_9am': 10,
+            'wind_speed_3pm': 20,
+            'wind_dir_9am': 'N',
+            'wind_dir_3pm': 'S',
+            'rain_tomorrow': 'No'
         }
 
 # Expected dict for: params passed, no data exists
@@ -41,28 +54,52 @@ def expected_dict_2():
         return {
             'city_name': 'NO DATA for Albury on this date', 
             'date': '2007-12-01', 
-            'temp_high': 0, 
-            'temp_low': 0, 
-            'rainfall': 0.0, 
-            'raining': '?', 
-            'wind_speed': 0, 
+            'temp_low': 0,
+            'temp_high': 0,
+            'sunshine': 0,
+            'rainfall': 0.0,
+            'evaporation': 0.0,
+            'cloud_9am': 0,
+            'cloud_3pm': 0,
+            'pressure_9am': 0.0,
+            'pressure_3pm': 0.0,
+            'humidity_9am': 0,
+            'humidity_3pm': 0,
+            'wind_speed': 0,
             'wind_dir': '?',
-            'cloud': 0
+            'wind_speed_9am': 0,
+            'wind_speed_3pm': 0,
+            'wind_dir_9am': '?',
+            'wind_dir_3pm': '?',
+            'rain_today': '?',
+            'rain_tomorrow': '?'
         }
 
 # Expected dict for: 'None' params passed
 @pytest.fixture()
 def expected_dict_3():
         return {
-            'city_name': 'NO DATA', 
-            'date': 'No Date', 
-            'temp_high': 0, 
-            'temp_low': 0, 
-            'rainfall': 0.0, 
-            'raining': '?', 
-            'wind_speed': 0, 
+            'city_name': 'NO DATA',
+            'date': 'No Date',
+            'temp_low': 0,
+            'temp_high': 0,
+            'sunshine': 0,
+            'rainfall': 0.0,
+            'evaporation': 0.0,
+            'cloud_9am': 0,
+            'cloud_3pm': 0,
+            'pressure_9am': 0.0,
+            'pressure_3pm': 0.0,
+            'humidity_9am': 0,
+            'humidity_3pm': 0,
+            'wind_speed': 0,
             'wind_dir': '?',
-            'cloud': 0
+            'wind_speed_9am': 0,
+            'wind_speed_3pm': 0,
+            'wind_dir_9am': '?',
+            'wind_dir_3pm': '?',
+            'rain_today': '?',
+            'rain_tomorrow': '?'
         }
 
 # Note
