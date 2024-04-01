@@ -102,6 +102,10 @@ table, th, td {
 }
 
 /* Dark mode */
+body.dark-mode {
+  background-color: #666; /* Change background color to grey */
+}
+
 body.dark-mode nav,
 body.dark-mode .button-style {
   background-color: #2a2a2a; /* Change yellow to dark grey */
@@ -116,3 +120,12 @@ body.dark-mode .button-style {
   color: #fff; /* Change green text to white */
 }
 
+body.dark-mode .select-table {
+  background-color: #2a2a2a; /* Change yellow to dark grey */
+  color: #fff; /* Change text color to white */
+}
+
+body.dark-mode .select-table th,
+body.dark-mode .select-table td {
+  padding: 8px; /* Adjust table cell padding */
+}
