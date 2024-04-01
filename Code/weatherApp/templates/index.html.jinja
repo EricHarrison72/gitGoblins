@@ -22,13 +22,15 @@
   
   <div class="centered-content">
     {% if user_city_data %}
-    <font size="+3">
-      <h2>{{ user_city_data.cityName }}</h2>
-    </font>
+        <font size="+3">
+            <h2>{{ user_city_data.cityName|replace('BadgerysCreek', 'Badgerys Creek')|replace('MountGinini', 'Mount Ginini')|replace('NorahHead', 'Norah Head')|replace('NorfolkIsland', 'Norfolk Island')|replace('PearceRAAF', 'Pearce RAAF')|replace('MelbourneAirport', 'Melbourne Airport')|replace('SydneyAirport', 'Sydney Airport')|replace('WaggaWagga', 'Wagga Wagga')|replace('Williamtown', 'Williamtown')|replace('MountGambier', 'Mount Gambier')|replace('PerthAirport', 'Perth Airport')|replace('SalmonGums', 'Salmon Gums')|replace('AliceSprings', 'Alice Springs')|replace('GoldCoast', 'Gold Coast')|replace('SunshineCoast', 'Sunshine Coast')|replace('PortMacquarie', 'Port Macquarie')|replace('MountIsa', 'Mount Isa')|replace('CoffsHarbour', 'Coffs Harbour') }}</h2>
+        </font>
     {% else %}
-      <p>No city data found for the user.</p>
+        <p>No city data found for the user.</p>
     {% endif %}
+</div>
 
+<div class="centered-content">
     {% if weather_icon == 'sun' %}
       <img src="{{ url_for('static', filename='img/marker_sun.png') }}" alt="Sunny" width="110" height="90">
     {% elif weather_icon == 'rain' %}
@@ -117,6 +119,7 @@
           {% endif %}
         </tbody>
       </table>
+    </div>
     </div>
   </div>
 </ul>
