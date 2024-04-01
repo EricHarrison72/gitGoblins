@@ -33,8 +33,8 @@ def get_graph_html(url_args=DEFAULT_url_args):
     graph = _get_graph(url_args)
     return _get_graph_as_string(graph)
 
-def _date_range_is_invalid(dates: dict):
-    if dates['start_date'] > dates['end_date']:
+def _date_range_is_valid(dates: dict):
+    if dates['start_date'] < dates['end_date']:
         return True
     else:
         return False
@@ -44,7 +44,7 @@ def _get_graph(url_args=DEFAULT_url_args):
     Not the function you should use outside of this module.
     You're thinking of get_graph_html.
     '''
-    if _date_range_is_invalid(url_args): 
+    if not _date_range_is_valid(url_args): 
         return "Date Error"
 
     match url_args['stat']:
@@ -251,8 +251,6 @@ class WindGraph(WeatherGraph):
         self.freq_table = DataFrame(freq_data)
         self.freq_table.columns = ['Direction', 'Speed', 'Frequency']
 
-    # TODO: some cities randomly cause a conversion to float, which breaks the code
-        # - Update: it has something to do with nums in least interval
     def _cut_speed_into_bins(self):
         speed_bins = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200]
         speeds_as_intervals = DataFrame(cut(self.dataframe['Speed'], speed_bins, right=True))['Speed']

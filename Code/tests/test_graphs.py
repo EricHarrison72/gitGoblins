@@ -4,20 +4,13 @@
 Unit tests for the classes and methods in graphs.py
 Note that tests are separated out so that they show up
 as individual tests in terminal and testing tab.
-
-The Plan:
-- Create instances of each class, test only that instance variables are what you expect them to be
-- test for: range has no missing values
-- range has missing values
-- range is invalid
-- see what coverage is after that and then move forward
-
-- also test get_fig
 '''
 # --------------------------------------------------
 import pytest
 from weatherApp.graphs import (
-    get_graph_html,
+    _get_graph,
+    _date_range_is_valid,
+    _get_graph_as_string,
     WeatherGraph,
     TemperatureGraph,
     RainGraph,
@@ -210,58 +203,59 @@ def wind_graph_tests(expected_wind_graph, real_wind_graph):
 # WIND GRAPH - TESTS
 # ------------------
 def test_WindGraph_dataframe(wind_graph_tests):
+    '''Also tests _cut_speed_bins in this case'''
     wind_graph_tests.test_dataframe()
 
 def test_WindGraph_figure(wind_graph_tests):
     wind_graph_tests.test_figure()
 
-# @pytest.fixture()
-# def expected_freq_table():
-#         directions =  ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
-#         bins =  ['1-10', '11-20', '21-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100', '101-200'],
-        
-#         expected_freq_table = {
-#             'Direction': [],
-#             'Speed': [],
-#             'Frequency': []
-#         }
+# ================================================
+# GET GRAPH FIXTURES
+#-------------------
+@pytest.fixture()
+def url_arg_inputs():
+    return {
+        'Date Error': {
+            'stat': 'temp',
+            'city_name': 'Springfield',
+            'start_date': '2023-01-03',
+            'end_date': '2023-01-01'
+        },
+        'Stat Error': {
+            'stat': 'nonsense',
+            'city_name': 'Springfield',
+            'start_date': '2023-01-01',
+            'end_date': '2023-01-03'
+        },
+        'Fully valid': {
+            'stat': 'temperature',
+            'city_name': 'Springfield',
+            'start_date': '2023-01-01',
+            'end_date': '2023-01-03'
+        }
+    }
 
-#         for dir in directions:
-#             for bin in bins:
-#                 expected_freq_table['Direction'].append(dir)
-#                 expected_freq_table['Speed'].append(bin)
-#                 expected_freq_table['Frequency'].append(0)
+# GET GRAPH TESTS
+# ---------------
+def test_date_range_is_invalid(url_arg_inputs):
+    assert not _date_range_is_valid(url_arg_inputs['Date Error'])
+    assert _date_range_is_valid(url_arg_inputs['Fully valid'])
 
-#         w_11_20 = 12*1 # W has idx 12 in directions, 11-20 has idx 1 in bins
-#         nne_31_40 = 1*3 # NNE has idx 1 in directions, 31-40 has idx 3 in bins
-#         sw_101_200 = 10*10 # SW has idx 10 in directions, 101-200 has idx 10 in bins
+def test_get_graph(app, url_arg_inputs):
+    assert _get_graph(url_arg_inputs['Date Error']) == "Date Error"
+    assert _get_graph(url_arg_inputs['Stat Error']) == None
 
-#         expected_freq_table['Frequency'][w_11_20] = 1
-#         expected_freq_table['Frequency'][nne_31_40] = 1
-#         expected_freq_table['Frequency'][sw_101_200] = 1
+    with app.app_context():
+        graph_w_valid_inputs = _get_graph(url_arg_inputs['Fully valid'])
+    
+    assert isinstance(graph_w_valid_inputs, WeatherGraph)
 
-#         return expected_freq_table
+def test_get_graph_as_string(real_temp_graph):
+    assert (_get_graph_as_string("Date Error") 
+            == "<p>Error. You entered an invalid date range.</p>")
+    assert (_get_graph_as_string(None) 
+            == "There was an error generating this graph.")
+    
+    assert ("<script" in _get_graph_as_string(real_temp_graph))
 
-# TODO - get this working - current problem is .at[] doesn't work
-    # OR DON'T - graphs.py has 89% coverage now... and frequency stuff is covered
-def test_WindGraph_freq_table( real_wind_graph):
-    # real_freq = real_wind_graph.freq_table
-    # expected_filled_freq = 1
-    # expected_empty_freq = 0
-
-    # assert real_freq.at['W', '11-20'] == expected_filled_freq
-    # assert real_freq.at['NNE', '31-40'] == expected_filled_freq
-    # assert real_freq.at['SW', '101-200'] == expected_filled_freq
-
-    # assert real_freq.at['W', '31-40'] == expected_empty_freq
-
-    # # for col in expected_ft.keys():
-    # #         for row in range( len(expected_ft[col])):
-    # #             assert (real_ft[col][row] == expected_ft[col][row])
-    pass
-
-# TODO
-'''
-- also remember to write test for get_fig_html
-    - maybe split into two functions; get_fig and get_fig_html?
-'''
+# =======================================================================
