@@ -90,14 +90,6 @@ def test_select_single_location_params(template_name):
     expected_selected_city_id = '4' # for Alice Springs
     assert f'<option value="{expected_selected_city_id}"  selected >' in rendered
 
-
-# ] select multiple location tests [
-def test_select_multiple_locations_defaults(template_name):
-    pass
-
-def test_select_multiple_locations_params(template_name):
-    pass
-
 # ] select statistic tests [
 def test_select_stat_defaults(template_name):
     rendered = get_rendered_template(

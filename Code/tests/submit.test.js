@@ -84,18 +84,6 @@ describe('getCityFromSelection', () => {
      });
 });
 
-
-describe('getCitiesFromSelection', () => {
-//----------------------------------------
-    //TODO - eric
-    
-    // Mocks
-    //------
-
-    // Tests
-    //------
-});
-
 describe('getStatFromSelection', () => {
 //--------------------------------------
     // Mocks

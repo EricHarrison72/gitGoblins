@@ -24,10 +24,6 @@ function getCityFromSelection() {
     return cityName;
 }
 
-function getCitiesFromSelection() {
-    //TODO - Eric
-}
-
 function getStatFromSelection() {
     var sel = document.getElementById('statSelect');
     var stat = sel.options[sel.selectedIndex].text;
