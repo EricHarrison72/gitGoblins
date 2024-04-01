@@ -18,6 +18,8 @@ import os
 from flask import current_app, g
 from flask.cli import with_appcontext
 
+from . import predictions
+
 #Returns current database
 def get_db():
     if 'db' not in g:
@@ -50,6 +52,7 @@ def init_db_command():
     init_db()
     _populate_db()
     click.echo('Initialized and populated the database.')
+    predictions.train_and_save_model()
 
 #Used to initialize database commands in app factory
 def init_app(app):
@@ -124,3 +127,30 @@ def _initialize_cities(cur):
     return cities
 
 
+# Get user settings from the database
+def get_user_settings(user_id):
+    db = get_db()
+    user_settings = db.execute(
+        "SELECT * FROM User WHERE userId = ?", (user_id,)
+    ).fetchone()
+    return user_settings
+
+# Get city data from the database
+def get_cities():
+    db = get_db()
+    cities = db.execute("SELECT * FROM City").fetchall()
+    return cities
+
+# Update user settings in the database
+def update_user_settings(user_id, email_list, city_id):
+    db = get_db()
+    cur = db.cursor()
+
+    update_sql = '''UPDATE User 
+                    SET  emailList=?,  cityId=?
+                    WHERE userId=?'''
+
+    cur.execute(update_sql, (email_list, city_id, user_id))
+    db.commit()
+
+    cur.close()

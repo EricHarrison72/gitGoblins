@@ -1,21 +1,27 @@
 {% extends 'base.html.jinja' %}
 
+{% block title %}
+  Admin Register
+{% endblock %}
+
 {% block header %}
-  {% block title %}Register{% endblock %}
+  Admin Register
 {% endblock %}
 
 {% block content %}
   <form method="post">
-    <br>
-    
     <label for="email">Email</label>
     <input type="email" name="email" id="email" required>
+    
     <label for="password">Password</label>
     <input type="password" name="password" id="password" required>
+    
     <label for="first_name">First Name</label>
     <input type="text" name="first_name" id="first_name">
+    
     <label for="last_name">Last Name</label>
     <input type="text" name="last_name" id="last_name">
+
     <label>Select City</label>
     <div>
       <select class="selectpicker" data-live-search="true" id="city_id" name="city_id">
@@ -24,12 +30,14 @@
         {% endfor %}
       </select>
     </div>
+
     <div style="display: flex; align-items: center;">
       <label for="email_list">Subscribe to Email List</label>
       <input type="checkbox" name="email_list" id="email_list">
     </div>
+
     <input type="submit" value="Register">
   </form>
 
-  <li><a href="{{ url_for('auth.login') }}">Already have an account?</a>
+  <li><a href="{{ url_for('auth.login') }}">Already have an account?</a></li>
 {% endblock %}

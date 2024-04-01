@@ -18,6 +18,9 @@ Starter code sources:
 from flask import Flask
 import os
 from flask_bcrypt import Bcrypt
+from flask_mail import Mail
+
+mail = Mail()
 
 #Initalizes database and returns app with working db
 def create_app(test_config=None):
@@ -54,5 +57,21 @@ def create_app(test_config=None):
     from .auth import auth_bp
     app.register_blueprint(auth_bp)
     
+
+    from .admin import admin_bp
+    app.register_blueprint(admin_bp)
+
+    # Notification configurations
+    app.config['MAIL_SERVER'] = "smtp.gmail.com"
+    app.config['MAIL_PORT'] = 465
+    app.config['MAIL_DEFAULT_SENDER'] = "gitgoblins4@gmail.com"
+    app.config['MAIL_USERNAME'] = "gitgoblins4@gmail.com"
+    app.config['MAIL_PASSWORD'] = "chji daka plxk vvlr"
+    app.config['MAIL_USE_TLS'] = False
+    app.config['MAIL_USE_SSL'] = True
+
+    mail.init_app(app)
+
+
 
     return app
