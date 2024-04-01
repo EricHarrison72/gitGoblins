@@ -187,6 +187,10 @@ class RainGraph(WeatherGraph):
             labels = {"value": "Rainfall (mm)"},
         )
 
+        self.fig.update_traces(
+            marker_line_width=0.1
+        )
+
 
 # ========================
 class WindGraph(WeatherGraph):
