@@ -108,3 +108,18 @@ def get_temp_in_range(city_name, start_date, end_date):
 
     return temp_in_range
 
+def get_alert_emails(city_name):
+
+    if city_name != None:
+        city_name.replace(' ', '') # (just in case)
+
+    datb = db.get_db()
+
+    #SQL query to get the list of emails that are signed up for alerts for a specific city
+    alert_emails = datb.execute('''
+        SELECT User.email
+        FROM User JOIN UsersCities ON User.userId = UsersCities.userId JOIN City ON UsersCities.cityId = City.cityId
+        WHERE cityName = ? AND User.emailList = 'TRUE'      
+    ''', (city_name)).fetchall()
+
+    return alert_emails
