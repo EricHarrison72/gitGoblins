@@ -23,22 +23,53 @@ DEFAULT_url_args = {
     'end_date': '2017-06-24'
 }
 
+# GET GRAPH METHODS
+# ------------------
 def get_graph_html(url_args=DEFAULT_url_args):
+    '''
+    USE THIS outside of graphs.py
+    Note: this function was written this way to make it easier to test the other get graph functions.
+    '''
+    graph = _get_graph(url_args)
+    return _get_graph_as_string(graph)
+
+def _date_range_is_invalid(dates: dict):
+    if dates['start_date'] > dates['end_date']:
+        return True
+    else:
+        return False
+
+def _get_graph(url_args=DEFAULT_url_args):
+    '''
+    Not the function you should use outside of this module.
+    You're thinking of get_graph_html.
+    '''
+    if _date_range_is_invalid(url_args): 
+        return "Date Error"
 
     match url_args['stat']:
         case "temperature":
             graph = TemperatureGraph(url_args)
-        
         case "wind":
             graph = WindGraph(url_args)
-
         case "rain":
             graph = RainGraph(url_args)
-
         case _:
             graph = None
 
-    return graph.get_html()
+    return graph
+
+def _get_graph_as_string(graph):
+    '''
+    Not the function you should use outside of this module.
+    You're thinking of get_graph_html.
+    '''
+    if graph == "Date Error":
+        return "<p>Error. You entered an invalid date range.</p>"
+    elif graph == None:
+        return "There was an error generating this graph."
+    else:
+        return graph.get_html()
 
 # ==================================
 class WeatherGraph(ABC):
