@@ -27,7 +27,7 @@ from . import (
     db,
 )
 from .auth import login_required
-from datetime import datetime
+from datetime import datetime, timedelta
 
 views_bp = Blueprint('views', __name__)
 
@@ -77,18 +77,47 @@ def weather_summary():
         'date' : request.args.get('date')
     }
 
+    # Dictionary of weather data
     weather_dict = queries.get_weather_data(url_args['city_name'], url_args['date'])
     
+    # AI prediction for rain
     rain_prediction = predictions.predict_rain(url_args['city_name'], url_args['date'])
     
+    # Weather icon for most prominent weather feature
     weather_dict = queries.get_weather_data(url_args['city_name'], url_args['date'])
     weather_icon = weather.determine_icon_based_on_weather(weather_dict)
+    
+    try:
+        # Convert 'date' URL argument to datetime object
+        date_arg = datetime.strptime(request.args.get('date'), '%Y-%m-%d')
+        # Calculate the start_date as 7 days before the 'date'
+        start_date = (date_arg - timedelta(days=7)).strftime('%Y-%m-%d')
+        
+        # Get arguments to create graph of previous week
+        graph_args = {
+            'stat' : 'temperature',
+            'city_name' : url_args['city_name'],
+            'start_date' : start_date,
+            'end_date' : url_args['date']
+        }
+        
+        # Generate temperature graph for previous week
+        for arg_val in graph_args.values():
+            if arg_val == None:
+                figure_html = graphs.get_graph_html()
+                break
+        else:
+            figure_html = graphs.get_graph_html(graph_args)
+    # If there is no data for this city/date set the graph to None
+    except: 
+        figure_html = None
      
     return render_template(
         "features/weather_summary.html.jinja",
         weather_dict = weather_dict,
         rain_prediction = rain_prediction,
         weather_icon = weather_icon,
+        figure_html = figure_html,
         url_args = url_args)
 
 @views_bp.route('/map')
