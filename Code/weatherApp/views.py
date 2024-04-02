@@ -103,11 +103,6 @@ def graph_past():
         figure_html = figure_html,
         url_args = url_args)
 
-@views_bp.route('/location_select')
-@login_required
-def location_select():
-    return render_template("features/location_select.html.jinja")
-
 # -----------------
 #This page is used only to determine which weather icon to use on the map as a marker
 @views_bp.route('/api/weather_icon')
