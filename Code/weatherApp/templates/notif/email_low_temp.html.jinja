@@ -8,13 +8,13 @@ This template expects the following parameters:
 <html lang="en">
 <html>
     <body>
-        <h1>Weather alert for {{ city_name }}.</h1>
+        <h1>Weather alert for {{ event_args['city_name'] }}.</h1>
       	<br>
       	<p>
-          Hello, you are receiving this alert because {{ city_name }} is expecting low temperatures.
+          Hello, you are receiving this alert because {{ event_args['city_name'] }} is expecting low temperatures.
       	</p>
      	<p>
-      	  Expect a temperature low of {{ data_point_one }}&degC.
+      	  Expect a temperature low of {{ event_args['data_point_one'] }}&degC.
       	</p>
     </body>
 </html>
