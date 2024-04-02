@@ -99,3 +99,18 @@ table, th, td {
   align-items: center;
   text-align: center;
 }
+
+/* Flex container for side-by-side layout */
+.flex-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.flex-item {
+  flex: 1;
+  min-width: 100px;
+  max-width: 600px;
+}
