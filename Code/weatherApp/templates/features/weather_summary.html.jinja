@@ -145,6 +145,9 @@
   <br>
   <br>
 
+  <!-- Flex container for side-by-side layout -->
+  <div style="display: flex; justify-content: center; align-items: flex-start; gap: 20px; flex-wrap: wrap;">
+
   
   <div class="table-container">
     <table class="select-table">
@@ -232,6 +235,12 @@
           </tr>
       </tbody>
     </table>
+  </div>
+
+  <div style="flex: 1; min-width: 100px; max-width: 600px">
+    {{ figure_html }}
+  </div>
+  
   </div>
 
 {% endblock %}
