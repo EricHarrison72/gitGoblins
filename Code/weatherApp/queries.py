@@ -115,11 +115,14 @@ def get_alert_emails(city_name):
 
     datb = db.get_db()
 
-    #SQL query to get the list of emails that are signed up for alerts for a specific city
+    # SQL query to get the list of emails that are signed up for alerts for a specific city
     alert_emails = datb.execute('''
         SELECT User.email
         FROM User JOIN UsersCities ON User.userId = UsersCities.userId JOIN City ON UsersCities.cityId = City.cityId
-        WHERE cityName = ? AND User.emailList = 'TRUE'      
-    ''', (city_name)).fetchall()
+        WHERE cityName = ? AND User.emailList = true     
+    ''', (city_name,)).fetchall()
+
+    # Convert the list of SQL rows into a list of the element in each row
+    alert_emails = [i[0] for i in alert_emails]
 
     return alert_emails

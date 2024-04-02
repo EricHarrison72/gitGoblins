@@ -72,12 +72,16 @@ INSERT INTO City (cityId, cityName) VALUES
 -- Users
 INSERT INTO User (userId, firstName, lastName, email, emailList, password) VALUES
 (1, 'Homer', 'Simpson', 'homer@example.com', true, 'password123'),
-(2, 'Marge', 'Simpson', 'marge@example.com', true, 'password123');
+(2, 'Marge', 'Simpson', 'marge@example.com', true, 'password123'),
+(3, 'Bart', 'Simpson', 'bart@example.com', true, 'password123'),
+(4, 'Lisa', 'Simpson', 'lisa@example.com', false, 'password123');
 
 -- UsersCities
 INSERT INTO UsersCities (userId, cityId) VALUES
 (1, 99),
-(2, 100);
+(2, 100),
+(3, 100),
+(4, 100);
 
 -- WeatherInstance
 INSERT INTO WeatherInstance (cityId, date, tempMin, tempMax, sunshine, rainfall, evaporation, cloud9am, cloud3pm, pressure9am, pressure3pm, humidity9am, humidity3pm, windGustSpeed, windGustDir, windSpeed9am, windSpeed3pm, windDir9am, windDir3pm, rainToday, rainTomorrow) VALUES

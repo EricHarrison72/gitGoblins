@@ -8,7 +8,8 @@ import pytest
 from weatherApp.queries import (
     get_weather_data,
     get_temp_in_range,
-    _add_space
+    _add_space,
+    get_alert_emails
 )
 
 # --------
@@ -65,6 +66,21 @@ def expected_dict_3():
             'cloud': 0
         }
 
+# Expected list for: "Shelbyville"
+@pytest.fixture()
+def expected_list_1():
+     return [
+          'marge@example.com',
+          'bart@example.com'
+     ]
+
+# Expected list for: "Springfield"
+@pytest.fixture()
+def expected_list_2():
+     return [
+          'homer@example.com'
+     ]
+
 # Note
 '''
 Since sqlite queries return Sqlite3.Row objects that are hard to mock,
@@ -108,5 +124,10 @@ def test_get_temp_in_range(app, expected_temp_table):
         for key in expected_temp_table[i].keys():
             assert expected_temp_table[i][key] == real_temp_table[i][key]
 
+def test_get_alert_emails(app, expected_list_1, expected_list_2):
+     
+     with app.app_context():
+          assert expected_list_1 == get_alert_emails('Shelbyville')
+          assert expected_list_2 == get_alert_emails('Springfield')
 # --------
 
