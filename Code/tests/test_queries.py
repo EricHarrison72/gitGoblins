@@ -130,4 +130,3 @@ def test_get_alert_emails(app, expected_list_1, expected_list_2):
           assert expected_list_1 == get_alert_emails('Shelbyville')
           assert expected_list_2 == get_alert_emails('Springfield')
 # --------
-

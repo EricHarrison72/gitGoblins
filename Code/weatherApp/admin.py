@@ -1,6 +1,6 @@
 '''admin.py'''
 
-from flask import Blueprint, request, jsonify, redirect, url_for
+from flask import Blueprint, request, jsonify, redirect, url_for, render_template, flash
 from . import db
 
 admin_bp = Blueprint('admin', __name__)
@@ -35,5 +35,17 @@ def admin():
     except ValueError as ve:
         error_message = 'Invalid input value: {}'.format(str(ve))
         return jsonify({'error': error_message}), 400
-   
 
+'''
+@admin_bp.route('/admin_alert', methods=['GET', 'POST'])
+def admin_alert():
+    try:
+        datb = db.get_db()
+        if request.method == 'POST':
+            event = request.form['eventSelect']
+            city = request.form['citySelect']
+
+            error = None
+
+            if error is None:
+'''
