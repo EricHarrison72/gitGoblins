@@ -70,11 +70,11 @@ INSERT INTO City (cityId, cityName) VALUES
 (100, 'Shelbyville'); -- error when populating actual database
 
 -- Users
-INSERT INTO User (userId, firstName, lastName, email, emailList, password) VALUES
-(1, 'Homer', 'Simpson', 'homer@example.com', true, 'password123'),
-(2, 'Marge', 'Simpson', 'marge@example.com', true, 'password123'),
-(3, 'Bart', 'Simpson', 'bart@example.com', true, 'password123'),
-(4, 'Lisa', 'Simpson', 'lisa@example.com', false, 'password123');
+INSERT INTO User (userId, firstName, lastName, email, emailList, password, cityId) VALUES
+(1, 'Homer', 'Simpson', 'homer@example.com', true, 'password123', 99),
+(2, 'Marge', 'Simpson', 'marge@example.com', true, 'password123', 100),
+(3, 'Bart', 'Simpson', 'bart@example.com', true, 'password123', 100),
+(4, 'Lisa', 'Simpson', 'lisa@example.com', false, 'password123', 100);
 
 -- UsersCities
 INSERT INTO UsersCities (userId, cityId) VALUES

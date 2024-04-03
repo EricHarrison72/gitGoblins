@@ -118,7 +118,7 @@ def get_alert_emails(city_name):
     # SQL query to get the list of emails that are signed up for alerts for a specific city
     alert_emails = datb.execute('''
         SELECT User.email
-        FROM User JOIN UsersCities ON User.userId = UsersCities.userId JOIN City ON UsersCities.cityId = City.cityId
+        FROM User JOIN City ON User.cityId = City.cityId
         WHERE cityName = ? AND User.emailList = true     
     ''', (city_name,)).fetchall()
 
