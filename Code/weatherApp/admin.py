@@ -1,7 +1,7 @@
 '''admin.py'''
 
-from flask import Blueprint, request, jsonify, redirect, url_for, render_template, flash
-from . import db
+from flask import Blueprint, request, jsonify, redirect, url_for, flash, render_template
+from . import db, notification, queries
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -36,16 +36,43 @@ def admin():
         error_message = 'Invalid input value: {}'.format(str(ve))
         return jsonify({'error': error_message}), 400
 
-'''
+
 @admin_bp.route('/admin_alert', methods=['GET', 'POST'])
 def admin_alert():
+    url_args = {"date": '2017-06-24'}
+
     try:
         datb = db.get_db()
         if request.method == 'POST':
-            event = request.form['eventSelect']
-            city = request.form['citySelect']
+            event = request.form.get('eventSelect')
+            city = request.form.get('citySelect')
 
-            error = None
+            if city != None:
+                city.replace(' ', '') # (just in case)
 
-            if error is None:
-'''
+            date = '2016-01-01'
+
+            url_args['date'] = date
+
+            # Put the arguments into a list to pass into get_template
+            event_args = {
+                "city_name": city,
+                "date": date,
+                "data_point": event
+            }
+            
+            # Send the notification
+            notification.send_email(
+                queries.get_alert_emails(city),
+                city,
+                notification.get_template
+            )
+            
+                
+            flash('Alert sent. City: ' + city + '. Event: ' + event + '. Date: ' + date)
+            return redirect(url_for('admin.admin_alert'))
+    except ValueError:
+        flash('Error in sending alert. Please check parameters.')
+        return redirect(url_for('admin.admin_alert'))
+    
+    return render_template('admin_dashboard.html.jinja', url_args = url_args)
