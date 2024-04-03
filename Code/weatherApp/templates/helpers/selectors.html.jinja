@@ -146,12 +146,13 @@ Docs:
 {% endmacro %}
 
 {% macro select_weather_event(url_arg_event='HighTemperature') %}
-
+    <!--
     {% if url_arg_event == None %}
         {% set url_arg_event = 'HighTemperature' %}
     {% endif %}
+    -->
 
-    <select id="eventSelect">
+    <select id="eventSelect" name="eventSelect">
         {% set events = [
             'High Temperature',
             'Low Temperature',
@@ -159,10 +160,82 @@ Docs:
             'Rain'
         ] %}
 
+        {% for o in events %}
+            <option value="{{ o }}">
+                {{ o }}
+            </option>
+        {% endfor %}
+
+        <!--
         {% for i in range(events|length) %}
             <option value="{{ i+1 }}" {% if events[i]|replace(' ','') == url_arg_event %} selected {% endif %}>
                 {{ events[i] }}
             </option>
         {% endfor %}
+        -->
+
+    </select>
+{% endmacro %}
+
+{% macro select_event_location(url_arg_city='Canberra') %}
+    <select id="citySelect" name="citySelect">
+        {% set cities = [
+            'Adelaide',
+            'Albany',
+            'Albury',
+            'Alice Springs',
+            'Badgerys Creek',
+            'Ballarat',
+            'Bendigo',
+            'Brisbane',
+            'Cairns',
+            'Canberra',
+            'Cobar',
+            'Coffs Harbour',
+            'Dartmoor',
+            'Darwin',
+            'Gold Coast',
+            'Hobart',
+            'Katherine',
+            'Launceston',
+            'Melbourne',
+            'Melbourne Airport',
+            'Mildura',
+            'Moree',
+            'Mount Gambier',
+            'Mount Ginini',
+            'Newcastle',
+            'Nhil',
+            'Norah Head',
+            'Norfolk Island',
+            'Nuriootpa',
+            'Pearce RAAF',
+            'Penrith',
+            'Perth',
+            'Perth Airport',
+            'Portland',
+            'Richmond',
+            'Sale',
+            'Salmon Gums',
+            'Sydney',
+            'Sydney Airport',
+            'Townsville',
+            'Tuggeranong',
+            'Uluru',
+            'Wagga Wagga',
+            'Walpole',
+            'Watsonia',
+            'Williamtown',
+            'Witchcliffe',
+            'Wollongong',
+            'Woomera',
+        ] %}
+
+        {% for o in cities %}
+            <option value="{{ o }}">
+                {{ o }}
+            </option>
+        {% endfor %}
+
     </select>
 {% endmacro %}
