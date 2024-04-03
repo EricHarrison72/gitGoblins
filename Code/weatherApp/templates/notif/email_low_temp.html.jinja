@@ -1,8 +1,8 @@
 {# 
 This template expects the following parameters: 
- -- email_args - a dictionary with the keys: 
+ -- event_args - a dictionary with the keys: 
     - city_name         The name of the city
-    - data_point_one    First data point for the weather event
+    - data_point    First data point for the weather event
 #}
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +14,7 @@ This template expects the following parameters:
           Hello, you are receiving this alert because {{ event_args['city_name'] }} is expecting low temperatures.
       	</p>
      	<p>
-      	  Expect a temperature low of {{ event_args['data_point_one'] }}&degC.
+      	  Expect a temperature low of {{ event_args['data_point'] }}&degC.
       	</p>
     </body>
 </html>
