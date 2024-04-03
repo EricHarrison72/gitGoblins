@@ -47,9 +47,6 @@ def admin_alert():
             event = request.form.get('eventSelect')
             city = request.form.get('citySelect')
 
-            if city != None:
-                city.replace(' ', '') # (just in case)
-
             date = '2016-01-01'
 
             url_args['date'] = date
@@ -65,7 +62,7 @@ def admin_alert():
             notification.send_email(
                 queries.get_alert_emails(city),
                 city,
-                notification.get_template
+                notification.get_template(event_args)
             )
             
                 

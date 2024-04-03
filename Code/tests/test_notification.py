@@ -41,7 +41,7 @@ def expected_template_1():
           Hello, you are receiving this alert because Springfield is expecting high temperatures.
       	</p>
      	 <p>
-      	  Expect a temperature high of 10&degC.
+      	  Expect a temperature high of 10&deg;C.
       	</p>
     </body>
 </html>"""
@@ -60,7 +60,7 @@ def expected_template_2():
           Hello, you are receiving this alert because Springfield is expecting low temperatures.
       	</p>
      	<p>
-      	  Expect a temperature low of -5&degC.
+      	  Expect a temperature low of -5&deg;C.
       	</p>
     </body>
 </html>'''

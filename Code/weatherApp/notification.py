@@ -19,8 +19,11 @@ def send_email(to, city, template):
     '''
     - sends an email notification to recipients in a list of emails "to", with the subject header of "Weather Alert for (subject)", using an HTML template of "template"
     '''
+
+    email_subject = 'Weather Alert for ' + city
+
     msg = Message(
-        "Weather Alert for " + city,
+        subject = email_subject,
         recipients = to,
         html = template,
         sender = current_app.config['MAIL_DEFAULT_SENDER']
@@ -33,12 +36,14 @@ def get_template(data : dict):
     - expects an event type as a string and the data parsed into a dictionary with
         - a city name as 'city_name'
         - a date as 'date'
-        - weather data point as 'data_point' (should be None, will be retrieved by this function)
+        - weather data point as 'data_point' (Takes in the weather event, outputs the data)
     '''
     template = None
     data_point = None
     date = data.get('date')
     event_type = data.get('data_point')
+
+    event_type = event_type.replace(' ', '') # (just in case)
 
     if event_type == 'HighTemperature':
         template = 'notif/email_high_temp.html.jinja'

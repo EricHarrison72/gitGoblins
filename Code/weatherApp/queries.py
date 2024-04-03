@@ -111,7 +111,7 @@ def get_temp_in_range(city_name, start_date, end_date):
 def get_alert_emails(city_name):
 
     if city_name != None:
-        city_name.replace(' ', '') # (just in case)
+        city_name = city_name.replace(' ', '') # (just in case)
 
     datb = db.get_db()
 

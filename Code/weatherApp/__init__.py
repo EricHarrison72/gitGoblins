@@ -66,7 +66,7 @@ def create_app(test_config=None):
     app.config['MAIL_PORT'] = 465
     app.config['MAIL_DEFAULT_SENDER'] = "gitgoblins4@gmail.com"
     app.config['MAIL_USERNAME'] = "gitgoblins4@gmail.com"
-    app.config['MAIL_PASSWORD'] = "chji daka plxk vvlr"
+    app.config['MAIL_PASSWORD'] = "bumr haqu abvm ggoe "
     app.config['MAIL_USE_TLS'] = False
     app.config['MAIL_USE_SSL'] = True
 
