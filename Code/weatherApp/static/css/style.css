@@ -60,6 +60,7 @@ table, th, td {
   text-align: center;
   text-decoration: none;
   display: block;
+  font-family: 'Roboto', sans-serif;
   font-size: 25px;
   margin: 5px auto; /* Adjusts button spacing */
   cursor: pointer;
