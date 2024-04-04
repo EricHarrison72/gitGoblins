@@ -1,3 +1,6 @@
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/darkmode.js') }}"></script>
+{% endblock %}
 {% extends 'base.html.jinja' %}
 
 {% block title %}
@@ -48,5 +51,5 @@
     </div>
     <button type="submit">Update Temperature</button>
   </form>
-  <script src="{{ url_for('static', filename='js/darkmode.js') }}"></script> 
+
 {% endblock %}
