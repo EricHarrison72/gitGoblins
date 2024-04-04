@@ -111,10 +111,12 @@ def weather_summary():
     # If there is no data for this city/date set the graph to None
     except: 
         figure_html = None
-        
-    # Convert date from YYYY-MM-DD into Month DD, YYYY    
-    weather_dict['date'] = datetime.strptime(weather_dict['date'], '%Y-%m-%d').strftime('%B %d, %Y')
-     
+    
+    try:
+        # Convert date from YYYY-MM-DD into Month DD, YYYY    
+        weather_dict['date'] = datetime.strptime(weather_dict['date'], '%Y-%m-%d').strftime('%B %d, %Y')
+    except:
+        weather_dict['date']    
     return render_template(
         "features/weather_summary.html.jinja",
         weather_dict = weather_dict,

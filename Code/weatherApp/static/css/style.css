@@ -3,6 +3,7 @@
 html { font-family: 'Roboto', sans-serif; background: #eee }
 body { margin: 0 auto; background: white; }
 h1 { font-family: 'Rubik', sans-serif; font-weight:700; color: #00843D; margin: 1rem 0; }
+h2 { font-family: 'Roboto', sans-serif; font-weight:600; font-size: 4rem; margin: 1rem 0; }
 a { color: #00843D; }
 hr { border: none; border-top: 1px solid lightgray; }
 nav { background: #FFCD00; display: flex; align-items: center; padding: 0 0.5rem; }
