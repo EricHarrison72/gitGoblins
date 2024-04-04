@@ -3,7 +3,7 @@
 html { font-family: 'Roboto', sans-serif; background: #eee }
 body { margin: 0 auto; background: white; }
 h1 { font-family: 'Rubik', sans-serif; font-weight:700; font-size: 1.2rem; color: #00843D; margin: 0.9rem 0; }
-h2 { font-family: 'Roboto', sans-serif; font-weight:600; font-size: 3.5rem; margin: 1rem 0; }
+h2 { font-family: 'Roboto', sans-serif; font-weight:600; font-size: 3rem; margin: 1rem 0; }
 a { color: #00843D; }
 hr { border: none; border-top: 1px solid lightgray; }
 nav { background: #FFCD00; display: flex; align-items: center; padding: 0 0.5rem; }
@@ -25,6 +25,7 @@ nav ul li a, nav ul li span, header .action { display: block; font-size: 0.85rem
 .content label { font-weight: bold; margin-bottom: 0.5em; }
 .content input, .content textarea { margin-bottom: 1em; }
 .content textarea { min-height: 12em; resize: vertical; }
+.dropdown-style { font-size: 12px; }
 input.danger { color: #cc2f2e; }
 input[type=submit] { align-self: start; min-width: 10em; }
 table, th, td {
@@ -37,10 +38,11 @@ table, th, td {
   border-style: hidden;
   border-radius: 6px;
   background-color: #FFCD00;
+  font-size: 13px;
 }
 .select-table th {
   border-style: hidden;
-  padding-top:10px;
+  padding-top: 10px;
   padding-left: 15px;
   padding-right: 15px;
   text-align: left;
@@ -49,7 +51,7 @@ table, th, td {
   border-style: hidden;
   padding-left: 15px;
   padding-right: 15px;
-  padding-bottom:15px;
+  padding-bottom: 15px;
   text-align: left;
 }
 
