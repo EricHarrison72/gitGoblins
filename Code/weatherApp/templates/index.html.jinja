@@ -9,7 +9,6 @@
 {% endblock %}
 
 {% block content %}
-<font size="+2">
 
 <ul>
   <div class="button-container">
@@ -51,10 +50,13 @@
           {% if weather_data %}
 
           <img src="{{ url_for('static', filename='img/temp_high.png') }}" alt="High Temperature" width="30" height="30">
-          <font size="+2">{{ weather_data.tempMax }}&deg &nbsp;&nbsp;&nbsp;
+          <font size="+2">{{ weather_data.tempMax }}&deg</font>C
+          
+          &nbsp;&nbsp;&nbsp;
             
           <img src="{{ url_for('static', filename='img/temp_low.png') }}" alt="Low Temperature" width="30" height="30">  
-          {{ weather_data.tempMin }}&deg</font>
+          <font size="+2">{{ weather_data.tempMin }}&deg</font>C
+          
           <br><br>
 
           {% if weather_data.rainToday == 'Yes' %}
