@@ -18,16 +18,9 @@
         <table class='select-table'>
             <tr>
                 <th>Date</th>
-                <th>Locations</th>
             </tr>
             <tr>
                 <td>{{ selectors.select_date() }}</td>
-                <td>{{ selectors.select_multiple_locations() }}</td>
-                <td>
-                    <button onclick="reloadPageWithArgs(`date=${getDateFromSelection()}`)">
-                        Submit
-                    </button>
-                </td>
             </tr>
         </table>
     </div>
