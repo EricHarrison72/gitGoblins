@@ -1,9 +1,9 @@
 /* CSS Style Sheet */
 
-html { font-family: 'Roboto', sans-serif; background: #eee }
+html { font-family: 'Roboto', sans-serif; font-size: 0.9rem; background: #eee }
 body { margin: 0 auto; background: white; }
 h1 { font-family: 'Rubik', sans-serif; font-weight:700; font-size: 1.2rem; color: #00843D; margin: 0.9rem 0; }
-h2 { font-family: 'Roboto', sans-serif; font-weight:600; font-size: 3rem; margin: 1rem 0; }
+h2 { font-family: 'Roboto', sans-serif; font-weight:600; font-size: 2.75rem; margin: 1rem 0; }
 a { color: #00843D; }
 hr { border: none; border-top: 1px solid lightgray; }
 nav { background: #FFCD00; display: flex; align-items: center; padding: 0 0.5rem; }
