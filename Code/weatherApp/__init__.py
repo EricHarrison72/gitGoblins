@@ -61,6 +61,9 @@ def create_app(test_config=None):
     from .admin import admin_bp
     app.register_blueprint(admin_bp)
 
+    from .settings import set_bp
+    app.register_blueprint(set_bp)
+    
     # Notification configurations
     app.config['MAIL_SERVER'] = "smtp.gmail.com"
     app.config['MAIL_PORT'] = 465
