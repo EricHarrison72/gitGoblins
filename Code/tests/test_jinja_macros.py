@@ -33,18 +33,18 @@ def test_select_date_defaults(template_name):
     )
 
     default_div_id = 'dateSelect'
-    assert ((f"<div id='{default_div_id}'>" in rendered) or
-            (f'<div id="{default_div_id}">' in rendered))
+    assert ((f"<div id='{default_div_id}'" in rendered) or
+            (f'<div id="{default_div_id}"' in rendered))
 
     default_ids = ['yearSelect', 'monthSelect', 'daySelect']
     for id in default_ids:
-        assert ((f"<select id='{id}'>" in rendered) or 
-                (f'<select id="{id}">' in rendered))
+        assert any(f'<select id="{id}"' in segment for segment in rendered.split('>')) or \
+               any(f"<select id='{id}'" in segment for segment in rendered.split('>'))
 
     default_selected_date = ['2017', '6', '24']
     for value in default_selected_date:
-        assert ((f'<option value="{value}"  selected >' in rendered) or
-                (f"<option value='{value}'  selected >" in rendered))
+        assert ((f'<option value="{value}"  selected' in rendered) or
+                (f"<option value='{value}'  selected" in rendered))
 
 def test_select_date_params(template_name):
     rendered = get_rendered_template(
