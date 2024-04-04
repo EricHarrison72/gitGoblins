@@ -116,7 +116,9 @@ def weather_summary():
         # Convert date from YYYY-MM-DD into Month DD, YYYY    
         weather_dict['date'] = datetime.strptime(weather_dict['date'], '%Y-%m-%d').strftime('%B %d, %Y')
     except:
-        weather_dict['date']    
+        # If date is empty do nothing, this is handles in the html
+        None
+        
     return render_template(
         "features/weather_summary.html.jinja",
         weather_dict = weather_dict,
