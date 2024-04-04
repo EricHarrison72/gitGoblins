@@ -115,3 +115,15 @@ table, th, td {
   min-width: 100px;
   max-width: 600px;
 }
+
+.weather-detail {
+  display: inline-block;
+  text-align: center;
+  margin-right: 10px;
+  font-size: 8px;
+}
+
+.weather-detail img {
+  display: block;
+  margin: 0 auto;
+}
