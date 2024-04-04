@@ -67,7 +67,7 @@
           {{ weather_dict['temp_low'] }}&deg</font>
           <br><br>
 
-          {% if weather_dict['raining'] == 'Yes' %}
+          {% if weather_dict['rain_today'] == 'Yes' %}
             <img src="{{ url_for('static', filename='img/rain.png') }}" alt="Raining" width="30" height="30">  
           {% else %}
             <img src="{{ url_for('static', filename='img/no_rain.png') }}" alt="Not Raining" width="30" height="30">  
