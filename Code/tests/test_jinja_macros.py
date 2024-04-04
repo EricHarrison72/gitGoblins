@@ -90,13 +90,28 @@ def test_select_single_location_params(template_name):
     expected_selected_city_id = '4' # for Alice Springs
     assert f'<option value="{expected_selected_city_id}"  selected >' in rendered
 
+# ] select statistic tests [
+def test_select_stat_defaults(template_name):
+    rendered = get_rendered_template(
+        "{{ selectors.select_stat() }}",
+        template_name
+    )
 
-# ] select multiple location tests [
-def test_select_multiple_locations_defaults(template_name):
-    pass
+    default_id = 'statSelect'
+    assert ((f"<select id='{default_id}'>" in rendered) or
+            (f'<select id="{default_id}">' in rendered))
 
-def test_select_multiple_locations_params(template_name):
-    pass
+    default_selected_stat_id = '0' # for temperature
+    assert f'<option value="{default_selected_stat_id}"  selected >' in rendered
+
+def test_select_stat_params(template_name):
+    rendered = get_rendered_template(
+        "{{ selectors.select_stat(url_arg_stat='wind') }}",
+        template_name
+    )
+
+    expected_selected_stat_id = '1' # for wind
+    assert f'<option value="{expected_selected_stat_id}"  selected >' in rendered
 
 # ]---------------------------
 # SOME HELPER FUNCTIONS
