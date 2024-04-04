@@ -85,11 +85,14 @@ def test_map__not_authenticated(client):
 def test_map__authenticated(client):
     ViewTests.test_authenticated(client, '/map', 'Map\n -') 
 
-def test_graph__not_authenticated(client):
-    ViewTests.test_not_authenticated(client, '/graph')
+# TODO idk why but the graph tests are failing for some reason
+def test_graph__not_authenticated(app, client):
+    with app.app_context():
+        ViewTests.test_not_authenticated(client, '/graphs')
 
-def test_graph__authenticated(client):
-    ViewTests.test_authenticated(client, '/graph', 'Graph\n -')
+def test_graph__authenticated(app, client):
+    with app.app_context():
+        ViewTests.test_authenticated(client, '/graphs', 'Graph\n -')
 
 # OTHER
 def test_settings__not_authenticated(client):
