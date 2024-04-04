@@ -47,15 +47,16 @@ def _get_graph(url_args=DEFAULT_url_args):
     if not _date_range_is_valid(url_args): 
         return "Date Error"
 
-    match url_args['stat']:
-        case "temperature":
-            graph = TemperatureGraph(url_args)
-        case "wind":
-            graph = WindGraph(url_args)
-        case "rain":
-            graph = RainGraph(url_args)
-        case _:
-            graph = None
+    stat = url_args['stat']
+    
+    if stat == "temperature":
+        graph = TemperatureGraph(url_args)
+    elif stat == "wind":
+        graph = WindGraph(url_args)
+    elif stat == "rain":
+        graph = RainGraph(url_args)
+    else:
+        graph = None
 
     return graph
 
