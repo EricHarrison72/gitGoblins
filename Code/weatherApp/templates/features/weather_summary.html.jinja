@@ -165,11 +165,14 @@
             
             <br><br>
 
+            <div class="weather-detail">
             {% if weather_dict['rain_today'] == 'Yes' %}
               <img src="{{ url_for('static', filename='img/rain.png') }}" alt="Raining" width="25" height="25">  
             {% else %}
               <img src="{{ url_for('static', filename='img/no_rain.png') }}" alt="Not Raining" width="25" height="25">  
             {% endif %}
+            <div>Rain</div>
+            </div>
 
             &nbsp;&nbsp;&nbsp;
 
@@ -177,6 +180,7 @@
               
             &nbsp;&nbsp;&nbsp;
 
+            <div class="weather-detail">
             {% set wind_dir = weather_dict['wind_dir'] %}
             {% if wind_dir == 'E' %}
               <img src="{{ url_for('static', filename='img/arrows/E.png') }}" alt="East" width="25" height="15">
@@ -213,7 +217,8 @@
             {% else %}
               <img src="{{ url_for('static', filename='img/marker_error.png') }}" alt="Not Available" width="25" height="25">
             {% endif %}
-
+            <div>Wind</div>
+          </div>
               
             &nbsp;&nbsp;&nbsp;
             {{ weather_dict['wind_speed'] }} km/h
