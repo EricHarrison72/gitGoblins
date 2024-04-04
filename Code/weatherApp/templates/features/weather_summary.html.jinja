@@ -10,9 +10,9 @@
 {% endblock %}
 
 {% block content %}
-
+<div class="centered-content">
   <br>
-  
+
   <div style="overflow-x: auto;">
     <table class='select-table'>
       <tr>
@@ -30,6 +30,7 @@
       </tr>
     </table>
   </div>
+</div>
 
   <br><br>
 
@@ -48,51 +49,51 @@
         <tbody>
             <tr>
               <td><br>Temperature Max</td>
-              <td><br>{{ weather_dict['temp_high'] }}</td>
+              <td><br>{{ weather_dict['temp_high'] }} &degC</td>
             </tr>
             <tr>
               <td>Temperature Min</td>
-              <td>{{ weather_dict['temp_low'] }}</td>
+              <td>{{ weather_dict['temp_low'] }} &degC</td>
             </tr>
             <tr>
               <td>Sunshine</td>
-              <td>{{ weather_dict['sunshine'] }}</td>
+              <td>{{ weather_dict['sunshine'] }} hrs</td>
             </tr>
             <tr>
               <td>Rainfall</td>
-              <td>{{ weather_dict['rainfall'] }}</td>
+              <td>{{ weather_dict['rainfall'] }} mm</td>
             </tr>
             <tr>
               <td>Evaporation</td>
-              <td>{{ weather_dict['evaporation'] }}</td>
+              <td>{{ weather_dict['evaporation'] }} mm</td>
             </tr>
             <tr>
               <td>Cloud 9am</td>
-              <td>{{ weather_dict['cloud_9am'] }}</td>
+              <td>{{ weather_dict['cloud_9am'] }} oktas</td>
             </tr>
             <tr>
               <td>Cloud 3pm</td>
-              <td>{{ weather_dict['cloud_3pm'] }}</td>
+              <td>{{ weather_dict['cloud_3pm'] }} oktas</td>
             </tr>
             <tr>
               <td>Pressure 9am</td>
-              <td>{{ weather_dict['pressure_9am'] }}</td>
+              <td>{{ weather_dict['pressure_9am'] }} hpa</td>
             </tr>
             <tr>
               <td>Pressure 3pm</td>
-              <td>{{ weather_dict['pressure_3pm'] }}</td>
+              <td>{{ weather_dict['pressure_3pm'] }} hpa</td>
             </tr>
             <tr>
               <td>Humidity 9am</td>
-              <td>{{ weather_dict['humidity_9am'] }}</td>
+              <td>{{ weather_dict['humidity_9am'] }} %</td>
             </tr>
             <tr>
               <td>Humidity 3pm</td>
-              <td>{{ weather_dict['humidity_3pm'] }}</td>
+              <td>{{ weather_dict['humidity_3pm'] }} %</td>
             </tr>
             <tr>
               <td>Wind Gust Speed</td>
-              <td>{{ weather_dict['wind_speed'] }}</td>
+              <td>{{ weather_dict['wind_speed'] }} km/h</td>
             </tr>
             <tr>
               <td>Wind Gust Dir</td>
@@ -100,11 +101,11 @@
             </tr>
             <tr>
               <td>Wind Speed 9am</td>
-              <td>{{ weather_dict['wind_speed_9am'] }}</td>
+              <td>{{ weather_dict['wind_speed_9am'] }} km/h</td>
             </tr>
             <tr>
               <td>Wind Speed 3pm</td>
-              <td>{{ weather_dict['wind_speed_3pm'] }}</td>
+              <td>{{ weather_dict['wind_speed_3pm'] }} km/h</td>
             </tr>
             <tr>
               <td>Wind Dir 9am</td>
@@ -151,10 +152,12 @@
             <h4> {{ weather_dict['date'] }} </h4>
 
             <img src="{{ url_for('static', filename='img/temp_high.png') }}" alt="High Temperature" width="30" height="30">
-            <font size="+2">{{ weather_dict['temp_high'] }}&deg &nbsp;&nbsp;&nbsp;
+            <font size="+2">{{ weather_dict['temp_high'] }}&degC 
+              
+            &nbsp;&nbsp;&nbsp;
               
             <img src="{{ url_for('static', filename='img/temp_low.png') }}" alt="Low Temperature" width="30" height="30">  
-            {{ weather_dict['temp_low'] }}&deg</font>
+            {{ weather_dict['temp_low'] }}&degC</font>
             <br><br>
 
             {% if weather_dict['rain_today'] == 'Yes' %}
