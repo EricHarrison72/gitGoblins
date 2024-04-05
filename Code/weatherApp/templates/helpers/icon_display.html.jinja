@@ -12,29 +12,37 @@ Docs:
 {% macro main_weather_icon( weather_icon) %}
 
     {% if weather_icon == 'sun' %}
-        <img src="{{ url_for('static', filename='img/marker_sun.png') }}" alt="Sunny" width="80" height="65">
+        <img src="{{ url_for('static', filename='img/marker_sun.png') }}" alt="Sunny" width="160" height="130">
     {% elif weather_icon == 'rain' %}
-        <img src="{{ url_for('static', filename='img/marker_rain.png') }}" alt="Rainy" width="85" height="65">
+        <img src="{{ url_for('static', filename='img/marker_rain.png') }}" alt="Rainy" width="170" height="130">
     {% elif weather_icon == 'wind' %}
-        <img src="{{ url_for('static', filename='img/marker_wind.png') }}" alt="Windy" width="110" height="65">
+        <img src="{{ url_for('static', filename='img/marker_wind.png') }}" alt="Windy" width="220" height="130">
     {% elif weather_icon == 'cloud' %}
-        <img src="{{ url_for('static', filename='img/marker_cloud.png') }}" alt="Cloudy" width="90" height="65"> 
+        <img src="{{ url_for('static', filename='img/marker_cloud.png') }}" alt="Cloudy" width="180" height="130"> 
     {% elif weather_icon == 'partcloud' %}
-        <img src="{{ url_for('static', filename='img/marker_partcloud.png') }}" alt="Partly Cloudy" width="100" height="65">  
+        <img src="{{ url_for('static', filename='img/marker_partcloud.png') }}" alt="Partly Cloudy" width="200" height="130">  
     {% else %}
-        <img src="{{ url_for('static', filename='img/marker_error.png') }}" alt="Error" width="50" height="50">  
+        <img src="{{ url_for('static', filename='img/marker_error.png') }}" alt="Error" width="100" height="100">  
     {% endif %}
 
+{% endmacro %}
+
+{% macro temp_low_icon() %}
+    <img src="{{ url_for('static', filename='img/temp_low.png') }}" alt="Low Temperature" width="30" height="30">
+{% endmacro %}
+
+{% macro temp_high_icon() %}
+    <img src="{{ url_for('static', filename='img/temp_high.png') }}" alt="High Temperature" width="30" height="30">
 {% endmacro %}
 
 {% macro rain_icon( rain_today) %}
 
     {% if rain_today == 'Yes' %}
-        <img src="{{ url_for('static', filename='img/rain.png') }}" alt="Raining" width="25" height="25">  
+        <img src="{{ url_for('static', filename='img/rain.png') }}" alt="Raining" width="30" height="30">  
     {% else %}
-        <img src="{{ url_for('static', filename='img/no_rain.png') }}" alt="Not Raining" width="25" height="25">  
+        <img src="{{ url_for('static', filename='img/no_rain.png') }}" alt="Not Raining" width="30" height="30">  
     {% endif %}
-    
+
 {% endmacro %}
 
 {% macro wind_dir_icon( wind_dir) %}
