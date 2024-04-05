@@ -43,84 +43,8 @@
     </div>
 
   <div class="flex-item">
-    <div class="centered-content">
-
-      
-      {% if weather_dict %}
-        <h2>{{ weather_dict['city_name'] }}</h2>
-      {% else %}
-          <p>No city data found for the user.</p>
-      {% endif %}
-      
-      
-      {{ icon_display.main_weather_icon( weather_icon)}}
-
-      <div class="table-container">
-        <table class="scrollable-table">
-          <tbody>
-            {% if weather_dict %}
-
-            <h4> {{ weather_dict['date'] }} </h4>
-            
-            <div class="weather-detail">
-              <img src="{{ url_for('static', filename='img/temp_high.png') }}" alt="High Temperature" width="25" height="25">
-              <div>High</div>
-            </div>
-            <font size="+2">{{ weather_dict['temp_high'] }}&deg</font>C
-              
-            &nbsp;&nbsp;&nbsp;
-              
-            <div class="weather-detail">
-              <img src="{{ url_for('static', filename='img/temp_low.png') }}" alt="Low Temperature" width="25" height="25">
-              <div>Low</div>
-            </div>
-            <font size="+2">{{ weather_dict['temp_low'] }}&deg</font>C
-            
-            <br><br>
-
-            <div class="weather-detail">
-              {{ icon_display.rain_icon( weather_dict['rain_today'])}}
-              <div>Rain</div>
-            </div>
-
-            &nbsp;&nbsp;&nbsp;
-
-            {{ weather_dict['rainfall'] }} mm
-              
-            &nbsp;&nbsp;&nbsp;
-
-            <div class="weather-detail">
-              {{ icon_display.wind_dir_icon( weather_dict['wind_dir'])}}
-              <div>Wind</div>
-            </div>
-              
-            &nbsp;&nbsp;&nbsp;
-            {{ weather_dict['wind_speed'] }} km/h
-
-            {% else %}
-              <tr>
-                <td colspan="2">No weather data found for the specified date.</td>
-              </tr>
-            {% endif %}
-          </tbody>
-        </table>
-
-        {% if rain_prediction == 0 %}
-          {% set will_or_will_not = 'WILL NOT' %}
-        {% elif rain_prediction == 1 %}
-          {% set will_or_will_not = 'WILL' %}
-        {% else %}
-          {% set error_detected = true %}
-        {% endif %}
-
-        {% if error_detected %}
-          <p>There was an error while performing the AI prediction.</p>
-        {% else %}
-          <p>Our AI model predicts that it <b>{{ will_or_will_not }}</b> rain tomorrow.</p>
-      {% endif %}
-      </div>
-    </div>
     
+    {{ data_display.weather_overview(weather_dict, weather_icon)}}
     <br>
     <br>
 
