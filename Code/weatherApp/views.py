@@ -144,14 +144,14 @@ def graph():
     
     for arg_val in url_args.values():
         if arg_val == None:
-            figure_html = graphs.get_graph_html()
+            graph_html = graphs.get_graph_html()
             break
     else:
-        figure_html = graphs.get_graph_html(url_args)
+        graph_html = graphs.get_graph_html(url_args)
 
     return render_template(
         "features/graphs.html.jinja", 
-        figure_html = figure_html,
+        graph_html = graph_html,
         url_args = url_args)
 
 @views_bp.route('/location_select')
