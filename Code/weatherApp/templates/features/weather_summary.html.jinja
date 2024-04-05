@@ -38,20 +38,20 @@
   <!-- Flex container for side-by-side layout -->
   <div class="flex-container">
     <div class="table-container">
-
-      
       {{ display.weather_details_table( weather_dict) }}
-      
     </div>
 
   <div class="flex-item">
-  
     <div class="centered-content">
+
+      
       {% if weather_dict %}
-        <h2>{{ weather_dict['city_name']|replace('BadgerysCreek', 'Badgerys Creek')|replace('MountGinini', 'Mount Ginini')|replace('NorahHead', 'Norah Head')|replace('NorfolkIsland', 'Norfolk Island')|replace('PearceRAAF', 'Pearce RAAF')|replace('MelbourneAirport', 'Melbourne Airport')|replace('SydneyAirport', 'Sydney Airport')|replace('WaggaWagga', 'Wagga Wagga')|replace('Williamtown', 'Williamtown')|replace('MountGambier', 'Mount Gambier')|replace('PerthAirport', 'Perth Airport')|replace('SalmonGums', 'Salmon Gums')|replace('AliceSprings', 'Alice Springs')|replace('GoldCoast', 'Gold Coast')|replace('SunshineCoast', 'Sunshine Coast')|replace('PortMacquarie', 'Port Macquarie')|replace('MountIsa', 'Mount Isa')|replace('CoffsHarbour', 'Coffs Harbour') }}</h2>
+        <h2>{{ weather_dict['city_name'] }}</h2>
       {% else %}
           <p>No city data found for the user.</p>
       {% endif %}
+      
+      
 
       {% if weather_icon == 'sun' %}
         <img src="{{ url_for('static', filename='img/marker_sun.png') }}" alt="Sunny" width="80" height="65">

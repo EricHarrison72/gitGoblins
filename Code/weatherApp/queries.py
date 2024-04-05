@@ -116,8 +116,6 @@ def add_space(city_name: str):
     - eg 'AliceSprings' -> 'Alice Springs'
     '''
 
-    upper_count = 0 # number of uppercase letters in city_name
-
     # Add spaces in front of all internal upper case characterss
     i = 1 # (we can skip checking first char
     while i in range(len(city_name)):
