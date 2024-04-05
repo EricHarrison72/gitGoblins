@@ -1,6 +1,7 @@
 {% extends 'base.html.jinja' %}
 {% import 'helpers/selectors.html.jinja' as selectors %}
-{% import 'helpers/data_display.html.jinja' as display %}
+{% import 'helpers/data_display.html.jinja' as data_display %}
+{% import 'helpers/icon_display.html.jinja' as icon_display %}
 
 {% block title %}
   Weather Summary
@@ -38,7 +39,7 @@
   <!-- Flex container for side-by-side layout -->
   <div class="flex-container">
     <div class="table-container">
-      {{ display.weather_details_table( weather_dict) }}
+      {{ data_display.weather_details_table( weather_dict) }}
     </div>
 
   <div class="flex-item">
@@ -52,20 +53,7 @@
       {% endif %}
       
       
-
-      {% if weather_icon == 'sun' %}
-        <img src="{{ url_for('static', filename='img/marker_sun.png') }}" alt="Sunny" width="80" height="65">
-      {% elif weather_icon == 'rain' %}
-        <img src="{{ url_for('static', filename='img/marker_rain.png') }}" alt="Rainy" width="85" height="65">
-      {% elif weather_icon == 'wind' %}
-        <img src="{{ url_for('static', filename='img/marker_wind.png') }}" alt="Windy" width="110" height="65">
-      {% elif weather_icon == 'cloud' %}
-        <img src="{{ url_for('static', filename='img/marker_cloud.png') }}" alt="Cloudy" width="90" height="65"> 
-      {% elif weather_icon == 'partcloud' %}
-        <img src="{{ url_for('static', filename='img/marker_partcloud.png') }}" alt="Partly Cloudy" width="100" height="65">  
-      {% else %}
-        <img src="{{ url_for('static', filename='img/marker_error.png') }}" alt="Error" width="50" height="50">  
-      {% endif %}
+      {{ icon_display.main_weather_icon( weather_icon)}}
 
       <div class="table-container">
         <table class="scrollable-table">
@@ -91,12 +79,8 @@
             <br><br>
 
             <div class="weather-detail">
-            {% if weather_dict['rain_today'] == 'Yes' %}
-              <img src="{{ url_for('static', filename='img/rain.png') }}" alt="Raining" width="25" height="25">  
-            {% else %}
-              <img src="{{ url_for('static', filename='img/no_rain.png') }}" alt="Not Raining" width="25" height="25">  
-            {% endif %}
-            <div>Rain</div>
+              {{ icon_display.rain_icon( weather_dict['rain_today'])}}
+              <div>Rain</div>
             </div>
 
             &nbsp;&nbsp;&nbsp;
@@ -106,44 +90,9 @@
             &nbsp;&nbsp;&nbsp;
 
             <div class="weather-detail">
-            {% set wind_dir = weather_dict['wind_dir'] %}
-            {% if wind_dir == 'E' %}
-              <img src="{{ url_for('static', filename='img/arrows/E.png') }}" alt="East" width="25" height="15">
-            {% elif wind_dir == 'ENE' %}
-              <img src="{{ url_for('static', filename='img/arrows/ENE.png') }}" alt="East-Northeast" width="25" height="25">
-            {% elif wind_dir == 'ESE' %}
-              <img src="{{ url_for('static', filename='img/arrows/ESE.png') }}" alt="East-Southeast" width="25" height="25">
-            {% elif wind_dir == 'N' %}
-              <img src="{{ url_for('static', filename='img/arrows/N.png') }}" alt="North" width="15" height="25">
-            {% elif wind_dir == 'NE' %}
-              <img src="{{ url_for('static', filename='img/arrows/NE.png') }}" alt="Northeast" width="25" height="25">
-            {% elif wind_dir == 'NNE' %}
-              <img src="{{ url_for('static', filename='img/arrows/NNE.png') }}" alt="North-Northeast" width="20" height="25">
-            {% elif wind_dir == 'NNW' %}
-              <img src="{{ url_for('static', filename='img/arrows/NNW.png') }}" alt="North-Northwest" width="20" height="25">
-            {% elif wind_dir == 'NW' %}
-              <img src="{{ url_for('static', filename='img/arrows/NW.png') }}" alt="Northwest" width="25" height="25">
-            {% elif wind_dir == 'S' %}
-              <img src="{{ url_for('static', filename='img/arrows/S.png') }}" alt="South" width="15" height="25">
-            {% elif wind_dir == 'SE' %}
-              <img src="{{ url_for('static', filename='img/arrows/SE.png') }}" alt="Southeast" width="25" height="25">
-            {% elif wind_dir == 'SSE' %}
-              <img src="{{ url_for('static', filename='img/arrows/SSE.png') }}" alt="South-Southeast" width="20" height="25">
-            {% elif wind_dir == 'SSW' %}
-              <img src="{{ url_for('static', filename='img/arrows/SSW.png') }}" alt="South-Southwest" width="20" height="25">
-            {% elif wind_dir == 'SW' %}
-              <img src="{{ url_for('static', filename='img/arrows/SW.png') }}" alt="Southwest" width="25" height="25">
-            {% elif wind_dir == 'W' %}
-              <img src="{{ url_for('static', filename='img/arrows/W.png') }}" alt="West" width="25" height="15">
-            {% elif wind_dir == 'WNW' %}
-              <img src="{{ url_for('static', filename='img/arrows/WNW.png') }}" alt="West-Northwest" width="25" height="25">
-            {% elif wind_dir == 'WSW' %}
-              <img src="{{ url_for('static', filename='img/arrows/WSW.png') }}" alt="West-Southwest" width="25" height="25">
-            {% else %}
-              <img src="{{ url_for('static', filename='img/marker_error.png') }}" alt="Not Available" width="25" height="25">
-            {% endif %}
-            <div>Wind</div>
-          </div>
+              {{ icon_display.wind_dir_icon( weather_dict['wind_dir'])}}
+              <div>Wind</div>
+            </div>
               
             &nbsp;&nbsp;&nbsp;
             {{ weather_dict['wind_speed'] }} km/h
