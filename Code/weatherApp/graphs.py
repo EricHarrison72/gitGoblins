@@ -126,7 +126,6 @@ class WeatherGraph(ABC):
 class TemperatureGraph(WeatherGraph):
     def __init__(self, city_and_dates):
         super().__init__(city_and_dates)
-        print(self.get_html())
 
     # OVERRIDE: all abstract methods
     # ------------------------------
