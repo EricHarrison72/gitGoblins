@@ -1,0 +1,91 @@
+{# --------------------------------------------------
+data_display.html.jinja
+----------------------
+Contains macros for displaying weather data, including:
+- 
+
+Docs:
+- [Jinja2 Docs: Macros](https://jinja.palletsprojects.com/en/3.1.x/templates/#macros)
+-------------------------------------------------- #}
+
+{# this macro expects the same weather dict as weather_summary.html.jinja #}
+{# TODO: change thead to css stuff#}
+{% macro weather_details_table(weather_dict) %}
+    <table class="select-table">
+        <thead>
+          <tr>
+            <th><font size="+1">Weather Details</font></th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+              <td><br>Temperature Max</td>
+              <td><br>{{ weather_dict['temp_high'] }} &degC</td>
+            </tr>
+            <tr>
+              <td>Temperature Min</td>
+              <td>{{ weather_dict['temp_low'] }} &degC</td>
+            </tr>
+            <tr>
+              <td>Sunshine</td>
+              <td>{{ weather_dict['sunshine'] }} hrs</td>
+            </tr>
+            <tr>
+              <td>Rainfall</td>
+              <td>{{ weather_dict['rainfall'] }} mm</td>
+            </tr>
+            <tr>
+              <td>Evaporation</td>
+              <td>{{ weather_dict['evaporation'] }} mm</td>
+            </tr>
+            <tr>
+              <td>Cloud 9am</td>
+              <td>{{ weather_dict['cloud_9am'] }} oktas</td>
+            </tr>
+            <tr>
+              <td>Cloud 3pm</td>
+              <td>{{ weather_dict['cloud_3pm'] }} oktas</td>
+            </tr>
+            <tr>
+              <td>Pressure 9am</td>
+              <td>{{ weather_dict['pressure_9am'] }} hpa</td>
+            </tr>
+            <tr>
+              <td>Pressure 3pm</td>
+              <td>{{ weather_dict['pressure_3pm'] }} hpa</td>
+            </tr>
+            <tr>
+              <td>Humidity 9am</td>
+              <td>{{ weather_dict['humidity_9am'] }} %</td>
+            </tr>
+            <tr>
+              <td>Humidity 3pm</td>
+              <td>{{ weather_dict['humidity_3pm'] }} %</td>
+            </tr>
+            <tr>
+              <td>Wind Gust Speed</td>
+              <td>{{ weather_dict['wind_speed'] }} km/h</td>
+            </tr>
+            <tr>
+              <td>Wind Gust Dir</td>
+              <td>{{ weather_dict['wind_dir'] }}</td>
+            </tr>
+            <tr>
+              <td>Wind Speed 9am</td>
+              <td>{{ weather_dict['wind_speed_9am'] }} km/h</td>
+            </tr>
+            <tr>
+              <td>Wind Speed 3pm</td>
+              <td>{{ weather_dict['wind_speed_3pm'] }} km/h</td>
+            </tr>
+            <tr>
+              <td>Wind Dir 9am</td>
+              <td>{{ weather_dict['wind_dir_9am'] }}</td>
+            </tr>
+            <tr>
+              <td>Wind Dir 3pm</td>
+              <td>{{ weather_dict['wind_dir_3pm'] }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endmacro %}
