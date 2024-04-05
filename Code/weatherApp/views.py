@@ -104,13 +104,13 @@ def weather_summary():
         # Generate temperature graph for previous week
         for arg_val in graph_args.values():
             if arg_val == None:
-                figure_html = graphs.get_graph_html()
+                graph_html = graphs.get_graph_html()
                 break
         else:
-            figure_html = graphs.get_graph_html(graph_args)
+            graph_html = graphs.get_graph_html(graph_args)
     # If there is no data for this city/date set the graph to None
     except: 
-        figure_html = None
+        graph_html = None
     
     try:
         # Convert date from YYYY-MM-DD into Month DD, YYYY    
@@ -124,7 +124,7 @@ def weather_summary():
         weather_dict = weather_dict,
         rain_prediction = rain_prediction,
         weather_icon = weather_icon,
-        figure_html = figure_html,
+        graph_html = graph_html,
         url_args = url_args)
 
 @views_bp.route('/map')
