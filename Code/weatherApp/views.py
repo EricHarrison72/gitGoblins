@@ -34,20 +34,8 @@ views_bp = Blueprint('views', __name__)
 @views_bp.route('/')
 @login_required
 def index():
-    datb = db.get_db()
-    user_id = g.user['userId']
 
-    user_city_data = datb.execute(
-        "SELECT * FROM City WHERE cityId = (SELECT cityId FROM User WHERE userId = ?)",
-        (user_id,)
-    ).fetchone()
-
-    city_name_row = datb.execute(
-        "SELECT cityName FROM City WHERE cityId = ?",
-        (user_city_data['cityId'],)
-    ).fetchone()
-    city_name = city_name_row['cityName']
-
+    city_name = queries.get_current_user_city()
     specified_date = datetime(2017, 6, 24).strftime('%Y-%m-%d')
 
     weather_dict = queries.get_weather_data(city_name, specified_date)
@@ -65,32 +53,33 @@ def index():
 @login_required
 def weather_summary():
 
+    # migth seem unecessary but is passed as param at end of method
     url_args = {
         'city_name' : request.args.get('city_name'),
         'date' : request.args.get('date')
     }
 
-    # Dictionary of weather data
-    weather_dict = queries.get_weather_data(url_args['city_name'], url_args['date'])
-    
-    # AI prediction for rain
-    rain_prediction = predictions.predict_rain(url_args['city_name'], url_args['date'])
-    
-    # Weather icon for most prominent weather feature
-    weather_dict = queries.get_weather_data(url_args['city_name'], url_args['date'])
+    if url_args['city_name'] == None:
+        url_args['city_name'] = queries.get_current_user_city()
+        url_args['date'] = datetime(2017, 6, 24).strftime('%Y-%m-%d')
+
+    city_name = url_args['city_name']
+    date = url_args['date']
+
+    # Prepare most of the render_template args
+    weather_dict = queries.get_weather_data( city_name, date)
     weather_icon = weather.determine_icon_based_on_weather(weather_dict)
+    rain_prediction = predictions.predict_rain(city_name, date)
     
+    # prepare graph
     try:
-        # Convert 'date' URL argument to datetime object
-        date_arg = datetime.strptime(request.args.get('date'), '%Y-%m-%d')
-        # Calculate the start_date as 7 days before the 'date'
+        date_arg = datetime.strptime(date, '%Y-%m-%d')
         start_date = (date_arg - timedelta(days=7)).strftime('%Y-%m-%d')
         
-        # Get arguments to create graph of previous week
         graph_args = {
-            'city_name' : url_args['city_name'],
+            'city_name' : city_name,
             'start_date' : start_date,
-            'end_date' : url_args['date']
+            'end_date' : date
         }
         
         graph = graphs.TemperatureGraph(graph_args)
@@ -99,16 +88,15 @@ def weather_summary():
         )
         graph_html = graph.get_html()
 
-    # If there is no data for this city/date set the graph to None
     except: 
-        graph_html = None
+        graph_html = "Error generatign graph."
     
     try:
         # Convert date from YYYY-MM-DD into Month DD, YYYY    
         weather_dict['date'] = datetime.strptime(weather_dict['date'], '%Y-%m-%d').strftime('%B %d, %Y')
     except:
         # If date is empty do nothing, this is handles in the html
-        None
+        pass
         
     return render_template(
         "features/weather_summary.html.jinja",
