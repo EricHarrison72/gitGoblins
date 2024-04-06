@@ -2,7 +2,9 @@
 data_display.html.jinja
 ----------------------
 Contains macros for displaying weather data, including:
-- 
+- info_widget
+- weather_overview
+- weather_details_table
 
 Docs:
 - [Jinja2 Docs: Macros](https://jinja.palletsprojects.com/en/3.1.x/templates/#macros)
@@ -62,7 +64,7 @@ Docs:
             {{info_widget(
                 wind_icon,
                 'Wind Gusts',
-                weather_dict['rainfall'] ~ ' km/h ' ~ weather_dict['wind_dir']
+                weather_dict['wind_speed'] ~ ' km/h ' ~ weather_dict['wind_dir']
             )}} 
           </td>
         </tr>
