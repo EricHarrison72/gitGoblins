@@ -18,19 +18,19 @@ Docs:
     </div>
 {% endmacro %}
 
-
+{# this macro expects the same weather dict as weather_summary.html.jinja #}
 {% macro weather_overview(weather_dict, weather_icon, rain_prediction) %}
   <div class="weather-overview-grid">
 
-    <div class="overview-header">
+    <div class="overview-header"> <!--(grid item)-->
       <h2>{{ weather_dict['city_name'] }}—{{ weather_dict['date'] }}</h2>
     </div>
 
-    <div class="main-icon">
+    <div class="main-icon"> <!--(grid item)-->
       {{ icon_display.main_weather_icon( weather_icon)}}
     </div>
 
-    <div class="widget-table-container">
+    <div class="widget-table-container"> <!--(grid item)-->
       <table class="widget-table">
         <tr>
           <td>
@@ -69,7 +69,7 @@ Docs:
       </table>
     </div>
 
-    <div class="prediction-container">
+    <div class="prediction-container"> <!--(grid item)-->
       <div class="info-widget">
         <span class="prediction">
           {% if rain_prediction == 0 %}
@@ -92,14 +92,11 @@ Docs:
   </div>
 {% endmacro %}
 
-
-
 {# this macro expects the same weather dict as weather_summary.html.jinja #}
-{# TODO: change thead to css stuff#}
 {% macro weather_details_table(weather_dict) %}
   <table class="select-table">
     <tr>
-      <th><font size="+1">Weather Details</font></th>
+      <th><font size="+1">Details</font></th>
     </tr>
     <tr>
       <td><br>Temperature Max</td>

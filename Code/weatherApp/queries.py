@@ -77,7 +77,7 @@ def get_weather_data (city_name: str, date: str):
 
         # If a city name and date were passed, put that in the dict
         try:
-            weather_data_dict['city_name'] += ' for ' + add_space(city_name) + ' on this date'
+            weather_data_dict['city_name'] += ' for ' + add_space(city_name)
             weather_data_dict['date'] = date
         except:
             pass
