@@ -15,42 +15,36 @@
 <!--possible future div -->
 <div class="centered-content">
   <div class="weather-summary-grid">
-    <div id="all-except-weather-details">
 
-      <div class="flex-item">
-        <div class="table-container">
-          <table class='select-table' style="display:flex;"">
-            <tr>
-              <th>Location</th>
-              <th>Date</th>
-            </tr>
-            <tr>
-              <td>{{ selectors.select_single_location( url_args['city_name']) }}</td>
-              <td>{{ selectors.select_date('', url_args['date']) }}</td>
-              <td>
-                <button onclick="reloadPageWithArgs(`city_name=${getCityFromSelection()}&date=${getDateFromSelection()}`)" class="dropdown-style">
-                  Submit
-                </button>
-              </td>
-            </tr>
-          </table>
-        </div>
+    <div id="all-except-weather-details"> <!-- grid item -->
+
+      <div class="table-container">
+        <table class='select-table' style="display:flex;"">
+          <tr>
+            <th>Location</th>
+            <th>Date</th>
+          </tr>
+          <tr>
+            <td>{{ selectors.select_single_location( url_args['city_name']) }}</td>
+            <td>{{ selectors.select_date('', url_args['date']) }}</td>
+            <td>
+              <button onclick="reloadPageWithArgs(`city_name=${getCityFromSelection()}&date=${getDateFromSelection()}`)" class="dropdown-style">
+                Submit
+              </button>
+            </td>
+          </tr>
+        </table>
       </div>
 
-      <div class="flex-item">
-        {{ data_display.weather_overview(weather_dict, weather_icon, rain_prediction)}}
+      {{ data_display.weather_overview(weather_dict, weather_icon, rain_prediction)}}
+
+      <div class="graph-container">
+        {{ graph_html }}
       </div>
 
-      <div class="flex-item">
-        <div class="graph-container">
-          {{ graph_html }}
-        </div>
-      </div>
-
-      <!--</div>-->
     </div>
 
-    <div id="weather-details">
+    <div id="weather-details"> <!-- grid item -->
       <div class="table-container">
         {{ data_display.weather_details_table( weather_dict) }}
       </div> 

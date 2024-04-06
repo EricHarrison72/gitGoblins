@@ -21,6 +21,8 @@ nav h1 { flex: auto; margin: 0; }
 nav h1 a { text-decoration: none; padding: 0.25rem 0.5rem; }
 nav ul  { display: flex; list-style: none; margin: 0; padding: 0; }
 nav ul li a, nav ul li span, header .action { display: block; font-size: 0.85rem; padding: 0.5rem; }
+
+/* CUSTOM CLASSES WE GOT FROM THE FLASKR TUTORIAL (but tweaked ourselves) */
 .content { padding: 0 1rem 1rem;}
 .content > header { border-bottom: 1px solid lightgray; display: flex; align-items: flex-end; text-align: center}
 .content > header h1 { flex: auto; font-size: 2.75rem; margin: 1rem 0 0.25rem 0;}
@@ -32,17 +34,16 @@ nav ul li a, nav ul li span, header .action { display: block; font-size: 0.85rem
 .post .body { white-space: pre-line; }
 .content:last-child { margin-bottom: 0; }
 .content form { margin: 1em 0; display: flex; flex-direction: column; }
-.content label { font-weight: bold; margin-bottom: 0.5em; }
+.content label { font-weight: bold; margin-bottom: 0.5em; display: flex; align-items: center; }
 .content input, .content textarea { margin-bottom: 1em; }
+.content input[type=checkbox] { margin-right: 0.5em; }
 .content textarea { min-height: 12em; resize: vertical; }
 .dropdown-style { font-size: 12px; }
 input.danger { color: #cc2f2e; }
 input[type=submit] { align-self: start; min-width: 10em; }
-table, th, td {
-    border: 1px solid black;
-    border-collapse: collapse;
-  }
 
+/* [[[[[[[[[[[[[[[[ TABLES AND WIDGETS ]]]]]]]]]]]]]]]]]]]]]]] */
+/* Select Table */
 .select-table {
   border-collapse: collapse;
   border-style: hidden;
@@ -66,6 +67,57 @@ table, th, td {
   text-align: left;
 }
 
+/* Widget Table */
+.widget-table {
+  border-style: hidden;
+  border-collapse: collapse;
+}
+.widget-table td {
+  border-style: hidden;
+  padding: 5px;
+}
+
+/* Info Widget */
+.info-widget {
+  background-color: #e1f4ff;
+  display: flex;
+  flex-wrap: wrap;
+  border-radius: 6px;
+  padding: 5px;
+  min-width: 110px;
+  max-width: none
+}
+.info-widget img {
+  display: block;
+  padding: 5px;
+  margin: auto;
+}
+.info-widget div {
+  flex: 1;
+  display: inline-block;
+  text-align: left;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.info-widget label {
+  font-weight: bold;
+  margin: 0px;
+}
+.info-widget span {
+  font-size: 150%;
+  font-weight: normal;
+  padding-bottom: 0px;
+}
+.info-widget > .prediction{
+  text-align: center;
+  margin: auto;
+}
+
+/* Custom Button Stuff */
+.button-container {
+  display: flex;
+  flex-direction: row;
+}
 .button-style {
   background-color: #FFCD00;
   color: #00843D;
@@ -83,32 +135,7 @@ table, th, td {
   max-width: 200px; /* Adjusts maximum width */
 }
 
-.button-container {
-  display: flex;
-  flex-direction: row;
-  
-}
-
-/* Update CSS to align the checkbox */
-.content form { 
-  margin: 1em 0; 
-  display: flex; 
-  flex-direction: column; 
-}
-
-/* Add new styles for the checkbox */
-.content label { 
-  font-weight: bold; 
-  margin-bottom: 0.5em; 
-  display: flex; /* Make the label and checkbox align horizontally */
-  align-items: center; /* Align items vertically in the flex container */
-}
-
-/* Style the checkbox */
-.content input[type=checkbox] { 
-  margin-right: 0.5em; /* Add some spacing between the checkbox and label */
-}
-
+/* ((((((((((((((((((( FLEXBOXES ))))))))))))))))))) */
 .centered-content {
   display: flex;
   flex-direction: column;
@@ -116,35 +143,7 @@ table, th, td {
   text-align: center;
 }
 
-/*---------------------------------*/
-/* Flex container for side-by-side layout */
-.flex-container {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
-  flex-direction: column;
-  
-}
-.flex-container #weather-summary {
-  flex-direction: column
-}
-.flex-container #all-except-details {
-  flex-direction: row;
-}
-.flex-container #weather-overview {
-  flex-direction: row;
-  align-items: center;
-  text-align: center;
-}
-
-.flex-item {
-  flex: 1;
-  min-width: 100px;
-  max-width: none;
-}
-/* ##### GRIDS ##### */
+/* ################# GRIDS ################## */
 /* Weather Summary */
 .weather-summary-grid {
   display: grid;
@@ -193,7 +192,6 @@ table, th, td {
 }
 
 /* Visualizations */
-/* TODO: add more columns */
 .visualization-grid {
   display: grid;
   grid-template-columns: auto auto auto;
@@ -217,50 +215,7 @@ table, th, td {
 }
 
 
-/*-------------------------------*/
-.widget-table {
-  border-style: hidden;
-  border-collapse: collapse;
-}
-.widget-table td {
-  border-style: hidden;
-  padding: 5px;
-}
-/*---------------------------------*/
-.info-widget {
-  background-color: #e1f4ff;
-  display: flex;
-  flex-wrap: wrap;
-  border-radius: 6px;
-  padding: 5px;
-  min-width: 110px;
-  max-width: none
-}
-.info-widget img {
-  display: block;
-  padding: 5px;
-  margin: auto;
-}
-.info-widget div {
-  flex: 1;
-  display: inline-block;
-  text-align: left;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-.info-widget label {
-  font-weight: bold;
-  margin: 0px;
-}
-.info-widget span {
-  font-size: 150%;
-  font-weight: normal;
-  padding-bottom: 0px;
-}
-.info-widget > .prediction{
-  text-align: center;
-  margin: auto;
-}
+
 
 
 
