@@ -5,6 +5,23 @@ Contains methods to retrieve data from the database
 '''
 # ----------------------------------
 from . import db
+from flask import g
+
+def get_current_user_city():
+    datb = db.get_db()
+    user_id = g.user['userId']
+
+    user_city_data = datb.execute(
+        "SELECT * FROM City WHERE cityId = (SELECT cityId FROM User WHERE userId = ?)",
+        (user_id,)
+    ).fetchone()
+
+    city_name_row = datb.execute(
+        "SELECT cityName FROM City WHERE cityId = ?",
+        (user_city_data['cityId'],)
+    ).fetchone()
+    
+    return city_name_row['cityName']
 
 def get_weather_data (city_name: str, date: str):
     '''
@@ -161,4 +178,3 @@ def _generate_column_script(columns: list):
         column_script += f'{column},'
 
     return column_script[:-1] # (sliced to get rid of last comma)
-
