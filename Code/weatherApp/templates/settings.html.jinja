@@ -2,7 +2,7 @@
   <script src="{{ url_for('static', filename='js/darkmode.js') }}"></script>
 {% endblock %}
 {% extends 'base.html.jinja' %}
-
+{% import 'helpers/selectors.html.jinja' as selectors %}
 {% block title %}
   User Settings
 {% endblock %}
@@ -21,16 +21,10 @@
     </div>
     <br>
 
-    <label for="cityId">City:</label>
-    <select id="cityId" name="cityId">
-      {% for city in cities %}
-        <option value="{{ city.cityId }}" {% if user.cityId == city.cityId %} selected {% endif %}>{{ city.cityName }}</option>
-      {% endfor %}
-    </select><br><br>
+    {{ selectors.select_location(cities, user.cityId) }}<br><br>
 
     <div class="button-container">
       <button type="submit" class="button-style">Update Settings</button>
     </div>
   </form>
 {% endblock %}
-

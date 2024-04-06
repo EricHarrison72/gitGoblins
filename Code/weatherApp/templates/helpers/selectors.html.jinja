@@ -149,3 +149,12 @@ Docs:
 
     </select>
 {% endmacro %}
+
+{% macro select_location(cities, user_city_id='Canberra') %}
+    <label for="cityId">City:</label>
+    <select id="cityId" name="cityId">
+        {% for city in cities %}
+            <option value="{{ city.cityId }}" {% if user_city_id == city.cityId %} selected {% endif %}>{{ city.cityName }}</option>
+        {% endfor %}
+    </select><br><br>
+{% endmacro %}
