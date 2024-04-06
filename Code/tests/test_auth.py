@@ -12,6 +12,7 @@ Start code sources:
 import bcrypt
 from flask import session
 from weatherApp.db import get_db
+from weatherApp import predictions
 
 
 #The register view should render successfully on GET. On POST with valid form data, 
@@ -94,35 +95,38 @@ def test_login(client, app):
         )
         db.commit()
 
-        # Test login with no email
-        response_no_email = client.post(
-            '/auth/login', data={'email': '', 'password': 'a'}
-        )
-        # Check for correct error message
-        assert b'Incorrect email.' in response_no_email.data
+        # MAKE SURE test app has a copy of the prediction model
+        predictions.train_and_save_model()
         
-        # Test login with incorrect password
-        response_no_password = client.post(
-            '/auth/login', data={'email': 'test_user@gmail.com', 'password': 'wrongpassword'}
-        )
-        # Check for correct error message
-        assert b'Incorrect password.' in response_no_password.data
-        # Test login with user ID 100
-        response = client.post(
-            '/auth/login',
-            data={'email': 'test_user@gmail.com', 'password': 'password'}
-        )
-        # Check if it redirects to the home page
-        assert response.headers["Location"] == "/"
+    # Test login with no email
+    response_no_email = client.post(
+        '/auth/login', data={'email': '', 'password': 'a'}
+    )
+    # Check for correct error message
+    assert b'Incorrect email.' in response_no_email.data
+    
+    # Test login with incorrect password
+    response_no_password = client.post(
+        '/auth/login', data={'email': 'test_user@gmail.com', 'password': 'wrongpassword'}
+    )
+    # Check for correct error message
+    assert b'Incorrect password.' in response_no_password.data
+    # Test login with user ID 100
+    response = client.post(
+        '/auth/login',
+        data={'email': 'test_user@gmail.com', 'password': 'password'}
+    )
+    # Check if it redirects to the home page
+    assert response.headers["Location"] == "/"
 
-        # Check if user ID 100 is stored in session
-        with client:
-            response_index = client.get('/')
-            assert response_index.status_code == 200  # Ensure the request is successful
-        
+    # Check if user ID 100 is stored in session
+    with client:
+        response_index = client.get('/')
+        assert response_index.status_code == 200  # Ensure the request is successful
+       
 
-            # Print debugging information
-            print(response_index.data)  # Print the response content
+        # Print debugging information
+        print(response_index.data)  # Print the response content
 
 
 def test_logout(client, app):
