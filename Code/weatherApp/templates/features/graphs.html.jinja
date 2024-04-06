@@ -50,8 +50,15 @@ This template expects the following parameters:
     <br>
     <hr>
 
-    {# embedded graph #}
-    {{ figure_html }}
+    {# graph title #}
+    {% if url_args['stat'] != None %}
+        <h2>
+            {{ url_args['stat'].capitalize() }} Data for {{ url_args['city_name'] }} over Time
+        </h2>
+    {% endif %}
+
+    {# embedded graph svg #}
+    {{ graph_html }}
 
 {% endblock %}
 
