@@ -95,19 +95,17 @@ def weather_summary():
         
         # Get arguments to create graph of previous week
         graph_args = {
-            'stat' : 'temperature',
             'city_name' : url_args['city_name'],
             'start_date' : start_date,
             'end_date' : url_args['date']
         }
         
-        # Generate temperature graph for previous week
-        for arg_val in graph_args.values():
-            if arg_val == None:
-                graph_html = graphs.get_graph_html()
-                break
-        else:
-            graph_html = graphs.get_graph_html(graph_args)
+        graph = graphs.TemperatureGraph(graph_args)
+        graph.fig.update_layout(
+            height=300
+        )
+        graph_html = graph.get_html()
+
     # If there is no data for this city/date set the graph to None
     except: 
         graph_html = None
