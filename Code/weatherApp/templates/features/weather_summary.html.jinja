@@ -12,11 +12,9 @@
 {% endblock %}
 
 {% block content %}
-<div class="centered-content">
-  <div class="flex-container">
-
-    <div class="flex-item">
-      <div id="all-except-details">
+<!--possible future div -->
+  <div class="weather-summary-grid">
+    <div id="all-except-weather-details">
 
         <div class="flex-item">
           <div class="table-container">
@@ -39,7 +37,7 @@
         </div>
 
         <div class="flex-item">
-          {{ data_display.weather_overview(weather_dict, weather_icon)}}
+          {{ data_display.weather_overview(weather_dict, weather_icon, rain_prediction)}}
         </div>
 
         <div class="flex-item">
@@ -48,17 +46,17 @@
           </div>
         </div>
 
-      </div>
+      <!--</div>-->
     </div>
 
-    <div class="flex-item">
+    <div id="'weather-details">
       <div class="table-container">
         {{ data_display.weather_details_table( weather_dict) }}
       </div> 
     </div>
 
   </div>
-</div>
+<!--</div>-->
 {% endblock %}
 
 {% block scripts %}

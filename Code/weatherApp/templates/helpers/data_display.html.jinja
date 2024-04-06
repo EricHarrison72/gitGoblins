@@ -19,80 +19,77 @@ Docs:
 {% endmacro %}
 
 
-{% macro weather_overview(weather_dict, weather_icon) %}
-    <div id="weather-overview">
-        
-        <div class="flex-item">
-            <h2>{{ weather_dict['city_name'] }}—{{ weather_dict['date'] }}</h2>
-        </div>
+{% macro weather_overview(weather_dict, weather_icon, rain_prediction) %}
+  <div class="weather-overview-grid">
 
-        <div class="flex-item">
-            <div class="flex-container">
-
-                <div class="flex-item">
-                    {{ icon_display.main_weather_icon( weather_icon)}}
-                </div>
-
-                <div class = "flex-item">
-                    <table class="widget-table">
-                        <tr>
-                            <td>
-                                {{info_widget(
-                                    icon_display.temp_low_icon(),
-                                    'Low',
-                                    weather_dict['temp_low'] ~ ' &degC'
-                                )}} 
-                            </td>
-                            <td>
-                                {{info_widget(
-                                    icon_display.temp_high_icon(),
-                                    'High',
-                                    weather_dict['temp_high'] ~ ' &degC'
-                                )}}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                {% set rain_icon = icon_display.rain_icon( weather_dict['rain_today']) %}
-                                {{info_widget(
-                                    rain_icon,
-                                    'Rain',
-                                    weather_dict['rainfall'] ~ ' mm'
-                                )}} 
-                            </td>
-                            <td>
-                                {% set wind_icon = icon_display.wind_dir_icon( weather_dict['wind_dir']) %}
-                                {{info_widget(
-                                    wind_icon,
-                                    'Wind Gusts',
-                                    weather_dict['rainfall'] ~ ' km/h ' ~ weather_dict['wind_dir']
-                                )}} 
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-
-            </div>
-        </div>
-
-        <div class="flex-item">
-                {#{% if rain_prediction == 0 %}
-                {% set will_or_will_not = 'WILL NOT' %}
-                {% elif rain_prediction == 1 %}
-                {% set will_or_will_not = 'WILL' %}
-                {% else %}
-                {% set error_detected = true %}
-                {% endif %}
-
-                {% if error_detected %}
-                <p>There was an error while performing the AI prediction.</p>
-                {% else %}
-                <p>Our AI model predicts that it <b>{{ will_or_will_not }}</b> rain tomorrow.</p>
-                {% endif %}#}
-                [ put rain prediction here ]
-        </div>
-
+    <div class="overview-header">
+      <h2>{{ weather_dict['city_name'] }}—{{ weather_dict['date'] }}</h2>
     </div>
+
+    <div class="main-icon">
+      {{ icon_display.main_weather_icon( weather_icon)}}
+    </div>
+
+    <div class="widget-table-container">
+      <table class="widget-table">
+        <tr>
+          <td>
+            {{info_widget(
+                icon_display.temp_low_icon(),
+                'Low',
+                weather_dict['temp_low'] ~ ' &degC'
+            )}} 
+          </td>
+          <td>
+            {{info_widget(
+                icon_display.temp_high_icon(),
+                'High',
+                weather_dict['temp_high'] ~ ' &degC'
+            )}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            {% set rain_icon = icon_display.rain_icon( weather_dict['rain_today']) %}
+            {{info_widget(
+                rain_icon,
+                'Rain',
+                weather_dict['rainfall'] ~ ' mm'
+            )}} 
+          </td>
+          <td>
+            {% set wind_icon = icon_display.wind_dir_icon( weather_dict['wind_dir']) %}
+            {{info_widget(
+                wind_icon,
+                'Wind Gusts',
+                weather_dict['rainfall'] ~ ' km/h ' ~ weather_dict['wind_dir']
+            )}} 
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="prediction-container">
+      <div class="info-widget">
+        <span class="prediction">
+          {% if rain_prediction == 0 %}
+            {% set will_or_will_not = 'WILL NOT' %}
+          {% elif rain_prediction == 1 %}
+            {% set will_or_will_not = 'WILL' %}
+          {% else %}
+            {% set error_detected = true %}
+          {% endif %}
+
+          {% if error_detected %}
+            There was an error while performing the AI prediction.
+          {% else %}
+            Our AI model predicts that it <b>{{ will_or_will_not }}</b> rain tomorrow.
+          {% endif %}
+        </span>
+      </div>
+    </div>
+
+  </div>
 {% endmacro %}
 
 
