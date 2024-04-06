@@ -13,46 +13,52 @@
 
 {% block content %}
 <div class="centered-content">
-  <br>
-
-  <div style="overflow-x: auto;">
-    <table class='select-table'>
-      <tr>
-        <th>Location</th>
-        <th>Date</th>
-      </tr>
-      <tr>
-        <td>{{ selectors.select_single_location( url_args['city_name']) }}</td>
-        <td>{{ selectors.select_date('', url_args['date']) }}</td>
-        <td>
-          <button onclick="reloadPageWithArgs(`city_name=${getCityFromSelection()}&date=${getDateFromSelection()}`)" class="dropdown-style">
-            Submit
-          </button>
-        </td>
-      </tr>
-    </table>
-  </div>
-</div>
-
-  <br><br>
-
-  <!-- Flex container for side-by-side layout -->
   <div class="flex-container">
-    <div class="table-container">
-      {{ data_display.weather_details_table( weather_dict) }}
+
+    <div class="flex-item">
+      <div id="all-except-details">
+
+        <div class="flex-item">
+          <div class="table-container">
+            <table class='select-table'>
+              <tr>
+                <th>Location</th>
+                <th>Date</th>
+              </tr>
+              <tr>
+                <td>{{ selectors.select_single_location( url_args['city_name']) }}</td>
+                <td>{{ selectors.select_date('', url_args['date']) }}</td>
+                <td>
+                  <button onclick="reloadPageWithArgs(`city_name=${getCityFromSelection()}&date=${getDateFromSelection()}`)" class="dropdown-style">
+                    Submit
+                  </button>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="flex-item">
+          {{ data_display.weather_overview(weather_dict, weather_icon)}}
+        </div>
+
+        <div class="flex-item">
+          <div class="graph-container">
+            {{ graph_html }}
+          </div>
+        </div>
+
+      </div>
     </div>
 
-  <div class="flex-item">
-    
-    {{ data_display.weather_overview(weather_dict, weather_icon)}}
-    <br>
-    <br>
+    <div class="flex-item">
+      <div class="table-container">
+        {{ data_display.weather_details_table( weather_dict) }}
+      </div> 
+    </div>
 
-    {{ graph_html }}
-  
-  </div>  
+  </div>
 </div>
-
 {% endblock %}
 
 {% block scripts %}

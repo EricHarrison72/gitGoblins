@@ -39,6 +39,7 @@ table, th, td {
   border-radius: 6px;
   background-color: #FFCD00;
   font-size: 13px;
+  max-width: none;
 }
 .select-table th {
   border-style: hidden;
@@ -99,38 +100,48 @@ table, th, td {
 
 .centered-content {
   display: flex;
-  flex-direction: column;
   align-items: center;
   text-align: center;
 }
 
+/*---------------------------------*/
 /* Flex container for side-by-side layout */
 .flex-container {
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  justify-content: flex-start;
+  align-items: center;
   gap: 20px;
   flex-wrap: wrap;
+  flex-direction: column;
+  
+}
+.flex-container #weather-summary {
+  flex-direction: column
+}
+.flex-container #all-except-details {
+  flex-direction: row;
+}
+.flex-container #weather-overview {
+  flex-direction: row;
+  align-items: center;
+  text-align: center;
 }
 
 .flex-item {
   flex: 1;
   min-width: 100px;
-  max-width: 600px;
+  max-width: none;
 }
 
-.weather-detail {
-  display: inline-block;
-  text-align: center;
-  margin-right: 10px;
-  font-size: 8px;
+.widget-table {
+  border-style: hidden;
+  border-collapse: collapse;
 }
-
-.weather-detail img {
-  display: block;
-  margin: 0 auto;
+.widget-table td {
+  border-style: hidden;
+  padding: 5px;
 }
-
+/*---------------------------------*/
 .info-widget {
   background-color: #e1f4ff;
   display: flex;
@@ -160,13 +171,4 @@ table, th, td {
   font-size: 150%;
   font-weight: normal;
   padding-bottom: 0px
-}
-
-.widget-table {
-  border-style: hidden;
-  border-collapse: collapse;
-}
-.widget-table td {
-  border-style: hidden;
-  padding: 5px;
 }

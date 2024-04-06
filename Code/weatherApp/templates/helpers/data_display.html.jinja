@@ -20,91 +20,63 @@ Docs:
 
 
 {% macro weather_overview(weather_dict, weather_icon) %}
-    <div class="centered-content">
-        <h2>{{ weather_dict['city_name'] }}—{{ weather_dict['date'] }}</h2>
+    <div id="weather-overview">
+        
+        <div class="flex-item">
+            <h2>{{ weather_dict['city_name'] }}—{{ weather_dict['date'] }}</h2>
+        </div>
 
-        <div class="flex-container">
-            <div class="flex-item">
-                {{ icon_display.main_weather_icon( weather_icon)}}
+        <div class="flex-item">
+            <div class="flex-container">
+
+                <div class="flex-item">
+                    {{ icon_display.main_weather_icon( weather_icon)}}
+                </div>
+
+                <div class = "flex-item">
+                    <table class="widget-table">
+                        <tr>
+                            <td>
+                                {{info_widget(
+                                    icon_display.temp_low_icon(),
+                                    'Low',
+                                    weather_dict['temp_low'] ~ ' &degC'
+                                )}} 
+                            </td>
+                            <td>
+                                {{info_widget(
+                                    icon_display.temp_high_icon(),
+                                    'High',
+                                    weather_dict['temp_high'] ~ ' &degC'
+                                )}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                {% set rain_icon = icon_display.rain_icon( weather_dict['rain_today']) %}
+                                {{info_widget(
+                                    rain_icon,
+                                    'Rain',
+                                    weather_dict['rainfall'] ~ ' mm'
+                                )}} 
+                            </td>
+                            <td>
+                                {% set wind_icon = icon_display.wind_dir_icon( weather_dict['wind_dir']) %}
+                                {{info_widget(
+                                    wind_icon,
+                                    'Wind Gusts',
+                                    weather_dict['rainfall'] ~ ' km/h ' ~ weather_dict['wind_dir']
+                                )}} 
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
             </div>
+        </div>
 
-
-                <table class="widget-table">
-                    <tr>
-                        <td>
-                            {{info_widget(
-                                icon_display.temp_low_icon(),
-                                'Low',
-                                weather_dict['temp_low'] ~ ' &degC'
-                            )}} 
-                        </td>
-                        <td>
-                            {{info_widget(
-                                icon_display.temp_high_icon(),
-                                'High',
-                                weather_dict['temp_high'] ~ ' &degC'
-                            )}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            {% set rain_icon = icon_display.rain_icon( weather_dict['rain_today']) %}
-                            {{info_widget(
-                                rain_icon,
-                                'Rain',
-                                weather_dict['rainfall'] ~ ' mm'
-                            )}} 
-                        </td>
-                        <td>
-                            {% set wind_icon = icon_display.wind_dir_icon( weather_dict['wind_dir']) %}
-                            {{info_widget(
-                                wind_icon,
-                                'Wind Gusts',
-                                weather_dict['rainfall'] ~ ' km/h ' ~ weather_dict['wind_dir']
-                            )}} 
-                        </td>
-                    </tr>
-                </table>
-            
-{#                     
-                    <div class="weather-detail">
-                    <img src="{{ url_for('static', filename='img/temp_low.png') }}" alt="Low Temperature" width="25" height="25">
-                    <div>Low</div>
-                    </div>
-                    <font size="+2">{{ weather_dict['temp_low'] }}&deg</font>C
-                    
-                    <br><br>
-
-                    <div class="weather-detail">
-                    {{ icon_display.rain_icon( weather_dict['rain_today'])}}
-                    <div>Rain</div>
-                    </div>
-
-                    &nbsp;&nbsp;&nbsp;
-
-                    {{ weather_dict['rainfall'] }} mm
-                    
-                    &nbsp;&nbsp;&nbsp;
-
-                    <div class="weather-detail">
-                    {{ icon_display.wind_dir_icon( weather_dict['wind_dir'])}}
-                    <div>Wind</div>
-                    </div>
-                    
-                    &nbsp;&nbsp;&nbsp;
-                    {{ weather_dict['wind_speed'] }} km/h
-
-                    {% else %}
-                    <tr>
-                        <td colspan="2">No weather data found for the specified date.</td>
-                    </tr>
-                    {% endif %}
-                </tbody> #}
-            
-
-                {# -------------------------------------------- #}
-{# 
-                {% if rain_prediction == 0 %}
+        <div class="flex-item">
+                {#{% if rain_prediction == 0 %}
                 {% set will_or_will_not = 'WILL NOT' %}
                 {% elif rain_prediction == 1 %}
                 {% set will_or_will_not = 'WILL' %}
@@ -116,8 +88,10 @@ Docs:
                 <p>There was an error while performing the AI prediction.</p>
                 {% else %}
                 <p>Our AI model predicts that it <b>{{ will_or_will_not }}</b> rain tomorrow.</p>
-            {% endif %}
-            </div> #}
+                {% endif %}#}
+                [ put rain prediction here ]
+        </div>
+
     </div>
 {% endmacro %}
 
