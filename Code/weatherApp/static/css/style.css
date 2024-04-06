@@ -34,7 +34,6 @@ table, th, td {
   }
 
 .select-table {
-  display: flex;
   border-collapse: collapse;
   border-style: hidden;
   border-radius: 6px;
@@ -100,7 +99,6 @@ table, th, td {
 }
 
 .centered-content {
-  display: flex;
   align-items: center;
   text-align: center;
 }
@@ -165,7 +163,7 @@ table, th, td {
   grid-column: 1 / 2;
   grid-row: 2 / 3;
   padding: 5px;
-  justify-self: center;
+  justify-self: end;
 }
 .weather-overview-grid .widget-table-container {
   grid-column: 2 / 3;
@@ -219,8 +217,9 @@ table, th, td {
   font-weight: normal;
   padding-bottom: 0px;
 }
-.info-widget .prediction {
+.info-widget > .prediction{
   text-align: center;
+  margin: auto;
 }
 
 
