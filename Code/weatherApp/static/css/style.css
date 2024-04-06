@@ -69,7 +69,7 @@ table, th, td {
 .button-style {
   background-color: #FFCD00;
   color: #00843D;
-  border: 2px solid black;
+  border: 0px;
   padding: 12px 16px; /* Adjusts button size */
   text-align: center;
   text-decoration: none;
@@ -78,7 +78,7 @@ table, th, td {
   font-size: 16px;
   margin: 5px auto; /* Adjusts button spacing */
   cursor: pointer;
-  border-radius: 16px; /* Rounded corners */
+  border-radius: 6px;
   width: 80%; /* Sets a specific width for all buttons */
   max-width: 200px; /* Adjusts maximum width */
 }
@@ -86,6 +86,7 @@ table, th, td {
 .button-container {
   display: flex;
   flex-direction: row;
+  
 }
 
 /* Update CSS to align the checkbox */

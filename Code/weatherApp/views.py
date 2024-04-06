@@ -35,37 +35,30 @@ views_bp = Blueprint('views', __name__)
 @login_required
 def index():
     datb = db.get_db()
-    user_id = g.user['userId']  # Assuming you have stored user data in the 'g' object
+    user_id = g.user['userId']
 
-    # Fetch the user's city data from the database
     user_city_data = datb.execute(
         "SELECT * FROM City WHERE cityId = (SELECT cityId FROM User WHERE userId = ?)",
         (user_id,)
     ).fetchone()
 
-    # Convert the specified date to the string format matching the database
-    specified_date = datetime(2017, 6, 24).strftime('%Y-%m-%d')
-
-    # Fetch the WeatherInstance data for the specified date (March 25, 2017)
-    weather_data = datb.execute(
-        "SELECT * FROM WeatherInstance WHERE cityId = ? AND date = ?",
-        (user_city_data['cityId'], specified_date)
-    ).fetchone()
-    
-    # Fetch cityName from the City table for specific cityId
     city_name_row = datb.execute(
-    "SELECT cityName FROM City WHERE cityId = ?",
-    (user_city_data['cityId'],)
+        "SELECT cityName FROM City WHERE cityId = ?",
+        (user_city_data['cityId'],)
     ).fetchone()
-
-    # Extract the cityName string from the row object
     city_name = city_name_row['cityName']
 
-    # Get the main weather icon for this city/date
+    specified_date = datetime(2017, 6, 24).strftime('%Y-%m-%d')
+
     weather_dict = queries.get_weather_data(city_name, specified_date)
     weather_icon = weather.determine_icon_based_on_weather(weather_dict)
+    rain_prediction = predictions.predict_rain(city_name, specified_date)
     
-    return render_template("index.html.jinja", user_city_data=user_city_data, weather_data=weather_data, weather_icon=weather_icon)
+    return render_template(
+        "index.html.jinja",
+        weather_dict = weather_dict,
+        weather_icon = weather_icon,
+        rain_prediction = rain_prediction)
 
 
 @views_bp.route('/weather_summary')
