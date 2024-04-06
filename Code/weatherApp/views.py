@@ -34,8 +34,8 @@ views_bp = Blueprint('views', __name__)
 @views_bp.route('/')
 @login_required
 def index():
-
-    city_name = queries.get_current_user_city()
+    user_id = g.user['userId']
+    city_name = queries.get_user_city(user_id)
     specified_date = datetime(2017, 6, 24).strftime('%Y-%m-%d')
 
     weather_dict = queries.get_weather_data(city_name, specified_date)
@@ -60,7 +60,8 @@ def weather_summary():
     }
 
     if url_args['city_name'] == None:
-        url_args['city_name'] = queries.get_current_user_city()
+        user_id = g.user['userId']
+        url_args['city_name'] = queries.get_user_city(user_id)
         url_args['date'] = datetime(2017, 6, 24).strftime('%Y-%m-%d')
 
     city_name = url_args['city_name']

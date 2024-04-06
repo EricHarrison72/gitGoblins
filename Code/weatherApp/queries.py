@@ -7,9 +7,8 @@ Contains methods to retrieve data from the database
 from . import db
 from flask import g
 
-def get_current_user_city():
+def get_user_city(user_id):
     datb = db.get_db()
-    user_id = g.user['userId']
 
     user_city_data = datb.execute(
         "SELECT * FROM City WHERE cityId = (SELECT cityId FROM User WHERE userId = ?)",
