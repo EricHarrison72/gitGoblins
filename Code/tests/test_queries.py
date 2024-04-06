@@ -59,7 +59,7 @@ def expected_weather_dict():
         },
         # (There is no data for Albury in the test DB)
         'params passed, no data exists': {
-            'city_name': 'NO DATA for Albury on this date', 
+            'city_name': 'NO DATA for Albury', 
             'date': '2007-12-01', 
             'temp_low': 0,
             'temp_high': 0,
