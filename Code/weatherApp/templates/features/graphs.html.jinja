@@ -21,45 +21,55 @@ This template expects the following parameters:
 {% endblock %}
 
 {% block content %}
-    {# Selection menus #}
-    <br>
-    <table class="select-table">
-        <tr>
-            <th>Statistic</th>
-            <th>Location</th>
-            <th>Start date</th>
-            <th>End date</th>
-        </tr>
-        <tr>
-            <td>{{ selectors.select_stat( url_args['stat']) }}</td>
-            <td>{{ selectors.select_single_location( url_args['city_name']) }}</td>
-            <td>{{ selectors.select_date( 'start_', url_args['start_date']) }}</td>
-            <td>{{ selectors.select_date( 'end_', url_args['end_date']) }}</td>
-            <td>
-                <button onclick="reloadPageWithArgs(
-                    `stat=${getStatFromSelection()}`
-                    + `&city_name=${getCityFromSelection()}`
-                    + `&start_date=${getDateFromSelection('start_')}`
-                    + `&end_date=${getDateFromSelection('end_')}`
-                )">
-                    Submit
-                </button>
-            </td>
-        </tr>
-    </table>
-    <br>
-    <hr>
+    <div class="visualization-grid">
+        
+        {# Selection menus #}
+        <div class="select-table-container">
+            <br>
+            <table class="select-table">
+                <tr>
+                    <th>Statistic</th>
+                    <th>Location</th>
+                    <th>Start date</th>
+                    <th>End date</th>
+                </tr>
+                <tr>
+                    <td>{{ selectors.select_stat( url_args['stat']) }}</td>
+                    <td>{{ selectors.select_single_location( url_args['city_name']) }}</td>
+                    <td>{{ selectors.select_date( 'start_', url_args['start_date']) }}</td>
+                    <td>{{ selectors.select_date( 'end_', url_args['end_date']) }}</td>
+                    <td>
+                        <button onclick="reloadPageWithArgs(
+                            `stat=${getStatFromSelection()}`
+                            + `&city_name=${getCityFromSelection()}`
+                            + `&start_date=${getDateFromSelection('start_')}`
+                            + `&end_date=${getDateFromSelection('end_')}`
+                        )">
+                            Submit
+                        </button>
+                    </td>
+                </tr>
+            </table>
 
-    {# graph title #}
-    {% if url_args['stat'] != None %}
-        <h2>
-            {{ url_args['stat'].capitalize() }} Data for {{ url_args['city_name'] }} over Time
-        </h2>
-    {% endif %}
+            <br>
+        </div>
 
-    {# embedded graph svg #}
-    {{ graph_html }}
+        {# graph title #}
+        {% if url_args['stat'] != None %}
+            <h2>
+                {{ url_args['stat'].capitalize() }} Data for {{ url_args['city_name'] }} over Time
+            </h2>
+        {% endif %}
 
+        {# embedded graph svg #}
+        <div class="visualization"
+            {% if url_args['stat'] == 'wind' %}
+                style="justify-self: center; padding-top: 10px"
+            {% endif%}
+        >
+            {{ graph_html }}
+        </div>
+    </div>
 {% endblock %}
 
 {% block scripts %}
