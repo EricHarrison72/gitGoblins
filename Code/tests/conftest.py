@@ -47,12 +47,12 @@ def app():
 
 @pytest.fixture()
 def client(app):
-    # allows us to simulate requests to the app
+    '''allows us to simulate requests to the app'''
     return app.test_client()
 
 @pytest.fixture()
 def runner(app):
-    # creates a runner that can call the Click commands registered with the application
+    '''creates a runner that can call the Click commands registered with the application'''
     return app.test_cli_runner()
 
 #With the auth fixture, you can call auth.login() in a test to log in as the test user, 
@@ -61,15 +61,25 @@ class AuthActions(object):
     def __init__(self, client):
         self._client = client
 
+    def register(self, email='test@gmail.com', password='test', cityId='1'):
+        return self._client.register(
+            '/auth/register',
+            data = {
+                'email': 'test@gmail.com',
+                'password': 'a',
+                'city_id': '1'  # Provide a valid city_id in the form data
+            })
+
     def login(self, email='test@gmail.com', password='test'):
         return self._client.post(
             '/auth/login',
-            data={'email': email, 'password': password}
-        )
+            data = {
+                'email': email,
+                'password': password
+            })
 
     def logout(self):
         return self._client.get('/auth/logout')
-
 
 @pytest.fixture
 def auth(client):
