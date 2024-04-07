@@ -116,7 +116,9 @@ input[type=submit] { align-self: start; min-width: 10em; }
 /* Custom Button Stuff */
 .button-container {
   display: flex;
-  flex-direction: row;
+  justify-content: center;
+  gap: 10px; /* Adjusts the gap between buttons */
+  flex-wrap: wrap;
 }
 .button-style {
   background-color: #FFCD00;
@@ -133,6 +135,22 @@ input[type=submit] { align-self: start; min-width: 10em; }
   border-radius: 6px;
   width: 80%; /* Sets a specific width for all buttons */
   max-width: 200px; /* Adjusts maximum width */
+}
+.button-style-headers {
+  background-color: #FFCD00;
+  color: #00843D;
+  border: 0px;
+  padding: 6px 10px; /* Adjusts button size */
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-family: 'Roboto', sans-serif;
+  font-size: 10px;
+  margin: 5px 0; /* Adjusts button spacing */
+  cursor: pointer;
+  border-radius: 6px;
+  width: 80%; /* Sets a specific width for all buttons */
+  max-width: 110px; /* Adjusts maximum width */
 }
 
 /* ((((((((((((((((((( FLEXBOXES ))))))))))))))))))) */
