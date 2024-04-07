@@ -11,7 +11,13 @@ Resources:
 ----------------------------------------*/
 
 html { font-family: 'Roboto', sans-serif; font-size: 0.9rem; background: #eee }
-body { margin: 0; background: white; height: 100vh; display: flex; flex-direction: column; }
+body {
+  margin: 0;
+  background: white;
+  min-height: 100vh; /* Change height to min-height */
+  display: flex;
+  flex-direction: column;
+}
 h1 { font-family: 'Rubik', sans-serif; font-weight:700; font-size: 1.5rem; color: #00843D; margin: 0.9rem 0; }
 h2 { font-family: 'Roboto', sans-serif; font-weight:600; font-size: 2.75rem; margin: 1rem 0; }
 a { color: #00843D; }
@@ -304,5 +310,3 @@ input:checked + .slider:before {
   -ms-transform: translateX(26px);
   transform: translateX(26px);
 }
-
-
