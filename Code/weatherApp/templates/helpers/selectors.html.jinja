@@ -4,7 +4,6 @@ selectors.html.jinja
 Contains macros for selection menus, including:
 - select_date
 - select_single_location
-- select_multiple_locations
 
 Docs:
 - [Jinja2 Docs: Macros](https://jinja.palletsprojects.com/en/3.1.x/templates/#macros)
@@ -18,7 +17,7 @@ Docs:
 
     {% set stats = ['temperature', 'wind', 'rain'] %}
 
-    <select id="statSelect">
+    <select id="statSelect" class="dropdown-style">
         {% for i in range(stats|length) %}
             <option value="{{ i }}" {% if stats[i] == url_arg_stat %} selected {% endif %}>
                     {{ stats[i] }}
@@ -40,7 +39,7 @@ Docs:
     {% set selected_day = url_arg_date[8:] | int %}
 
     <div id="{{ id_prefix }}dateSelect">
-        <select id="{{ id_prefix }}yearSelect">
+        <select id="{{ id_prefix }}yearSelect" class="dropdown-style">
             {% for year in range(2008, 2018) %}
                 <option value="{{ year }}" {% if year == selected_year %} selected {% endif %}>
                         {{ year }}
@@ -48,7 +47,7 @@ Docs:
             {% endfor %}
         </select>
 
-        <select id="{{ id_prefix }}monthSelect">
+        <select id="{{ id_prefix }}monthSelect" class="dropdown-style">
             {% set months = [
                 'January',
                 'February',
@@ -71,7 +70,7 @@ Docs:
             {% endfor %}
         </select>
 
-        <select id="{{ id_prefix }}daySelect">
+        <select id="{{ id_prefix }}daySelect" class="dropdown-style">
             {% for day in range(1, 32) %}
                 <option value="{{ day }}" {% if day == selected_day %} selected {% endif %}>
                     {{ day }}
@@ -88,7 +87,7 @@ Docs:
         {% set url_arg_city = 'Canberra' %}
     {% endif %}
 
-    <select id="citySelect">
+    <select id="citySelect" class="dropdown-style">
         {% set cities = [
             'Adelaide',
             'Albany',

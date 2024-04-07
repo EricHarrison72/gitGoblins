@@ -82,6 +82,7 @@ class WeatherGraph(ABC):
         self._initialize_dataframe()
         self._initialize_figure()
         self._update_fonts()
+        self._update_margins_and_color()
     
     def get_html(self):
         return self.fig.to_html(full_html=False)
@@ -122,12 +123,17 @@ class WeatherGraph(ABC):
         title_font_color="black",
         legend_title_font_color="black"
     )
+    
+    def _update_margins_and_color(self):
+        self.fig.update_layout(
+            margin={'t': 20, 'r': 10, 'l': 10, 'b':20},
+            plot_bgcolor = '#e1f4ff'
+        )
 
 # =================================
 class TemperatureGraph(WeatherGraph):
     def __init__(self, city_and_dates):
         super().__init__(city_and_dates)
-        print(self.get_html())
 
     # OVERRIDE: all abstract methods
     # ------------------------------
@@ -152,7 +158,6 @@ class TemperatureGraph(WeatherGraph):
             x = 'Date',
             y = ['Low', 'High'],
             barmode = 'group',
-            title = "Temperature Over Time — "+ self.get_city_name(),
             labels = {"value": "Temperature (°C)", "variable": "Type"},
         )
 
@@ -184,7 +189,6 @@ class RainGraph(WeatherGraph):
             self.dataframe,
             x = 'Date',
             y = 'Rainfall',
-            title = "Rainfall Over Time — "+ self.get_city_name(),
             labels = {"value": "Rainfall (mm)"},
         )
 
@@ -224,12 +228,8 @@ class WindGraph(WeatherGraph):
             theta="Direction",
             color="Speed",
             color_discrete_sequence= px.colors.sequential.Plasma_r,
-            title = f"Wind Gust Data"
-                    + f" — Between {self.city_and_dates['start_date']} and {self.city_and_dates['end_date']}"
-                    + f" — {self.get_city_name()}",
             labels = {"Speed": "Speed (km/h)"},
             width=700,
-
         )
 
     # NEW Helper METHODS

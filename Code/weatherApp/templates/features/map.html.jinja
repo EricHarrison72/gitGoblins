@@ -24,20 +24,27 @@
     Map
 {% endblock %}
 {% block content %}
-    <br>
-    <div style="overflow-x: auto;">
-        <table class='select-table'>
-            <tr>
-                <th>Date</th>
-            </tr>
-            <tr>
-                <td>{{ selectors.select_date() }}</td>
-            </tr>
-        </table>
-    </div>
-    <br>
+    <div class="visualization-grid">
 
-    <div id="map" style="height: 80vh; width: 100%;"></div>
-    
+        <div class="select-table-container">
+            <br>
+            <div style="overflow-x: auto;">
+                <table class='select-table'>
+                    <tr>
+                        <th>Date</th>
+                    </tr>
+                    <tr>
+                        <td>{{ selectors.select_date() }}</td>
+                    </tr>
+                </table>
+            </div>
+            <br>
+        </div>
+
+        <div class="visualization">
+            <div id="map" style="height: 80vh; width: 100%;"></div>
+        </div>
+        
+    </div>
 {% endblock %}
 

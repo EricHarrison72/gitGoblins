@@ -4,6 +4,8 @@
 {% endblock %}
 {% extends 'base.html.jinja' %}
 {% import 'helpers/selectors.html.jinja' as selectors %}
+{% import 'helpers/data_display.html.jinja' as data_display %}
+{% import 'helpers/icon_display.html.jinja' as icon_display %}
 
 {% block title %}
   Weather Summary
@@ -14,144 +16,45 @@
 {% endblock %}
 
 {% block content %}
+<!--possible future div -->
+<div class="centered-content">
+  <div class="weather-summary-grid">
 
-  <br>
-  <div style="overflow-x: auto;">
-    <table class='select-table'>
-      <tr>
-        <th>Location</th>
-        <th>Date</th>
-      </tr>
-      <tr>
-        <td>{{ selectors.select_single_location( url_args['city_name']) }}</td>
-        <td>{{ selectors.select_date('', url_args['date']) }}</td>
-        <td>
-          <button onclick="reloadPageWithArgs(`city_name=${getCityFromSelection()}&date=${getDateFromSelection()}`)">
-            Submit
-          </button>
-        </td>
-      </tr>
-    </table>
+    <div id="all-except-weather-details"> <!-- grid item -->
+
+      <div class="table-container">
+        <table class='select-table' style="display:flex;"">
+          <tr>
+            <th>Location</th>
+            <th>Date</th>
+          </tr>
+          <tr>
+            <td>{{ selectors.select_single_location( url_args['city_name']) }}</td>
+            <td>{{ selectors.select_date('', url_args['date']) }}</td>
+            <td>
+              <button onclick="reloadPageWithArgs(`city_name=${getCityFromSelection()}&date=${getDateFromSelection()}`)" class="dropdown-style">
+                Submit
+              </button>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      {{ data_display.weather_overview(weather_dict, weather_icon, rain_prediction)}}
+
+      <div class="graph-container">
+        {{ graph_html }}
+      </div>
+
+    </div>
+
+    <div id="weather-details"> <!-- grid item -->
+      <div class="table-container">
+        {{ data_display.weather_details_table( weather_dict) }}
+      </div> 
+    </div>
+
   </div>
-
-  <h3>{{weather_dict['city_name']}} — {{ weather_dict['date'] }}</h3>
-
-  <font size="+2">{{ weather_dict['temp_high'] }}&deg</font><font size="-2"><sub>high</sub></font> |
-  <font size="+2">{{ weather_dict['temp_low'] }}&deg</font><font size="-2"><sub>low</sub></font>
-
-  <br>
-  <br>
-
-  <table>
-    <tr>
-      <td>Is it raining? | <b>{{ weather_dict['raining'] }}</b></td>
-      <td>Rainfall | <b>{{ weather_dict['rainfall'] }} mm</b></td>
-    </tr>
-    <tr>
-      <td>Wind speed | <b>{{ weather_dict['wind_speed'] }} km/h</b></td>
-      <td>Wind direction | <b>{{ weather_dict['wind_dir'] }}</b></td>
-    </tr>
-  </table>
-
-  <br>
-  <br>
-
-  {% if rain_prediction == 0 %}
-    {% set will_or_will_not = 'WILL NOT' %}
-  {% elif rain_prediction == 1 %}
-    {% set will_or_will_not = 'WILL' %}
-  {% else %}
-    {% set error_detected = true %}
-  {% endif %}
-
-  {% if error_detected %}
-    <p>There was an error while performing the AI prediction.</p>
-  {% else %}
-    <p>Our AI model predicts that it <b>{{ will_or_will_not }}</b> rain tomorrow.</p>
-  {% endif %}
-  
-  <div class="table-container">
-    <table class="scrollable-table">
-      <tbody>
-          <tr>
-            <td>Temperature Max</td>
-            <td>{{ weather_dict['temp_high'] }}</td>
-          </tr>
-          <tr>
-            <td>Temperature Min</td>
-            <td>{{ weather_dict['temp_low'] }}</td>
-          </tr>
-          <tr>
-            <td>Sunshine</td>
-            <td>{{ weather_dict['sunshine'] }}</td>
-          </tr>
-          <tr>
-            <td>Rainfall</td>
-            <td>{{ weather_dict['rainfall'] }}</td>
-          </tr>
-          <tr>
-            <td>Evaporation</td>
-            <td>{{ weather_dict['evaporation'] }}</td>
-          </tr>
-          <tr>
-            <td>Cloud 9am</td>
-            <td>{{ weather_dict['cloud9am'] }}</td>
-          </tr>
-          <tr>
-            <td>Cloud 3pm</td>
-            <td>{{ weather_dict['cloud'] }}</td>
-          </tr>
-          <tr>
-            <td>Pressure 9am</td>
-            <td>{{ weather_dict['pressure9am'] }}</td>
-          </tr>
-          <tr>
-            <td>Pressure 3pm</td>
-            <td>{{ weather_dict['pressure3pm'] }}</td>
-          </tr>
-          <tr>
-            <td>Humidity 9am</td>
-            <td>{{ weather_dict['humidity9am'] }}</td>
-          </tr>
-          <tr>
-            <td>Humidity 3pm</td>
-            <td>{{ weather_dict['humidity3pm'] }}</td>
-          </tr>
-          <tr>
-            <td>Wind Gust Speed</td>
-            <td>{{ weather_dict['wind_speed'] }}</td>
-          </tr>
-          <tr>
-            <td>Wind Gust Dir</td>
-            <td>{{ weather_dict['wind_dir'] }}</td>
-          </tr>
-          <tr>
-            <td>Wind Speed 9am</td>
-            <td>{{ weather_dict['windSpeed9am'] }}</td>
-          </tr>
-          <tr>
-            <td>Wind Speed 3pm</td>
-            <td>{{ weather_dict['windSpeed3pm'] }}</td>
-          </tr>
-          <tr>
-            <td>Wind Dir 9am</td>
-            <td>{{ weather_dict['windDir9am'] }}</td>
-          </tr>
-          <tr>
-            <td>Wind Dir 3pm</td>
-            <td>{{ weather_dict['windDir3pm'] }}</td>
-          </tr>
-          <tr>
-            <td>Rain Today</td>
-            <td>{{ weather_dict['raining'] }}</td>
-          </tr>
-          <tr>
-            <td>Rain Tomorrow</td>
-            <td>{{ weather_dict['rainTomorrow'] }}</td>
-          </tr>
-      </tbody>
-    </table>
-  </div>
-
+</div>
 {% endblock %}
 

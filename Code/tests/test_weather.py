@@ -21,10 +21,10 @@ def expected_error():
             'temp_high': 0.0, 
             'temp_low': 0.0, 
             'rainfall': 0.0, 
-            'raining': 'No', 
+            'rain_today': 'No', 
             'wind_speed': 30, 
             'wind_dir': 'N',
-            'cloud': 3
+            'cloud_3pm': 3
         }
     
 @pytest.fixture()
@@ -36,10 +36,10 @@ def expected_rain():
             'temp_high': 10.0, 
             'temp_low': 2.0, 
             'rainfall': 0.0, 
-            'raining': 'Yes', 
+            'rain_today': 'Yes', 
             'wind_speed': 30, 
             'wind_dir': 'N',
-            'cloud': 3
+            'cloud_3pm': 3
         }
 
 @pytest.fixture()
@@ -51,10 +51,10 @@ def expected_wind():
             'temp_high': 10.0, 
             'temp_low': 2.0, 
             'rainfall': 0.0, 
-            'raining': 'No', 
+            'rain_today': 'No', 
             'wind_speed': 81, 
             'wind_dir': 'N',
-            'cloud': 3
+            'cloud_3pm': 3
         }
 
 @pytest.fixture()
@@ -66,10 +66,10 @@ def expected_cloud():
             'temp_high': 10.0, 
             'temp_low': 2.0, 
             'rainfall': 0.0, 
-            'raining': 'No', 
+            'rain_today': 'No', 
             'wind_speed': 30, 
             'wind_dir': 'N',
-            'cloud': 5
+            'cloud_3pm': 5
         }
     
 @pytest.fixture()
@@ -81,10 +81,10 @@ def expected_partcloud():
             'temp_high': 10.0, 
             'temp_low': 2.0, 
             'rainfall': 0.0, 
-            'raining': 'No', 
+            'rain_today': 'No', 
             'wind_speed': 30, 
             'wind_dir': 'N',
-            'cloud': 3
+            'cloud_3pm': 3
         }
     
 @pytest.fixture()
@@ -96,10 +96,10 @@ def expected_sun():
             'temp_high': 10.0, 
             'temp_low': 2.0, 
             'rainfall': 0.0, 
-            'raining': 'No', 
+            'rain_today': 'No', 
             'wind_speed': 30, 
             'wind_dir': 'N',
-            'cloud': 0
+            'cloud_3pm': 0
         }
     
 @pytest.fixture()
@@ -111,10 +111,10 @@ def expected_value_error():
             'temp_high': 10.0, 
             'temp_low': 2.0, 
             'rainfall': 0.0, 
-            'raining': 'No', 
+            'rain_today': 'No', 
             'wind_speed': 'NA', 
             'wind_dir': 'N',
-            'cloud': 0
+            'cloud_3pm': 0
         }
     
 def test_determine_icon_based_on_weather(app, expected_error, expected_rain, expected_wind, expected_cloud, expected_partcloud, expected_sun, expected_value_error):
