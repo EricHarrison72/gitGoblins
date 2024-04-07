@@ -234,7 +234,7 @@ https://www.w3schools.com/howto/howto_js_toggle_dark_mode.asp
  */
 /* Dark mode */
 body.dark-mode {
-  background-color: #666; /* Change background color to grey */
+  background-color: #666; 
 }
 body.dark-mode {
   color: #fff;
@@ -243,8 +243,8 @@ body.dark-mode {
 body.dark-mode nav,
 body.dark-mode .button-style,
 body.dark-mode .select-table {
-  background-color: #2a2a2a; /* Change yellow to dark grey */
-  color: #fff; /* Change text color to white */
+  background-color: #2a2a2a; 
+  color: #fff; 
 }
 
 body.dark-mode h1,
@@ -252,10 +252,10 @@ body.dark-mode a,
 body.dark-mode .post .about,
 body.dark-mode input[type="submit"],
 body.dark-mode .button-style {
-  color: #fff; /* Change green text to white */
+  color: #fff; 
 }
 
-/* Dark mode for Info Widget */
+
 body.dark-mode .info-widget {
   background-color: #333; 
   color: #fff; 
