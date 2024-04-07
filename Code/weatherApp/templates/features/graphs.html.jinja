@@ -18,23 +18,6 @@ This template expects the following parameters:
 
 {% block header %}
     Graphs
-      
-  <br>
-  
-  <div class="button-container">
-    <button onclick="window.location.href= '{{ url_for('views.map') }}';" class="button-style-headers">
-      Map
-    </button>
-    <button onclick="window.location.href= '{{ url_for('views.weather_summary') }}';" class="button-style-headers">
-      Weather Summary
-    </button>
-    <button onclick="window.location.href= '{{ url_for('views.settings') }}';" class="button-style-headers">
-      Settings
-    </button>
-    <button onclick="window.location.href= '{{ url_for('auth.admin_dashboard') }}';" class="button-style-headers">
-      Admin Dashboard
-    </button>
-  </div>
 {% endblock %}
 
 {% block content %}

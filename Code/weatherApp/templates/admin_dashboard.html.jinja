@@ -6,23 +6,6 @@
 
 {% block header %}
   Admin Dashboard
-    
-  <br>
-  
-  <div class="button-container">
-    <button onclick="window.location.href= '{{ url_for('views.map') }}';" class="button-style-headers">
-      Map
-    </button>
-    <button onclick="window.location.href= '{{ url_for('views.weather_summary') }}';" class="button-style-headers">
-      Weather Summary
-    </button>
-    <button onclick="window.location.href= '{{ url_for('views.graph') }}';" class="button-style-headers">
-      Graphs
-    </button>
-    <button onclick="window.location.href= '{{ url_for('views.settings') }}';" class="button-style-headers">
-      Settings
-    </button>
-  </div>
 {% endblock %}
 
 {% block content %}

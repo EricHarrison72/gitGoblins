@@ -6,28 +6,9 @@
 
 {% block header %}
   User Settings
-    
-  <br>
-  
-  <div class="button-container">
-    <button onclick="window.location.href= '{{ url_for('views.map') }}';" class="button-style-headers">
-      Map
-    </button>
-    <button onclick="window.location.href= '{{ url_for('views.weather_summary') }}';" class="button-style-headers">
-      Weather Summary
-    </button>
-    <button onclick="window.location.href= '{{ url_for('views.graph') }}';" class="button-style-headers">
-      Graphs
-    </button>
-    <button onclick="window.location.href= '{{ url_for('auth.admin_dashboard') }}';" class="button-style-headers">
-      Admin Dashboard
-    </button>
-  </div>
 {% endblock %}
 
 {% block content %}
-  <h2>User Settings</h2>
-
   <form id="userSettingsForm" method="post" action="{{ url_for('views.settings') }}">
     <div style="display: flex; align-items: center;">
       <label for="emailList">Email List:</label>
