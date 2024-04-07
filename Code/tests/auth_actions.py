@@ -44,5 +44,5 @@ def login_test_user(client, email='test@gmail.com', password='test'):
             'password': password
         })
 
-def logout_test_user(self):
-    return self._client.get('/auth/logout')
+def logout_test_user(client):
+    return client.get('/auth/logout')

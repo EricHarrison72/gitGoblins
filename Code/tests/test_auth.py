@@ -21,8 +21,9 @@ from tests.auth_actions import (
     logout_test_user
 )
 
-# ---------------------------------
+# =====================================================
 # REGISTRATION TESTS
+# -----------------
 def test_register__normal(client, app):
     assert client.get('/auth/register').status == '200 OK'
 
@@ -56,8 +57,8 @@ def test_register__no_password(client):
 
     assert expected_error_message in no_password_response.data
 
-# ---------------------------------
 # LOGIN TESTS
+# -----------
 def test_login__normal(client, app):
 
     # Make sure app has a prediction model so loading '/' doesn't fail
@@ -91,34 +92,20 @@ def test_login__incorrect_password(client):
 
     assert expected_error_message in incorrect_password_response.data
 
-# ---------------------------------
 # LOGOUT TESTS
-def test_logout(client, app):
-    # Manually insert user with ID 100 into the database with hashed password
-    with app.app_context():
-        db = get_db()
-        hashed_password = bcrypt.hashpw('password'.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-        db.execute(
-            "INSERT INTO user (userId, email, password) VALUES (?, ?, ?)",
-            (100, 'test_user@gmail.com', hashed_password)
-        )
-        db.commit()
-
-    # Test login with user ID 100
-    client.post(
-        '/auth/login',
-        data={'email': 'test_user@gmail.com', 'password': 'password'}
-    )
-
-    # Test logout with user ID 100 within client context
+# ------------
+def test_logout(client):
+    register_and_login_test_user(client)
     with client:
-        client.get('/auth/logout')
-        # Ensure that the user ID is removed from the session
+        logout_test_user(client)
         assert 'user_id' not in session
 
-# Test passcode verification
+# ===========================================================
+# ADMIN AUTHENTICATION TESTS
+# ---------------------------
+# TODO: figure out if these need cahnging and work with test_admin.py
 def test_passcode(client, app):
-    assert client.get('/auth/passcode').status_code == 200
+    assert client.get('/auth/passcode').status == '200 OK'
 
     # Test with correct passcode
     with client.session_transaction() as session:
@@ -204,7 +191,4 @@ def test_admin_register_dashboard_and_admin_route(client, app):
     # 5. Simulate submitting a form to update weather data (access admin route)
     response_update_weather = client.post('/admin', data={'cityName': '1', 'tempMin': '10', 'tempMax': '20', 'date': '2014-04-01'})
     assert response_update_weather.status_code == 400  # Redirect status code
-   
 
-       
-       
