@@ -11,7 +11,7 @@ Resources:
 ----------------------------------------*/
 
 html { font-family: 'Roboto', sans-serif; font-size: 0.9rem; background: #eee }
-body { margin: 0 auto; background: white; }
+body { margin: 0; background: white; height: 100vh; display: flex; flex-direction: column; }
 h1 { font-family: 'Rubik', sans-serif; font-weight:700; font-size: 1.5rem; color: #00843D; margin: 0.9rem 0; }
 h2 { font-family: 'Roboto', sans-serif; font-weight:600; font-size: 2.75rem; margin: 1rem 0; }
 a { color: #00843D; }
@@ -226,12 +226,14 @@ input[type=submit] { align-self: start; min-width: 10em; }
 /* Dark mode
 https://www.w3schools.com/howto/howto_js_toggle_dark_mode.asp
  */
+/* Dark mode */
 body.dark-mode {
   background-color: #666; /* Change background color to grey */
 }
 
 body.dark-mode nav,
-body.dark-mode .button-style {
+body.dark-mode .button-style,
+body.dark-mode .select-table {
   background-color: #2a2a2a; /* Change yellow to dark grey */
   color: #fff; /* Change text color to white */
 }
@@ -244,29 +246,12 @@ body.dark-mode .button-style {
   color: #fff; /* Change green text to white */
 }
 
-body.dark-mode .select-table {
-  background-color: #2a2a2a; /* Change yellow to dark grey */
-  color: #fff; /* Change text color to white */
-}
-
 body.dark-mode .select-table th,
 body.dark-mode .select-table td {
   padding: 8px; /* Adjust table cell padding */
-}
-
-body.dark-mode .select-table {
-  background-color: #2a2a2a; /* Change yellow to dark grey */
-}
-
-body.dark-mode .select-table th,
-body.dark-mode .select-table td {
-
   color: #fff; /* Change text color to white */
 }
 
-body.dark-mode {
-  color: #fff; /* Change text color to white */
-}
 .switch {
   position: relative;
   display: inline-block;
@@ -319,4 +304,5 @@ input:checked + .slider:before {
   -ms-transform: translateX(26px);
   transform: translateX(26px);
 }
+
 
