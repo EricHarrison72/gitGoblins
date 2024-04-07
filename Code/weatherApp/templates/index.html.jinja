@@ -19,8 +19,11 @@ This template expects the following parameters:
 {% endblock %}
 
 {% block content %}
-  <h1>Welcome, {{ g.user['firstname'] }}!</h1>
-  <br>
+<br>
+
+  <div class="centered-content">
+    <h1>Welcome, {{ g.user['firstname'] }}!</h1>
+  </div>
   
   <div class="centered-content">
     {{ data_display.weather_overview(weather_dict, weather_icon, rain_prediction) }}
