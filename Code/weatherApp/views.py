@@ -27,64 +27,91 @@ from . import (
     db,
 )
 from .auth import login_required
-from datetime import datetime
+from datetime import datetime, timedelta
 
 views_bp = Blueprint('views', __name__)
 
 @views_bp.route('/')
 @login_required
 def index():
-    datb = db.get_db()
-    user_id = g.user['userId']  # Assuming you have stored user data in the 'g' object
-
-    # Fetch the user's city data from the database
-    user_city_data = datb.execute(
-        "SELECT * FROM City WHERE cityId = (SELECT cityId FROM User WHERE userId = ?)",
-        (user_id,)
-    ).fetchone()
-
-    # Convert the specified date to the string format matching the database
+    user_id = g.user['userId']
+    city_name = queries.get_user_city(user_id)
     specified_date = datetime(2017, 6, 24).strftime('%Y-%m-%d')
 
-    # Fetch the WeatherInstance data for the specified date (March 25, 2017)
-    weather_data = datb.execute(
-        "SELECT * FROM WeatherInstance WHERE cityId = ? AND date = ?",
-        (user_city_data['cityId'], specified_date)
-    ).fetchone()
-    
-    # Fetch cityName from the City table for specific cityId
-    city_name_row = datb.execute(
-    "SELECT cityName FROM City WHERE cityId = ?",
-    (user_city_data['cityId'],)
-    ).fetchone()
-
-    # Extract the cityName string from the row object
-    city_name = city_name_row['cityName']
-
-    # Get the main weather icon for this city/date
     weather_dict = queries.get_weather_data(city_name, specified_date)
     weather_icon = weather.determine_icon_based_on_weather(weather_dict)
+    rain_prediction = predictions.predict_rain(city_name, specified_date)
     
-    return render_template("index.html.jinja", user_city_data=user_city_data, weather_data=weather_data, weather_icon=weather_icon)
+    try:
+        # Convert date from YYYY-MM-DD into Month DD, YYYY    
+        weather_dict['date'] = datetime.strptime(weather_dict['date'], '%Y-%m-%d').strftime('%B %d, %Y')
+    except:
+        # If date is empty do nothing, this is handled in the html
+        pass
+    
+    return render_template(
+        "index.html.jinja",
+        weather_dict = weather_dict,
+        weather_icon = weather_icon,
+        rain_prediction = rain_prediction)
 
 
 @views_bp.route('/weather_summary')
 @login_required
 def weather_summary():
 
+    # migth seem unecessary but is passed as param at end of method
     url_args = {
         'city_name' : request.args.get('city_name'),
         'date' : request.args.get('date')
     }
 
-    weather_dict = queries.get_weather_data(url_args['city_name'], url_args['date'])
+    if url_args['city_name'] == None:
+        user_id = g.user['userId']
+        url_args['city_name'] = queries.get_user_city(user_id)
+        url_args['date'] = datetime(2017, 6, 24).strftime('%Y-%m-%d')
+
+    city_name = url_args['city_name']
+    date = url_args['date']
+
+    # Prepare most of the render_template args
+    weather_dict = queries.get_weather_data( city_name, date)
+    weather_icon = weather.determine_icon_based_on_weather(weather_dict)
+    rain_prediction = predictions.predict_rain(city_name, date)
     
-    rain_prediction = predictions.predict_rain(url_args['city_name'], url_args['date'])
+    # prepare graph
+    try:
+        date_arg = datetime.strptime(date, '%Y-%m-%d')
+        start_date = (date_arg - timedelta(days=7)).strftime('%Y-%m-%d')
+        
+        graph_args = {
+            'city_name' : city_name,
+            'start_date' : start_date,
+            'end_date' : date
+        }
+        
+        graph = graphs.TemperatureGraph(graph_args)
+        graph.fig.update_layout(
+            height=300
+        )
+        graph_html = graph.get_html()
+
+    except: 
+        graph_html = "Error generatign graph."
     
+    try:
+        # Convert date from YYYY-MM-DD into Month DD, YYYY    
+        weather_dict['date'] = datetime.strptime(weather_dict['date'], '%Y-%m-%d').strftime('%B %d, %Y')
+    except:
+        # If date is empty do nothing, this is handled in the html
+        pass
+        
     return render_template(
         "features/weather_summary.html.jinja",
         weather_dict = weather_dict,
         rain_prediction = rain_prediction,
+        weather_icon = weather_icon,
+        graph_html = graph_html,
         url_args = url_args)
 
 @views_bp.route('/map')
@@ -104,14 +131,14 @@ def graph():
     
     for arg_val in url_args.values():
         if arg_val == None:
-            figure_html = graphs.get_graph_html()
+            graph_html = graphs.get_graph_html()
             break
     else:
-        figure_html = graphs.get_graph_html(url_args)
+        graph_html = graphs.get_graph_html(url_args)
 
     return render_template(
         "features/graphs.html.jinja", 
-        figure_html = figure_html,
+        graph_html = graph_html,
         url_args = url_args)
 
 @views_bp.route('/location_select')
