@@ -42,6 +42,13 @@ def index():
     weather_icon = weather.determine_icon_based_on_weather(weather_dict)
     rain_prediction = predictions.predict_rain(city_name, specified_date)
     
+    try:
+        # Convert date from YYYY-MM-DD into Month DD, YYYY    
+        weather_dict['date'] = datetime.strptime(weather_dict['date'], '%Y-%m-%d').strftime('%B %d, %Y')
+    except:
+        # If date is empty do nothing, this is handled in the html
+        pass
+    
     return render_template(
         "index.html.jinja",
         weather_dict = weather_dict,
@@ -96,7 +103,7 @@ def weather_summary():
         # Convert date from YYYY-MM-DD into Month DD, YYYY    
         weather_dict['date'] = datetime.strptime(weather_dict['date'], '%Y-%m-%d').strftime('%B %d, %Y')
     except:
-        # If date is empty do nothing, this is handles in the html
+        # If date is empty do nothing, this is handled in the html
         pass
         
     return render_template(
