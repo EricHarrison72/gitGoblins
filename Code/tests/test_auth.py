@@ -1,7 +1,8 @@
 # --------------------------------------------------
 # test_auth.py
 '''
-Unit tests for user registration.
+Unit tests for user registration. Chase can update this
+to use auth_actions if he want.s
 '''
 '''
 Start code sources:
@@ -13,63 +14,43 @@ import bcrypt
 from flask import session
 from weatherApp.db import get_db
 from weatherApp import predictions
+from tests import auth_actions
 
+# REGISTRATION TESTS
+def test_register__normal(client, app):
+    assert client.get('/auth/register').status == '200 OK'
 
-#The register view should render successfully on GET. On POST with valid form data, 
-# it should redirect to the login URL and the user’s data should be in the database.
-def test_register(client, app):
-    assert client.get('/auth/register').status_code == 200
-    
-    # Test registering user
-    response = client.post(
-        '/auth/register',
-        data={
-            'email': 'test@gmail.com',
-            'password': 'a',
-            'city_id': '1'  # Provide a valid city_id in the form data
-        }
-    )
-    
-    # Check if it redirects to login page
-    assert response.headers["Location"] == "/auth/login"
-    
-    # Test registering user with duplicate email
-    response_duplicate_email = client.post(
-        '/auth/register',
-        data={
-            'email': 'test@gmail.com',
-            'password': 'a',
-            'city_id': '1'  # Provide a valid city_id in the form data
-        }
-    )
-    
-    # Check if it redirects to login page
-    assert b'User with email test@gmail.com is already registered.' in response_duplicate_email.data
-
-    # Test register with no email
-    response_no_email = client.post(
-        '/auth/register',
-        data={'email': '', 'password': 'a', 'city_id': '1'}  # Provide a valid city_id
-    )
-    
-    # Check for correct error message
-    assert b'Email is required.' in response_no_email.data
-
-    # Test register with no password
-    response_no_password = client.post(
-        '/auth/register',
-        data={'email': 'test@gmail.com', 'password': '', 'city_id': '1'}  # Provide a valid city_id
-    )
-    
-    # Check for correct error message
-    assert b'Password is required.' in response_no_password.data
+    correct_redirect_location = "/auth/login"
+    response = auth_actions.register_test_user(client)
+    assert response.location == correct_redirect_location
 
     with app.app_context():
-        assert get_db().execute(
+        user_that_should_exist = get_db().execute(
             "SELECT * FROM user WHERE email = 'test@gmail.com'",
-        ).fetchone() is not None
+        ).fetchone()
+    
+    assert user_that_should_exist is not None
 
+def test_register__duplicate_email(client):
+    auth_actions.register_test_user(client, email='test@gmail.com')
+    duplicate_email_response = auth_actions.register_test_user(client, email='test@gmail.com')
+    expected_error_message = b'User with email test@gmail.com is already registered.'
 
+    assert expected_error_message in duplicate_email_response.data
+
+def test_register__no_email(client):
+    no_email_response = auth_actions.register_test_user(client, email='')
+    expected_error_message = b'Email is required.'
+    
+    assert expected_error_message in no_email_response.data
+
+def test_register__no_password(client):
+    no_password_response = auth_actions.register_test_user(client, password='')
+    expected_error_message = b'Password is required.'
+
+    assert expected_error_message in no_password_response.data
+
+    
 def test_login(client, app):
     # Manually insert user with ID 100 into the database with hashed password
     with app.app_context():
