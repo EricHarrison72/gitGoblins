@@ -5,6 +5,22 @@ Contains methods to retrieve data from the database
 '''
 # ----------------------------------
 from . import db
+from flask import g
+
+def get_user_city(user_id):
+    datb = db.get_db()
+
+    user_city_data = datb.execute(
+        "SELECT * FROM City WHERE cityId = (SELECT cityId FROM User WHERE userId = ?)",
+        (user_id,)
+    ).fetchone()
+
+    city_name_row = datb.execute(
+        "SELECT cityName FROM City WHERE cityId = ?",
+        (user_city_data['cityId'],)
+    ).fetchone()
+    
+    return city_name_row['cityName']
 
 def get_weather_data (city_name: str, date: str):
     '''
@@ -77,7 +93,7 @@ def get_weather_data (city_name: str, date: str):
 
         # If a city name and date were passed, put that in the dict
         try:
-            weather_data_dict['city_name'] += ' for ' + add_space(city_name) + ' on this date'
+            weather_data_dict['city_name'] += ' for ' + add_space(city_name)
             weather_data_dict['date'] = date
         except:
             pass
@@ -115,8 +131,6 @@ def add_space(city_name: str):
     - Helper method that adds a space to the city name if it should have one
     - eg 'AliceSprings' -> 'Alice Springs'
     '''
-
-    upper_count = 0 # number of uppercase letters in city_name
 
     # Add spaces in front of all internal upper case characterss
     i = 1 # (we can skip checking first char
@@ -163,4 +177,3 @@ def _generate_column_script(columns: list):
         column_script += f'{column},'
 
     return column_script[:-1] # (sliced to get rid of last comma)
-

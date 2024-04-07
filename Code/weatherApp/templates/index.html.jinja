@@ -1,4 +1,14 @@
+{# -------------------------
+index.html.jinja
+(The home page)
+
+This template expects the following parameters:
+ - weather_dict: a dictionary with a bunch of weather data info (see weather_summary.html.jinja)
+ - weather_icon: str - refers to what type of icon to display
+ - rain_prediction: 1 or 0
+-------------------------- #}
 {% extends 'base.html.jinja' %}
+{% import 'helpers/data_display.html.jinja' as data_display %}
 
 {% block title %}
   Home
@@ -9,129 +19,26 @@
 {% endblock %}
 
 {% block content %}
-
-<ul>
+  <br>
   <div class="button-container">
-    <button onclick="window.location.href = '{{ url_for('views.map') }}';" class="button-style">Map</button>
-    <button onclick="window.location.href = '{{ url_for('views.weather_summary') }}';" class="button-style">Weather Summary</button>
-    <button onclick="window.location.href = '{{ url_for('views.graph') }}';" class="button-style">Graphs</button>
-    <button onclick="window.location.href = '{{ url_for('views.settings') }}';" class="button-style">Settings</button>
-    <button onclick="window.location.href = '{{ url_for('auth.admin_dashboard') }}';" class="button-style">Admin Dashboard</button>
+    <button onclick="window.location.href= '{{ url_for('views.map') }}';" class="button-style">
+      Map
+    </button>
+    <button onclick="window.location.href= '{{ url_for('views.weather_summary') }}';" class="button-style">
+      Weather Summary
+    </button>
+    <button onclick="window.location.href= '{{ url_for('views.graph') }}';" class="button-style">
+      Graphs
+    </button>
+    <button onclick="window.location.href= '{{ url_for('views.settings') }}';" class="button-style">
+      Settings
+    </button>
+    <button onclick="window.location.href= '{{ url_for('auth.admin_dashboard') }}';" class="button-style">
+      Admin Dashboard
+    </button>
   </div>
   
   <div class="centered-content">
-    {% if user_city_data %}
-        <h2>{{ user_city_data.cityName|replace('BadgerysCreek', 'Badgerys Creek')|replace('MountGinini', 'Mount Ginini')|replace('NorahHead', 'Norah Head')|replace('NorfolkIsland', 'Norfolk Island')|replace('PearceRAAF', 'Pearce RAAF')|replace('MelbourneAirport', 'Melbourne Airport')|replace('SydneyAirport', 'Sydney Airport')|replace('WaggaWagga', 'Wagga Wagga')|replace('Williamtown', 'Williamtown')|replace('MountGambier', 'Mount Gambier')|replace('PerthAirport', 'Perth Airport')|replace('SalmonGums', 'Salmon Gums')|replace('AliceSprings', 'Alice Springs')|replace('GoldCoast', 'Gold Coast')|replace('SunshineCoast', 'Sunshine Coast')|replace('PortMacquarie', 'Port Macquarie')|replace('MountIsa', 'Mount Isa')|replace('CoffsHarbour', 'Coffs Harbour') }}</h2>
-    {% else %}
-        <p>No city data found for the user.</p>
-    {% endif %}
-</div>
-
-<div class="centered-content">
-    {% if weather_icon == 'sun' %}
-      <img src="{{ url_for('static', filename='img/marker_sun.png') }}" alt="Sunny" width="80" height="65">
-    {% elif weather_icon == 'rain' %}
-      <img src="{{ url_for('static', filename='img/marker_rain.png') }}" alt="Rainy" width="85" height="65">
-    {% elif weather_icon == 'wind' %}
-      <img src="{{ url_for('static', filename='img/marker_wind.png') }}" alt="Windy" width="110" height="65">
-    {% elif weather_icon == 'cloud' %}
-      <img src="{{ url_for('static', filename='img/marker_cloud.png') }}" alt="Cloudy" width="90" height="65"> 
-    {% elif weather_icon == 'partcloud' %}
-      <img src="{{ url_for('static', filename='img/marker_partcloud.png') }}" alt="Partly Cloudy" width="100" height="65">  
-    {% else %}
-      <img src="{{ url_for('static', filename='img/marker_error.png') }}" alt="Error" width="50" height="50">  
-    {% endif %}
-      
-    <h4>June 24, 2017</h4>
-
-    <div class="table-container">
-      <table class="scrollable-table">
-        <tbody>
-          {% if weather_data %}
-
-          <div class="weather-detail">
-            <img src="{{ url_for('static', filename='img/temp_high.png') }}" alt="High Temperature" width="25" height="25">
-            <div>High</div>
-          </div>
-          <font size="+2">{{ weather_data.tempMax }}&deg</font>C
-            
-          &nbsp;&nbsp;&nbsp;
-            
-          <div class="weather-detail">
-            <img src="{{ url_for('static', filename='img/temp_low.png') }}" alt="Low Temperature" width="25" height="25">
-            <div>Low</div>
-          </div>
-          <font size="+2">{{ weather_data.tempMin }}&deg</font>C
-          
-          <br><br>
-
-          <div class="weather-detail">
-          {% if weather_data.rainToday == 'Yes' %}
-            <img src="{{ url_for('static', filename='img/rain.png') }}" alt="Raining" width="25" height="25">  
-          {% else %}
-            <img src="{{ url_for('static', filename='img/no_rain.png') }}" alt="Not Raining" width="25" height="25">  
-          {% endif %}
-          <div>Rain</div>
-          </div>
-
-          &nbsp;&nbsp;&nbsp;
-
-          {{ weather_data.rainfall }} mm
-
-          <br><br>
-          
-          <div class="weather-detail">
-          {% set wind_dir = weather_data.windGustDir %}
-          {% if wind_dir == 'E' %}
-            <img src="{{ url_for('static', filename='img/arrows/E.png') }}" alt="East" width="25" height="15">
-          {% elif wind_dir == 'ENE' %}
-            <img src="{{ url_for('static', filename='img/arrows/ENE.png') }}" alt="East-Northeast" width="25" height="25">
-          {% elif wind_dir == 'ESE' %}
-            <img src="{{ url_for('static', filename='img/arrows/ESE.png') }}" alt="East-Southeast" width="25" height="25">
-          {% elif wind_dir == 'N' %}
-            <img src="{{ url_for('static', filename='img/arrows/N.png') }}" alt="North" width="15" height="25">
-          {% elif wind_dir == 'NE' %}
-            <img src="{{ url_for('static', filename='img/arrows/NE.png') }}" alt="Northeast" width="25" height="25">
-          {% elif wind_dir == 'NNE' %}
-            <img src="{{ url_for('static', filename='img/arrows/NNE.png') }}" alt="North-Northeast" width="20" height="25">
-          {% elif wind_dir == 'NNW' %}
-            <img src="{{ url_for('static', filename='img/arrows/NNW.png') }}" alt="North-Northwest" width="20" height="25">
-          {% elif wind_dir == 'NW' %}
-            <img src="{{ url_for('static', filename='img/arrows/NW.png') }}" alt="Northwest" width="25" height="25">
-          {% elif wind_dir == 'S' %}
-            <img src="{{ url_for('static', filename='img/arrows/S.png') }}" alt="South" width="15" height="25">
-          {% elif wind_dir == 'SE' %}
-            <img src="{{ url_for('static', filename='img/arrows/SE.png') }}" alt="Southeast" width="25" height="25">
-          {% elif wind_dir == 'SSE' %}
-            <img src="{{ url_for('static', filename='img/arrows/SSE.png') }}" alt="South-Southeast" width="20" height="25">
-          {% elif wind_dir == 'SSW' %}
-            <img src="{{ url_for('static', filename='img/arrows/SSW.png') }}" alt="South-Southwest" width="20" height="25">
-          {% elif wind_dir == 'SW' %}
-            <img src="{{ url_for('static', filename='img/arrows/SW.png') }}" alt="Southwest" width="25" height="25">
-          {% elif wind_dir == 'W' %}
-            <img src="{{ url_for('static', filename='img/arrows/W.png') }}" alt="West" width="25" height="15">
-          {% elif wind_dir == 'WNW' %}
-            <img src="{{ url_for('static', filename='img/arrows/WNW.png') }}" alt="West-Northwest" width="25" height="25">
-          {% elif wind_dir == 'WSW' %}
-            <img src="{{ url_for('static', filename='img/arrows/WSW.png') }}" alt="West-Southwest" width="25" height="25">
-          {% else %}
-            <img src="{{ url_for('static', filename='img/marker_error.png') }}" alt="Not Available" width="25" height="25">
-          {% endif %}
-          <div>Wind</div>
-          </div>
-            
-          &nbsp;&nbsp;&nbsp;
-          {{ weather_data.windGustSpeed }}km/h
-
-          {% else %}
-            <tr>
-              <td colspan="2">No weather data found for the specified date.</td>
-            </tr>
-          {% endif %}
-        </tbody>
-      </table>
-    </div>
-    </div>
+    {{ data_display.weather_overview(weather_dict, weather_icon, rain_prediction) }}
   </div>
-</ul>
 {% endblock %}
