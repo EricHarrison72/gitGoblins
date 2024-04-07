@@ -18,14 +18,14 @@ def determine_icon_based_on_weather(weather_data):
     if (weather_data['temp_high'] == 0) & (weather_data['temp_low'] == 0):
         return 'error'
     
-    if weather_data['raining'] == "Yes":
+    if weather_data['rain_today'] == "Yes":
         return 'rain'
 
     wind_speed = safe_int(weather_data['wind_speed'])
     if wind_speed > 80:
         return 'wind'
 
-    cloud_cover = safe_int(weather_data['cloud'])
+    cloud_cover = safe_int(weather_data['cloud_3pm'])
     if cloud_cover > 4:
         return 'cloud'
     elif cloud_cover > 0:
