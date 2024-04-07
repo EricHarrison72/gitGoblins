@@ -3,6 +3,9 @@
 FreeCodeCamp "Learn Flask for Python" https://www.youtube.com/watch?v=Z1RJmh_OqeA
 
 /-->
+
+{% import 'helpers/navbar_display.html.jinja' as navbar_display %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,10 +24,12 @@ FreeCodeCamp "Learn Flask for Python" https://www.youtube.com/watch?v=Z1RJmh_Oqe
     <nav>
         <img src="{{ url_for('static', filename='img/happy_cloud.png') }}" alt="Happy Cloud" height="55" width="65">
         <h1><a href="{{ url_for('views.index') }}">WEATHER AUSTRALIA</a></h1>
+       
+        {{ navbar_display.button_display(g.current_page) }}
+        
         <ul>
             {% if g.user %}
                 <li><span>{{ g.user['firstname'] }}</span></li>
-                <li><span> ID: {{ g.user['userid'] }}</span></li>
                 <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
             {% else %}
                 <li><a href="{{ url_for('auth.register') }}">Register</a></li>
@@ -50,4 +55,3 @@ FreeCodeCamp "Learn Flask for Python" https://www.youtube.com/watch?v=Z1RJmh_Oqe
 
 </body>
 </html>
-
