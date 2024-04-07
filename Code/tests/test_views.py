@@ -11,6 +11,7 @@ Starter Code sources:
 import pytest
 from weatherApp import views
 from weatherApp.db import get_db
+from tests import auth_actions
 
 # THE MAIN TEST LOGIC IS WRITTEN HERE
 class ViewTests:
@@ -21,33 +22,12 @@ class ViewTests:
             assert view_response.location.endswith('/auth/login')
 
     def test_authenticated(client, url, expected_html_elem):
-        with client:
-            register_test_user(client)
-            login_test_user(client)
+        with client.application.test_request_context():
+            auth_actions.register_and_login_test_user(client)
 
             view_response = client.get( url)
             assert view_response.status == '200 OK'
             assert expected_html_elem.encode("utf-8") in view_response.data 
-
-# Helpers for test_authenticated
-def register_test_user(client):
-    client.post(
-        '/auth/register',
-        data = {
-            'email': 'test@gmail.com',
-            'password': 'a',
-            'city_id': '1'
-        }
-    )
-
-def login_test_user(client):
-    client.post(
-        '/auth/login',
-        data = {
-            'email': 'test@gmail.com',
-            'password': 'a'
-        }
-    )
 
 # THE TESTS (for reals)
 # -------------------
@@ -68,7 +48,6 @@ alternatives are less reliable:
 def test_index__not_authenticated(client):
     ViewTests.test_not_authenticated(client, '/')
 
-# TODO @Chase or @Eric why does this fail??
 def test_index__authenticated(client):
     ViewTests.test_authenticated(client, '/', 'Home\n -')
 
