@@ -64,14 +64,11 @@ def test_map__not_authenticated(client):
 def test_map__authenticated(client):
     ViewTests.test_authenticated(client, '/map', 'Map\n -') 
 
-# TODO idk why but the graph tests are failing for some reason
-def test_graph__not_authenticated(app, client):
-    with app.app_context():
-        ViewTests.test_not_authenticated(client, '/graphs')
+def test_graph__not_authenticated(client):
+    ViewTests.test_not_authenticated(client, '/graphs')
 
-def test_graph__authenticated(app, client):
-    with app.app_context():
-        ViewTests.test_authenticated(client, '/graphs', 'Graph\n -')
+def test_graph__authenticated(client):
+    ViewTests.test_authenticated(client, '/graphs', 'Graphs\n -')
 
 # OTHER
 def test_settings__not_authenticated(client):
@@ -88,7 +85,6 @@ def test_get_weather_icon(client):
 # TODO THIS TEST SHOULDN'T BE HERE
 '''
 The whole organization of user settings needs to be addressed in another branch
-  -- the fix_view_tests branch
 '''
 # def test_update_user_settings(client, app):
 #     with client:
