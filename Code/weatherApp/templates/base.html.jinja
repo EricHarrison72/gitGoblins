@@ -44,9 +44,9 @@ FreeCodeCamp "Learn Flask for Python" https://www.youtube.com/watch?v=Z1RJmh_Oqe
                 <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
             {% endif %}
             <li>
-                <button onclick="switchAndLoadMode(); updateToggleText();" id="mode-toggle-button"></button>
+                <button onclick="switchAndLoadMode(); updateTextAndGraph();" id="mode-toggle-button"></button>
                 <script>
-                    updateToggleText(); // so that buttons loads with text when page is loaded.
+                    updateToggleText(); // called here for initial page load
                 </script>
             </li>
         </ul>
@@ -64,7 +64,8 @@ FreeCodeCamp "Learn Flask for Python" https://www.youtube.com/watch?v=Z1RJmh_Oqe
         {% block content %}{% endblock %}
     </section>
 
-    {% block scripts %}{% endblock %}
+    {% block scripts %}
+    {% endblock %}
 
 </body>
 </html>

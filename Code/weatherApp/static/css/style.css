@@ -285,3 +285,8 @@ body.dark-mode #mode-toggle-button {
 body.dark-mode #mode-toggle-button:hover {
   background-color: #FFCD00;
 }
+
+/* Stuff for making graphs darkmode */
+#light-mode-graph, #dark-mode-graph {
+  display: none; /* this is the default, so that you don't get weird flashing on first page load */
+}

@@ -59,13 +59,24 @@ This template expects the following parameters:
             </h2>
         {% endif %}
 
+        {# TODO: DARKMODE GRAPHS #}
+
         {# embedded graph svg #}
         <div class="visualization"
             {% if url_args['stat'] == 'wind' %}
                 style="justify-self: center; padding-top: 10px"
-            {% endif%}
+            {% endif %}
         >
-            {{ graph_html }}
+            <div id="light-mode-graph">
+                {{ graph_html }}
+            </div>
+            <div id="dark-mode-graph">
+                <p> [PUT DARK GRAPH HERE] </p>
+            </div>
+
+            <script>
+                updateGraph(); // (called here for initial page load)
+            </script>
         </div>
     </div>
 {% endblock %}

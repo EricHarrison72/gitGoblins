@@ -42,3 +42,22 @@ function updateToggleText() {
         button.innerHTML = "DARK<br>MODE";
     }
 }
+
+function updateGraph() {
+    var darkModeGraph = document.getElementById("dark-mode-graph");
+    var lightModeGraph = document.getElementById("light-mode-graph");
+
+    if (darkModeIsEnabled()) {
+        darkModeGraph.style.display = "block";
+        lightModeGraph.style.display = "none";
+    }
+    else {
+        darkModeGraph.style.display = "none";
+        lightModeGraph.style.display = "block";
+    }
+}
+
+function updateTextAndGraph() {
+    updateToggleText();
+    updateGraph();
+}
