@@ -43,11 +43,13 @@ def admin_alert():
 
     try:
         datb = db.get_db()
+
+        cities = db.get_cities()
         if request.method == 'POST':
             event = request.form.get('eventSelect')
             city = request.form.get('citySelect')
+            date = request.form['eventDate']
 
-            date = '2016-01-01'
 
             url_args['date'] = date
 
@@ -58,18 +60,25 @@ def admin_alert():
                 "data_point": event
             }
             
+            to = queries.get_alert_emails(city)
+            if not to:
+                flash(city + ' has no subscribers. Alert not sent.')
+                return redirect(url_for('admin.admin_alert'))
+
+
+
             # Send the notification
             notification.send_email(
-                queries.get_alert_emails(city),
+                to,
                 city,
                 notification.get_template(event_args)
             )
             
                 
-            flash('Alert sent. City: ' + city + '. Event: ' + event + '. Date: ' + date)
+            flash(event + ' alert sent for ' + city + ' on ' + date)
             return redirect(url_for('admin.admin_alert'))
     except ValueError:
         flash('Error in sending alert. Please check parameters.')
         return redirect(url_for('admin.admin_alert'))
     
-    return render_template('admin_dashboard.html.jinja', url_args = url_args)
+    return render_template('admin_dashboard.html.jinja', url_args = url_args, cities = cities)
