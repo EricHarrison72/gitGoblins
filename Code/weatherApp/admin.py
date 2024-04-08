@@ -42,8 +42,6 @@ def admin_alert():
     url_args = {"date": '2017-06-24'}
 
     try:
-        datb = db.get_db()
-
         cities = db.get_cities()
         if request.method == 'POST':
             event = request.form.get('eventSelect')
@@ -57,21 +55,26 @@ def admin_alert():
             event_args = {
                 "city_name": city,
                 "date": date,
-                "data_point": event
+                "event_type": event
             }
             
+            # gets the list of emails and the template, and checks if there are subscribers or weather data
             to = queries.get_alert_emails(city)
             if not to:
                 flash(city + ' has no subscribers. Alert not sent.')
                 return redirect(url_for('admin.admin_alert'))
 
+            template = notification.get_template(event_args)
+            if not template:
+                flash(city + ' does not have weather data for ' + event + ' on ' + date + '. Alert not sent.')
+                return redirect(url_for('admin.admin_alert'))
 
 
             # Send the notification
             notification.send_email(
                 to,
                 city,
-                notification.get_template(event_args)
+                template
             )
             
                 

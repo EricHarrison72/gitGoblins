@@ -36,28 +36,36 @@ def get_template(data : dict):
     - expects an event type as a string and the data parsed into a dictionary with
         - a city name as 'city_name'
         - a date as 'date'
-        - weather data point as 'data_point' (Takes in the weather event, outputs the data)
+        - wthe weather event as 'event_type'
     '''
     template = None
-    data_point = None
     date = data.get('date')
-    event_type = data.get('data_point')
+    event_type = data.get('event_type')
 
     event_type = event_type.replace(' ', '') # (just in case)
 
+    city_dict = queries.get_weather_data(data['city_name'], date)
+
+    if(len(city_dict.get('city_name')) > len(data.get('city_name'))):
+        return template
+
     if event_type == 'HighTemperature':
         template = 'notif/email_high_temp.html.jinja'
-        data_point = 'temp_high'
+        event_type = 'temp_high'
     elif event_type == 'LowTemperature':
         template = 'notif/email_low_temp.html.jinja'
-        data_point = 'temp_low'
+        event_type = 'temp_low'
     elif event_type == 'Wind':
         template = 'notif/email_high_winds.html.jinja'
-        data_point = 'wind_speed'
+        event_type = 'wind_speed'
     elif event_type == 'Rain':
         template = 'notif/email_rain.html.jinja'
-        data_point = 'rainfall'
+        event_type = 'rainfall'
         
-    data['data_point'] = queries.get_weather_data(data['city_name'], date).get(data_point)
+    #data['data_point'] = queries.get_weather_data(data['city_name'], date).get(event_type)
+
+
+    data['data_point'] = city_dict.get(event_type)
+
 
     return render_template(template, event_args = data)
