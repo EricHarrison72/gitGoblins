@@ -228,7 +228,7 @@ class WindGraph(WeatherGraph):
             color="Speed",
             color_discrete_sequence= px.colors.sequential.Plasma_r,
             labels = {"Speed": "Speed (km/h)"},
-            width=700,
+            width=700
         )
 
     # NEW Helper METHODS
