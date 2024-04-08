@@ -1,12 +1,8 @@
-{% block scripts %}
-  <script src="{{ url_for('static', filename='js/darkmode.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/submit.js') }}"></script>
-{% endblock %}
-
 {# 
 This template expects the following parameters: 
  -- figure_html - a plotly figure object in html string form
  -- url_args - a dictionary with the keys: 
+    - stat
     - city_name
     - start_date
     - end_date
@@ -14,9 +10,6 @@ This template expects the following parameters:
 {% extends "base.html.jinja" %}
 {% import 'helpers/selectors.html.jinja' as selectors %}
 
-
-{% block head %}
-{% endblock %}
 {% block title %}
     Graphs
 {% endblock %}
@@ -75,4 +68,8 @@ This template expects the following parameters:
             {{ graph_html }}
         </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/submit.js') }}"></script>
 {% endblock %}

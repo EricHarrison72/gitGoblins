@@ -11,9 +11,7 @@ This template expects the following parameters:
 
 {% extends 'base.html.jinja' %}
 {% import 'helpers/data_display.html.jinja' as data_display %}
-{% block scripts %}
-  <script src="{{ url_for('static', filename='js/darkmode.js') }}"></script>
-{% endblock %}
+
 {% block title %}
   Home
 {% endblock %}
