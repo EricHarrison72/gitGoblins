@@ -30,7 +30,7 @@ nav ul li a, nav ul li span, header .action { display: block; font-size: 0.85rem
 
 /* CUSTOM CLASSES WE GOT FROM THE FLASKR TUTORIAL (but tweaked ourselves) */
 .content { padding: 0 1rem 1rem;}
-.content > header { border-bottom: 1px solid lightgray; display: flex; align-items: flex-end; text-align: center}
+.content > header { display: flex; align-items: flex-end; text-align: center}
 .content > header h1 { flex: auto; font-size: 2.75rem; margin: 1rem 0 0.25rem 0;}
 .flash { margin: 1em 0; padding: 1em; background: #cae6f6; border: 1px solid #377ba8; }
 .post > header { display: flex; align-items: flex-end; font-size: 0.85em; }
@@ -242,9 +242,12 @@ body.dark-mode .select-table {
 }
 
 
-body.dark-mode h1,
 body.dark-mode a {
-  color: #529f66
+  color: #6dad7a
+}
+
+body.dark-mode header h1 {
+  color: #6dad7a
 }
 
 body.dark-mode .post .about,
