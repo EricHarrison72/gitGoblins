@@ -220,44 +220,41 @@ input[type=submit] { align-self: start; min-width: 10em; }
   padding: 0px 20px 20px 20px;
 }
 
+/* ================= Dark mode ==================== */
+/* https://www.w3schools.com/howto/howto_js_toggle_dark_mode.asp */
 
-.centered-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-
-/* Dark mode
-https://www.w3schools.com/howto/howto_js_toggle_dark_mode.asp
- */
-/* Dark mode */
-body.dark-mode {
-  background-color: #666; 
-}
-body.dark-mode {
+/* Dark and twisted versions */
+body.dark-mode,
+body.darkmode .select-table option, 
+body.darkmode .select-table button {
+  background-color: #424843; 
   color: #fff;
 }
 
+body.darkmode nav img {
+  opacity: 0.1; /* this isn't working and i don't know why*/
+}
 body.dark-mode nav,
 body.dark-mode .button-style,
 body.dark-mode .select-table {
-  background-color: #2a2a2a; 
+  background-color: #161d17;
   color: #fff; 
 }
 
+
 body.dark-mode h1,
-body.dark-mode a,
+body.dark-mode a {
+  color: #529f66
+}
+
 body.dark-mode .post .about,
 body.dark-mode input[type="submit"],
 body.dark-mode .button-style {
   color: #fff; 
 }
 
-
 body.dark-mode .info-widget {
-  background-color: #333; 
+  background-color: #5a605b; 
   color: #fff; 
 }
 body.dark-mode .select-table th,
@@ -265,6 +262,7 @@ body.dark-mode .select-table td {
   color: #fff; 
 }
 
+/* Dark Mode toggle stuff */
 .switch {
   position: relative;
   display: inline-block;
