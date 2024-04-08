@@ -13,6 +13,9 @@ FreeCodeCamp "Learn Flask for Python" https://www.youtube.com/watch?v=Z1RJmh_Oqe
     <link href='https://fonts.googleapis.com/css?family=Rubik:700' rel='stylesheet'>
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <script src="{{ url_for('static', filename='js/darkmode.js') }}"></script>
+
     {% block head %}{% endblock %}
     
     <title>{% block title %}{% endblock %} - Thunder Down Under
@@ -21,46 +24,52 @@ FreeCodeCamp "Learn Flask for Python" https://www.youtube.com/watch?v=Z1RJmh_Oqe
 </head>
 
 <body id="body">
-<nav>
-    <img src="{{ url_for('static', filename='img/happy_cloud.png') }}" alt="Happy Cloud" height="66" width="76">
-    <h1>
-        <a href="{{ url_for('views.index') }}">THUNDER DOWN UNDER</a>
-    </h1>
-    <ul>
-        {% if g.user %}
-            <li><span>{{ g.user['firstname'] }}</span></li>
-            <li><span> ID: {{ g.user['userid'] }}</span></li>
-            <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
-        {% else %}
-            <li><a href="{{ url_for('auth.register') }}">Register</a></li>
-            <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
-        {% endif %}
-        <li>
-            <label class="switch">
-                <input type="checkbox" id="darkModeToggle">
-                <span class="slider"></span>
-            </label>
-            
-        </li>
-    </ul>
-</nav>
 
+    <script>
+        loadPageWithCorrectMode()
+    </script>
 
-<section class="content">
-    <header>
-        <h1>{% block header %}{% endblock %}</h1>
-    </header>
+    <nav>
+        <img src="{{ url_for('static', filename='img/happy_cloud.png') }}" alt="Happy Cloud" height="66" width="76">
+        <h1>
+            <a href="{{ url_for('views.index') }}">THUNDER DOWN UNDER</a>
+        </h1>
+        <ul>
+            {% if g.user %}
+                <li><span>{{ g.user['firstname'] }}</span></li>
+                <li><span> ID: {{ g.user['userid'] }}</span></li>
+                <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
+            {% else %}
+                <li><a href="{{ url_for('auth.register') }}">Register</a></li>
+                <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
+            {% endif %}
+            <li>
+                <label class="switch">
+                    <input type="checkbox" id="darkModeToggle">
+                    <span class="slider"></span>
+                </label>
+                
+            </li>
+        </ul>
+    </nav>
 
-    {% for message in get_flashed_messages() %}
-        <div class="flash">{{ message }}</div>
-    {% endfor %}
+    <script>
+        onToggleSwitchMode()
+    </script>
 
-    {% block content %}{% endblock %}
-</section>
+    <section class="content">
+        <header>
+            <h1>{% block header %}{% endblock %}</h1>
+        </header>
 
-{% block scripts %}
-<script src="{{ url_for('static', filename='js/darkmode.js') }}"></script>
-{% endblock %}
+        {% for message in get_flashed_messages() %}
+            <div class="flash">{{ message }}</div>
+        {% endfor %}
+
+        {% block content %}{% endblock %}
+    </section>
+
+    {% block scripts %}{% endblock %}
 
 </body>
 </html>

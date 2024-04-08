@@ -1,35 +1,38 @@
-function toggleDarkMode() {
+// ----------------------------------------------------
+// darkmode.js
+/*
+Functions for controlling website darkmode.
+*/
+// -----------------------------------------------------
+
+function darkModeIsEnabled() {
+    return localStorage.getItem('darkMode') === 'enabled'
+}
+
+function switchMode() {
+    if (darkModeIsEnabled()) {
+        localStorage.setItem('darkMode', 'disabled');
+    }
+    else {
+        localStorage.setItem('darkMode', 'enabled');
+    }
+}
+
+function loadPageWithCorrectMode() {
     const body = document.getElementById('body');
-    const darkModeEnabled = localStorage.getItem('darkMode') === 'enabled';
     
-    if (darkModeEnabled) {
+    if (darkModeIsEnabled()) {
         body.classList.add('dark-mode');
     } else {
         body.classList.remove('dark-mode');
     }
-    
 }
 
-function saveDarkModePreference() {
+function onToggleSwitchMode() {
     const darkModeToggle = document.getElementById('darkModeToggle');
+
     darkModeToggle.addEventListener('change', function() {
-        const darkModeEnabled = this.checked;
-        localStorage.setItem('darkMode', darkModeEnabled ? 'enabled' : 'disabled');
-        toggleDarkMode();
+        switchMode();
+        loadPageWithCorrectMode();
     });
 }
-
-// Call toggleDarkMode on page load
-document.addEventListener('DOMContentLoaded', function() {
-    toggleDarkMode();
-});
-
-// Call toggleDarkMode whenever dark mode preference changes
-window.addEventListener('storage', function(event) {
-    if (event.key === 'darkMode') {
-        toggleDarkMode();
-    }
-});
-
-// Save dark mode preference when toggled
-saveDarkModePreference();
