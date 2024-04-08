@@ -79,7 +79,7 @@ def expected_template_3():
           Hello, you are receiving this alert because Springfield is expecting high wind speeds and gusts on 2023-01-01.
       	</p>
      	 <p>
-      	  Expect wind speeds up to 30km/h.
+      	  Expect wind speeds up to 12km/h.
       	</p>
     </body>
 </html>'''

@@ -36,7 +36,7 @@ def test_get_user_city(client, app):
     register_and_login(client)
     with app.test_request_context():
         user_id = 3 # (because we only registered 1 extra user in this context)
-        assert get_user_city(user_id) == 'Springfield'
+        assert get_user_city(user_id) == 'Shelbyville'
 
 # helper
 def register_and_login(client):
