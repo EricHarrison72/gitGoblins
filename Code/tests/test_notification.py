@@ -38,7 +38,7 @@ def expected_template_1():
         <h1>Weather alert for Springfield.</h1>
       	<br>
       	<p>
-          Hello, you are receiving this alert because Springfield is expecting high temperatures.
+          Hello, you are receiving this alert because Springfield is expecting high temperatures on 2023-01-01.
       	</p>
      	 <p>
       	  Expect a temperature high of 10&deg;C.
@@ -57,7 +57,7 @@ def expected_template_2():
         <h1>Weather alert for Springfield.</h1>
       	<br>
       	<p>
-          Hello, you are receiving this alert because Springfield is expecting low temperatures.
+          Hello, you are receiving this alert because Springfield is expecting low temperatures on 2023-01-01.
       	</p>
      	<p>
       	  Expect a temperature low of -5&deg;C.
@@ -76,7 +76,7 @@ def expected_template_3():
         <h1>Weather alert for Springfield.</h1>
       	<br>
       	<p>
-          Hello, you are receiving this alert because Springfield is expecting high wind speeds and gusts.
+          Hello, you are receiving this alert because Springfield is expecting high wind speeds and gusts on 2023-01-01.
       	</p>
      	 <p>
       	  Expect wind speeds up to 30km/h.
@@ -95,7 +95,7 @@ def expected_template_4():
         <h1>Weather alert for Springfield.</h1>
       	<br>
       	<p>
-          Hello, you are receiving this alert because Springfield is expecting rain.
+          Hello, you are receiving this alert because Springfield is expecting rain on 2023-01-01.
       	</p>
      	 <p>
       	  Expect 0mm of rain.
