@@ -1,6 +1,6 @@
 {# 
 This template expects the following parameters: 
- -- figure_html - a plotly figure object in html string form
+ -- graph_html - a dictionary containing 2 graph objects in html string form (light and dark)
  -- url_args - a dictionary with the keys: 
     - stat
     - city_name
@@ -59,19 +59,18 @@ This template expects the following parameters:
             </h2>
         {% endif %}
 
-        {# TODO: DARKMODE GRAPHS #}
-
         {# embedded graph svg #}
         <div class="visualization"
             {% if url_args['stat'] == 'wind' %}
                 style="justify-self: center; padding-top: 10px"
             {% endif %}
         >
+            {# one of these is hidden and one is shown at all times #}
             <div id="light-mode-graph">
-                {{ graph_html }}
+                {{ graph_html.light }}
             </div>
             <div id="dark-mode-graph">
-                <p> [PUT DARK GRAPH HERE] </p>
+                <p> {{ graph_html.dark }} </p>
             </div>
 
             <script>

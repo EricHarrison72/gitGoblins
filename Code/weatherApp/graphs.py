@@ -30,8 +30,15 @@ def get_graph_html(url_args=DEFAULT_url_args):
     USE THIS outside of graphs.py
     Note: this function was written this way to make it easier to test the other get graph functions.
     '''
-    graph = _get_graph(url_args)
-    return _get_graph_as_string(graph)
+    light_graph = _get_graph(url_args)
+    dark_graph = _get_graph(url_args)
+    dark_graph.convert_to_darkmode()
+
+
+    return {
+        'light': _get_graph_as_string(light_graph),
+        'dark': _get_graph_as_string(dark_graph)
+    }
 
 def _date_range_is_valid(dates: dict):
     if dates['start_date'] < dates['end_date']:
@@ -89,7 +96,7 @@ class WeatherGraph(ABC):
     
     def get_city_name(self):
         return queries.add_space(self.city_and_dates['city_name'])
-   
+
     # DATAFRAME METHODS
     # ----------------
     def _initialize_dataframe(self):
@@ -128,6 +135,19 @@ class WeatherGraph(ABC):
         self.fig.update_layout(
             margin={'t': 20, 'r': 10, 'l': 10, 'b':20},
             plot_bgcolor = '#e1f4ff'
+        )
+    
+    def convert_to_darkmode(self):
+        self.fig.update_layout(
+            margin={'t': 20, 'r': 10, 'l': 10, 'b':20},
+            paper_bgcolor = '#424843',
+            plot_bgcolor = '#5a605b',
+            font_color = '#fff',
+            legend_title_font_color = '#fff',
+        )
+        self.fig.update_yaxes(
+            gridcolor = '#424843',
+            zerolinecolor = '#424843'
         )
 
 # =================================
@@ -203,11 +223,18 @@ class WindGraph(WeatherGraph):
         self.freq_table = None
         super().__init__(city_and_dates)
 
-    # Overide parent method
+    # Overide parent methods
     def _initialize_dataframe(self):
         super()._initialize_dataframe()
         self._initialize_freq_table()
 
+    def convert_to_darkmode(self):
+        super().convert_to_darkmode()
+        self.fig.update_polars(
+            bgcolor = '#5a605b',
+            angularaxis_gridcolor = '#424843',
+            radialaxis_gridcolor = '#424843'
+        )
     # OVERRIDE: all abstract methods
     # ------------------------------
     def _fetch_and_convert_data(self):
