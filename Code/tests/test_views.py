@@ -1,7 +1,7 @@
 # ------------------------------------------------
 # test_views.py
 '''
-Contains unit tests for the views.py
+Contains unit tests for views.py.
 '''
 '''
 Starter Code sources:
