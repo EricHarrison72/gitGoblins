@@ -11,7 +11,7 @@ This template expects the following parameters:
         <h1>Weather alert for {{ event_args['city_name'] }}.</h1>
       	<br>
       	<p>
-          Hello, you are receiving this alert because {{ event_args['city_name'] }} is expecting rain.
+          Hello, you are receiving this alert because {{ event_args['city_name'] }} is expecting rain on {{ event_args['date'] }}.
       	</p>
      	 <p>
       	  Expect {{ event_args['data_point'] }}mm of rain.
