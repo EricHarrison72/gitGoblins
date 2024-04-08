@@ -151,12 +151,7 @@ Docs:
 {% endmacro %}
 
 {% macro select_weather_event(url_arg_event='HighTemperature') %}
-    <!--
-    {% if url_arg_event == None %}
-        {% set url_arg_event = 'HighTemperature' %}
-    {% endif %}
-    -->
-
+    
     <select id="eventSelect" name="eventSelect">
         {% set events = [
             'High Temperature',
@@ -170,16 +165,8 @@ Docs:
                 {{ o }}
             </option>
         {% endfor %}
-
-        <!--
-        {% for i in range(events|length) %}
-            <option value="{{ i+1 }}" {% if events[i]|replace(' ','') == url_arg_event %} selected {% endif %}>
-                {{ events[i] }}
-            </option>
-        {% endfor %}
-        -->
-
     </select>
+    
 {% endmacro %}
 
 {% macro select_event_location(url_arg_city='Canberra') %}

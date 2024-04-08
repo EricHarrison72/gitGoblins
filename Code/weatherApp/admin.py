@@ -76,7 +76,6 @@ def admin_alert():
                 city,
                 template
             )
-            
                 
             flash(event + ' alert sent for ' + city + ' on ' + date)
             return redirect(url_for('admin.admin_alert'))
