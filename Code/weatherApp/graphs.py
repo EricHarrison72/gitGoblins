@@ -149,6 +149,16 @@ class WeatherGraph(ABC):
             gridcolor = '#424843',
             zerolinecolor = '#424843'
         )
+        self.fig.update_polars(
+            bgcolor = '#5a605b',
+            angularaxis_gridcolor = '#424843',
+            radialaxis_gridcolor = '#424843',
+            angularaxis_linecolor = '#424843',
+            radialaxis_linecolor = '#424843'
+        )
+        self.fig.update_traces(
+            marker_line_color = '#424843'
+        )
 
 # =================================
 class TemperatureGraph(WeatherGraph):
@@ -228,13 +238,6 @@ class WindGraph(WeatherGraph):
         super()._initialize_dataframe()
         self._initialize_freq_table()
 
-    def convert_to_darkmode(self):
-        super().convert_to_darkmode()
-        self.fig.update_polars(
-            bgcolor = '#5a605b',
-            angularaxis_gridcolor = '#424843',
-            radialaxis_gridcolor = '#424843'
-        )
     # OVERRIDE: all abstract methods
     # ------------------------------
     def _fetch_and_convert_data(self):
