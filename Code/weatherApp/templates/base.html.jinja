@@ -44,18 +44,13 @@ FreeCodeCamp "Learn Flask for Python" https://www.youtube.com/watch?v=Z1RJmh_Oqe
                 <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
             {% endif %}
             <li>
-                <label class="switch">
-                    <input type="checkbox" id="darkModeToggle">
-                    <span class="slider"></span>
-                </label>
-                
+                <button onclick="switchAndLoadMode(); updateToggleText();" id="mode-toggle-button"></button>
+                <script>
+                    updateToggleText(); // so that buttons loads with text when page is loaded.
+                </script>
             </li>
         </ul>
     </nav>
-
-    <script>
-        onToggleSwitchMode()
-    </script>
 
     <section class="content">
         <header>

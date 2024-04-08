@@ -28,11 +28,17 @@ function loadPageWithCorrectMode() {
     }
 }
 
-function onToggleSwitchMode() {
-    const darkModeToggle = document.getElementById('darkModeToggle');
+function switchAndLoadMode() {
+    switchMode();
+    loadPageWithCorrectMode();
+}
 
-    darkModeToggle.addEventListener('change', function() {
-        switchMode();
-        loadPageWithCorrectMode();
-    });
+function updateToggleText() {
+    const button = document.getElementById('mode-toggle-button');
+    if (darkModeIsEnabled()) {
+        button.innerHTML = "LIGHT<br>MODE";
+    }
+    else {
+        button.innerHTML = "DARK<br>MODE";
+    }
 }

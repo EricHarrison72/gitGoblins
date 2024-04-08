@@ -26,7 +26,7 @@ nav { background: #FFCD00; display: flex; align-items: center; padding: 0 0.5rem
 nav h1 { flex: auto; margin: 0; }
 nav h1 a { text-decoration: none; padding: 0.25rem 0.5rem; }
 nav ul  { display: flex; list-style: none; margin: 0; padding: 0; }
-nav ul li a, nav ul li span, header .action { display: block; font-size: 0.85rem; padding: 0.5rem; }
+nav ul li a, nav ul li span, header .action { display: block; font-size: 1rem; padding: 0.5rem; }
 
 /* CUSTOM CLASSES WE GOT FROM THE FLASKR TUTORIAL (but tweaked ourselves) */
 .content { padding: 0 1rem 1rem;}
@@ -266,55 +266,23 @@ body.dark-mode .select-table td {
 }
 
 /* Dark Mode toggle stuff */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
+#mode-toggle-button {
+  background-color: #4b6e52;
+  color: #fff;
+  border: 0px;
+  border-radius: 6px;
+  font-size: 70%;
+  font-weight: bold;
+  padding: 5px;
+}
+#mode-toggle-button:hover {
+  background-color: #161d17;
 }
 
-.switch input { 
-  opacity: 0;
-  width: 0;
-  height: 0;
+body.dark-mode #mode-toggle-button {
+  background-color: #FFCD00;
+  color: #00843D;
 }
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #000;
-  -webkit-transition: .4s;
-  transition: .4s;
-  border-radius: 34px;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: #fff;
-  -webkit-transition: .4s;
-  transition: .4s;
-  border-radius: 50%;
-}
-
-input:checked + .slider {
-  background-color: #fff;
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 1px #fff;
-}
-
-input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
+body.dark-mode #mode-toggle-button:hover {
+  background-color: #ffe8a3;
 }
