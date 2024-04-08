@@ -119,7 +119,8 @@ input[type=submit] { align-self: start; min-width: 10em; }
   margin: auto;
 }
 
-/* Custom Button Stuff */
+/* ooooooooooooooooooooo Buttons ooooooooooooooooooooooooooooo */
+/* Link Buttons */
 .button-container {
   display: flex;
   flex-direction: row;
@@ -139,6 +140,20 @@ input[type=submit] { align-self: start; min-width: 10em; }
   border-radius: 6px;
   width: 80%; /* Sets a specific width for all buttons */
   max-width: 200px; /* Adjusts maximum width */
+}
+
+/* Dark mode toggle button */
+#mode-toggle-button {
+  background-color: #4b6e52;
+  color: #fff;
+  border: 0px;
+  border-radius: 6px;
+  font-size: 70%;
+  font-weight: bold;
+  padding: 5px;
+}
+#mode-toggle-button:hover {
+  background-color: #161d17;
 }
 
 /* ((((((((((((((((((( FLEXBOXES ))))))))))))))))))) */
@@ -223,7 +238,6 @@ input[type=submit] { align-self: start; min-width: 10em; }
 /* ================= Dark mode ==================== */
 /* https://www.w3schools.com/howto/howto_js_toggle_dark_mode.asp */
 
-/* Dark and twisted versions */
 body.dark-mode,
 body.darkmode .select-table option, 
 body.darkmode .select-table button {
@@ -240,7 +254,6 @@ body.dark-mode .select-table {
   background-color: #161d17;
   color: #fff; 
 }
-
 
 body.dark-mode a {
   color: #6dad7a
@@ -265,24 +278,10 @@ body.dark-mode .select-table td {
   color: #fff; 
 }
 
-/* Dark Mode toggle stuff */
-#mode-toggle-button {
-  background-color: #4b6e52;
-  color: #fff;
-  border: 0px;
-  border-radius: 6px;
-  font-size: 70%;
-  font-weight: bold;
-  padding: 5px;
-}
-#mode-toggle-button:hover {
-  background-color: #161d17;
-}
-
 body.dark-mode #mode-toggle-button {
-  background-color: #FFCD00;
+  background-color: #ffe8a3;
   color: #00843D;
 }
 body.dark-mode #mode-toggle-button:hover {
-  background-color: #ffe8a3;
+  background-color: #FFCD00;
 }
