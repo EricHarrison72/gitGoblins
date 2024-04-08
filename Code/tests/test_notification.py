@@ -122,25 +122,25 @@ def test_get_template(app, expected_template_1, expected_template_2, expected_te
     test_dict_1 = {
         "city_name": "Springfield",
         "date": "2023-01-01",
-        "data_point": "HighTemperature"
+        "event_type": "HighTemperature"
     }
 
     test_dict_2 = {
         "city_name": "Springfield",
         "date": "2023-01-01",
-        "data_point": "LowTemperature"
+        "event_type": "LowTemperature"
     }
 
     test_dict_3 = {
         "city_name": "Springfield",
         "date": "2023-01-01",
-        "data_point": "Wind"
+        "event_type": "Wind"
     }
 
     test_dict_4 = {
         "city_name": "Springfield",
         "date": "2023-01-01",
-        "data_point": "Rain"
+        "event_type": "Rain"
     }
 
     # Checks that each data point is correctly obtained from the database and that each corresponding template is grabbed
