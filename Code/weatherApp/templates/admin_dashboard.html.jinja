@@ -60,7 +60,7 @@
       </form>
     </div>
 
-    <!--  section for changing weather data   -->
+    <!--  section for alerts   -->
 
     <div style="display: inline-block">
       <form id ="alertForm" method="post" action ="{{ url_for("admin.admin_alert") }}">
@@ -69,10 +69,12 @@
       <table class="select-table">
         <tr>
           <th>Select City</th>
+          <th>Select Date</th>
           <th>Alert Type</th>
         </tr>
         <tr>
           <td>{{ selectors.select_event_location( url_args['city_name']) }}</td>
+          <td> <input type="date" id="eventDate" name="eventDate" required min="2008-01-01" max="2017-06-24" value="{{ url_args['date'] }}"> </td>
           <td>{{ selectors.select_weather_event( url_args['weather_alert']) }}</td>
           <td>
             <input type="submit" value="Send Alert" form="alertForm">
