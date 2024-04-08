@@ -4,12 +4,30 @@ selectors.html.jinja
 Contains macros for selection menus, including:
 - select_date
 - select_single_location
-- select_multiple_locations
 - select_weather_event
 
 Docs:
 - [Jinja2 Docs: Macros](https://jinja.palletsprojects.com/en/3.1.x/templates/#macros)
 -------------------------------------------------- #}
+
+{% macro select_stat(url_arg_stat='temperature') %}
+
+    {% if url_arg_date in [None, 'None', 'NA'] %}
+        {% set url_arg_stat = 'temperature' %}
+    {% endif %}
+
+    {% set stats = ['temperature', 'wind', 'rain'] %}
+
+    <select id="statSelect" class="dropdown-style">
+        {% for i in range(stats|length) %}
+            <option value="{{ i }}" {% if stats[i] == url_arg_stat %} selected {% endif %}>
+                    {{ stats[i] }}
+            </option>
+        {% endfor %}
+        
+    </div>
+
+{% endmacro %}
 
 {% macro select_date(id_prefix='', url_arg_date='2017-06-24') %}
 
@@ -22,7 +40,7 @@ Docs:
     {% set selected_day = url_arg_date[8:] | int %}
 
     <div id="{{ id_prefix }}dateSelect">
-        <select id="{{ id_prefix }}yearSelect">
+        <select id="{{ id_prefix }}yearSelect" class="dropdown-style">
             {% for year in range(2008, 2018) %}
                 <option value="{{ year }}" {% if year == selected_year %} selected {% endif %}>
                         {{ year }}
@@ -30,7 +48,7 @@ Docs:
             {% endfor %}
         </select>
 
-        <select id="{{ id_prefix }}monthSelect">
+        <select id="{{ id_prefix }}monthSelect" class="dropdown-style">
             {% set months = [
                 'January',
                 'February',
@@ -53,7 +71,7 @@ Docs:
             {% endfor %}
         </select>
 
-        <select id="{{ id_prefix }}daySelect">
+        <select id="{{ id_prefix }}daySelect" class="dropdown-style">
             {% for day in range(1, 32) %}
                 <option value="{{ day }}" {% if day == selected_day %} selected {% endif %}>
                     {{ day }}
@@ -70,7 +88,7 @@ Docs:
         {% set url_arg_city = 'Canberra' %}
     {% endif %}
 
-    <select id="citySelect">
+    <select id="citySelect" class="dropdown-style">
         {% set cities = [
             'Adelaide',
             'Albany',
@@ -130,19 +148,6 @@ Docs:
         {% endfor %}
 
     </select>
-{% endmacro %}
-
-
-{% macro select_multiple_locations() %}
-    <p>[my pal Eric has TODO this]</p>
-    {#
-        Eric, I'm hoping you can make a PURE HTML/CSS dropdown 
-        checklist of some sort, so that it fits in the select-table.
-
-        This might require defining some custom css classes, but
-        trust me, that will be better than using Bootstrap or some
-        other external library (in the context of this project)
-    #}
 {% endmacro %}
 
 {% macro select_weather_event(url_arg_event='HighTemperature') %}

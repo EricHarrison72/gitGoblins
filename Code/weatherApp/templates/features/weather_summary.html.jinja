@@ -1,20 +1,7 @@
-{#
-This template expects the following parameters:
-  -- weather_dict, with keys:
-    - 'city_name',
-    - 'date',
-    - 'temp_high', 
-    - 'temp_low', 
-    - 'rainfall', 
-    - 'raining', 
-    - 'wind_speed', 
-    - 'wind_dir'
-  -- url_args dict, with keys
-    - 'city_name'
-    - 'date'
-#}
 {% extends 'base.html.jinja' %}
 {% import 'helpers/selectors.html.jinja' as selectors %}
+{% import 'helpers/data_display.html.jinja' as data_display %}
+{% import 'helpers/icon_display.html.jinja' as icon_display %}
 
 {% block title %}
   Weather Summary
@@ -25,65 +12,46 @@ This template expects the following parameters:
 {% endblock %}
 
 {% block content %}
+<!--possible future div -->
+<div class="centered-content">
+  <div class="weather-summary-grid">
 
-  <br>
-  <div style="overflow-x: auto;">
-    <table class='select-table'>
-      <tr>
-        <th>Location</th>
-        <th>Date</th>
-      </tr>
-      <tr>
-        <td>{{ selectors.select_single_location( url_args['city_name']) }}</td>
-        <td>{{ selectors.select_date('', url_args['date']) }}</td>
-        <td>
-          <button onclick="reloadPageWithArgs(`city_name=${getCityFromSelection()}&date=${getDateFromSelection()}`)">
-            Submit
-          </button>
-        </td>
-      </tr>
-    </table>
+    <div id="all-except-weather-details"> <!-- grid item -->
+
+      <div class="table-container">
+        <table class='select-table' style="display:flex;"">
+          <tr>
+            <th>Location</th>
+            <th>Date</th>
+          </tr>
+          <tr>
+            <td>{{ selectors.select_single_location( url_args['city_name']) }}</td>
+            <td>{{ selectors.select_date('', url_args['date']) }}</td>
+            <td>
+              <button onclick="reloadPageWithArgs(`city_name=${getCityFromSelection()}&date=${getDateFromSelection()}`)" class="dropdown-style">
+                Submit
+              </button>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      {{ data_display.weather_overview(weather_dict, weather_icon, rain_prediction)}}
+
+      <div class="graph-container">
+        {{ graph_html }}
+      </div>
+
+    </div>
+
+    <div id="weather-details"> <!-- grid item -->
+      <div class="table-container">
+        {{ data_display.weather_details_table( weather_dict) }}
+      </div> 
+    </div>
+
   </div>
-
-  <h3>{{weather_dict['city_name']}} — {{ weather_dict['date'] }}</h3>
-
-  <font size="+2">{{ weather_dict['temp_high'] }}&deg</font><font size="-2"><sub>high</sub></font> |
-  <font size="+2">{{ weather_dict['temp_low'] }}&deg</font><font size="-2"><sub>low</sub></font>
-
-  <br>
-  <br>
-
-  <table>
-    <tr>
-      <td>It is raining | <b>{{ weather_dict['raining'] }}</b></td>
-      <td>Precipitation% | <b>{{ weather_dict['rainfall'] }}</b></td>
-    </tr>
-    <tr>
-      <td>Wind speed | <b>{{ weather_dict['wind_speed'] }}</b></td>
-      <td>Wind direction | <b>{{ weather_dict['wind_dir'] }}</b></td>
-    </tr>
-  </table>
-
-  <br>
-  <br>
-
-
-  {% if rain_prediction == 0 %}
-    {% set will_or_will_not = 'WILL NOT' %}
-  {% elif rain_prediction == 1 %}
-    {% set will_or_will_not = 'WILL' %}
-  {% else %}
-    {% set error_detected = true %}
-  {% endif %}
-
-  {% if error_detected %}
-    <p>There was an error while performing the AI prediction.</p>
-  {% else %}
-    <p>Our AI model predicts that it <b>{{ will_or_will_not }}</b> rain tomorrow.</p>
-  {% endif %}
-  
-
-
+</div>
 {% endblock %}
 
 {% block scripts %}

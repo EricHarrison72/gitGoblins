@@ -12,6 +12,7 @@ Start code sources:
 import bcrypt
 from flask import session
 from weatherApp.db import get_db
+from weatherApp import predictions
 
 
 #The register view should render successfully on GET. On POST with valid form data, 
@@ -93,6 +94,10 @@ def test_login(client, app):
             (1, 100)
         )
         db.commit()
+
+        # MAKE SURE test app has a copy of the prediction model
+        predictions.train_and_save_model()
+        
     # Test login with no email
     response_no_email = client.post(
         '/auth/login', data={'email': '', 'password': 'a'}

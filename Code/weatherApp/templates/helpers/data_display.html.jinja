@@ -1,0 +1,172 @@
+{# --------------------------------------------------
+data_display.html.jinja
+----------------------
+Contains macros for displaying weather data, including:
+- info_widget
+- weather_overview
+- weather_details_table
+
+Docs:
+- [Jinja2 Docs: Macros](https://jinja.palletsprojects.com/en/3.1.x/templates/#macros)
+-------------------------------------------------- #}
+{% import 'helpers/icon_display.html.jinja' as icon_display %}
+{% macro info_widget(icon, label, info) %}
+    <div class="info-widget">
+        {{ icon }}
+        <div>
+            <label>{{ label }}</label>
+            <span>{{ info }}</span>
+        </div>
+    </div>
+{% endmacro %}
+
+{# this macro expects the same weather dict as weather_summary.html.jinja #}
+{% macro weather_overview(weather_dict, weather_icon, rain_prediction) %}
+  <div class="weather-overview-grid">
+
+    <div class="overview-header"> <!--(grid item)-->
+      <h2>{{ weather_dict['city_name'] }}—{{ weather_dict['date'] }}</h2>
+    </div>
+
+    <div class="main-icon"> <!--(grid item)-->
+      {{ icon_display.main_weather_icon( weather_icon)}}
+    </div>
+
+    <div class="widget-table-container"> <!--(grid item)-->
+      <table class="widget-table">
+        <tr>
+          <td>
+            {{info_widget(
+                icon_display.temp_low_icon(),
+                'Low',
+                weather_dict['temp_low'] ~ ' &degC'
+            )}} 
+          </td>
+          <td>
+            {{info_widget(
+                icon_display.temp_high_icon(),
+                'High',
+                weather_dict['temp_high'] ~ ' &degC'
+            )}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            {% set rain_icon = icon_display.rain_icon( weather_dict['rain_today']) %}
+            {{info_widget(
+                rain_icon,
+                'Rain',
+                weather_dict['rainfall'] ~ ' mm'
+            )}} 
+          </td>
+          <td>
+            {% set wind_icon = icon_display.wind_dir_icon( weather_dict['wind_dir']) %}
+            {{info_widget(
+                wind_icon,
+                'Wind Gusts',
+                weather_dict['wind_speed'] ~ ' km/h ' ~ weather_dict['wind_dir']
+            )}} 
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="prediction-container"> <!--(grid item)-->
+      <div class="info-widget">
+        <span class="prediction">
+          {% if rain_prediction == 0 %}
+            {% set will_or_will_not = 'WILL NOT' %}
+          {% elif rain_prediction == 1 %}
+            {% set will_or_will_not = 'WILL' %}
+          {% else %}
+            {% set error_detected = true %}
+          {% endif %}
+
+          {% if error_detected %}
+            There was an error while performing the AI prediction.
+          {% else %}
+            Our AI model predicts that it <b>{{ will_or_will_not }}</b> rain tomorrow.
+          {% endif %}
+        </span>
+      </div>
+    </div>
+
+  </div>
+{% endmacro %}
+
+{# this macro expects the same weather dict as weather_summary.html.jinja #}
+{% macro weather_details_table(weather_dict) %}
+  <table class="select-table">
+    <tr>
+      <th><font size="+1">Details</font></th>
+    </tr>
+    <tr>
+      <td><br>Temperature Max</td>
+      <td><br>{{ weather_dict['temp_high'] }} &degC</td>
+    </tr>
+    <tr>
+      <td>Temperature Min</td>
+      <td>{{ weather_dict['temp_low'] }} &degC</td>
+    </tr>
+    <tr>
+      <td>Sunshine</td>
+      <td>{{ weather_dict['sunshine'] }} hrs</td>
+    </tr>
+    <tr>
+      <td>Rainfall</td>
+      <td>{{ weather_dict['rainfall'] }} mm</td>
+    </tr>
+    <tr>
+      <td>Evaporation</td>
+      <td>{{ weather_dict['evaporation'] }} mm</td>
+    </tr>
+    <tr>
+      <td>Cloud 9am</td>
+      <td>{{ weather_dict['cloud_9am'] }} oktas</td>
+    </tr>
+    <tr>
+      <td>Cloud 3pm</td>
+      <td>{{ weather_dict['cloud_3pm'] }} oktas</td>
+    </tr>
+    <tr>
+      <td>Pressure 9am</td>
+      <td>{{ weather_dict['pressure_9am'] }} hpa</td>
+    </tr>
+    <tr>
+      <td>Pressure 3pm</td>
+      <td>{{ weather_dict['pressure_3pm'] }} hpa</td>
+    </tr>
+    <tr>
+      <td>Humidity 9am</td>
+      <td>{{ weather_dict['humidity_9am'] }} %</td>
+    </tr>
+    <tr>
+      <td>Humidity 3pm</td>
+      <td>{{ weather_dict['humidity_3pm'] }} %</td>
+    </tr>
+    <tr>
+      <td>Wind Gust Speed</td>
+      <td>{{ weather_dict['wind_speed'] }} km/h</td>
+    </tr>
+    <tr>
+      <td>Wind Gust Dir</td>
+      <td>{{ weather_dict['wind_dir'] }}</td>
+    </tr>
+    <tr>
+      <td>Wind Speed 9am</td>
+      <td>{{ weather_dict['wind_speed_9am'] }} km/h</td>
+    </tr>
+    <tr>
+      <td>Wind Speed 3pm</td>
+      <td>{{ weather_dict['wind_speed_3pm'] }} km/h</td>
+    </tr>
+    <tr>
+      <td>Wind Dir 9am</td>
+      <td>{{ weather_dict['wind_dir_9am'] }}</td>
+    </tr>
+    <tr>
+      <td>Wind Dir 3pm</td>
+      <td>{{ weather_dict['wind_dir_3pm'] }}</td>
+    </tr>
+  </table>
+{% endmacro %}
