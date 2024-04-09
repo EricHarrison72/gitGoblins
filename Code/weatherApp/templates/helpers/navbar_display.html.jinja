@@ -8,7 +8,6 @@
     - [Jinja2 Docs: Macros](https://jinja.palletsprojects.com/en/3.1.x/templates/#macros)
     -------------------------------------------------- #}
 {% macro button_display(current_page) %}
-
     {% if current_page != 'map' %}
         <button onclick="window.location.href= '{{ url_for('views.map') }}';" class="button-style-headers">
             Map

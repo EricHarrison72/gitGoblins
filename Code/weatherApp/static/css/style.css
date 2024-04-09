@@ -124,18 +124,23 @@ input[type=submit] { align-self: start; min-width: 10em; }
 .button-style-headers {
   background-color: #00843D;
   color: #FFCD00;
+
+  display: block;
+  border-radius: 6px;
   border: 0px;
-  padding: 6px 10px; /* Adjusts button size */
+  padding: 6px 10px; 
+
   text-align: center;
   text-decoration: none;
-  display: block;
   font-family: 'Roboto', sans-serif;
-  font-size: 10px;
-  margin: 0px 5px; /* Adjusts button spacing */
+  font-size: 12px;
+  font-weight: bold;
+
+  margin: 0px 5px; 
   cursor: pointer;
-  border-radius: 6px;
-  width: 80%; /* Sets a specific width for all buttons */
-  max-width: 110px; /* Adjusts maximum width */
+}
+.button-style-headers:hover {
+  background-color: #359251;
 }
 
 /* Dark mode toggle button */
@@ -144,9 +149,14 @@ input[type=submit] { align-self: start; min-width: 10em; }
   color: #fff;
   border: 0px;
   border-radius: 6px;
+
+  padding: 5px;
+  margin-right: 5px;
+  margin-left: 10px;
+  cursor: pointer;
+
   font-size: 70%;
   font-weight: bold;
-  padding: 5px;
 }
 #mode-toggle-button:hover {
   background-color: #161d17;
@@ -248,9 +258,6 @@ body.darkmode .select-table button {
   color: #fff;
 }
 
-body.darkmode nav img {
-  opacity: 0.1; /* this isn't working and i don't know why*/
-}
 body.dark-mode nav,
 body.dark-mode .button-style,
 body.dark-mode .select-table {
@@ -261,7 +268,6 @@ body.dark-mode .select-table {
 body.dark-mode a {
   color: #6dad7a
 }
-
 body.dark-mode header h1 {
   color: #6dad7a
 }
@@ -279,6 +285,14 @@ body.dark-mode .info-widget {
 body.dark-mode .select-table th,
 body.dark-mode .select-table td {
   color: #fff; 
+}
+
+body.dark-mode .button-style-headers {
+  background-color: #6dad7a;
+  color: #161d17;
+}
+body.dark-mode .button-style-headers:hover {
+  background-color: #00843D;
 }
 
 body.dark-mode #mode-toggle-button {
