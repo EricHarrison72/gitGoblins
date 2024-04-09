@@ -1,7 +1,8 @@
 # --------------------------------------
-# weather.py
+# icons.py
 '''
-Contains methods to retrieve weather information
+Contains functions that determine what icons 
+should be displayed based on the current weather.
 '''
 # ----------------------------------
 

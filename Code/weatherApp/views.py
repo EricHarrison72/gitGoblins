@@ -21,8 +21,8 @@ from flask import (
 )
 from . import (
     graphs,
+    icons,
     queries,
-    weather,
     predictions,
     db,
 )
@@ -41,7 +41,7 @@ def index():
     specified_date = datetime(2017, 6, 24).strftime('%Y-%m-%d')
 
     weather_dict = queries.get_weather_data(city_name, specified_date)
-    weather_icon = weather.determine_icon_based_on_weather(weather_dict)
+    weather_icon = icons.determine_icon_based_on_weather(weather_dict)
     rain_prediction = predictions.predict_rain(city_name, specified_date)
     
     try:
@@ -79,7 +79,7 @@ def weather_summary():
 
     # Prepare most of the render_template args
     weather_dict = queries.get_weather_data( city_name, date)
-    weather_icon = weather.determine_icon_based_on_weather(weather_dict)
+    weather_icon = icons.determine_icon_based_on_weather(weather_dict)
     rain_prediction = predictions.predict_rain(city_name, date)
     
     # prepare graph
@@ -158,7 +158,7 @@ def get_weather_icon():
     date = request.args.get('date')
     
     weather_dict = queries.get_weather_data(city_name, date)
-    icon_name = weather.determine_icon_based_on_weather(weather_dict)
+    icon_name = icons.determine_icon_based_on_weather(weather_dict)
     
     return jsonify({'icon': icon_name})
 
