@@ -4,17 +4,9 @@ This template expects the following parameters:
     - city_name         The name of the city
     - data_point    First data point for the weather event
 #}
-<!DOCTYPE html>
-<html lang="en">
-<html>
-    <body>
-        <h1>Weather alert for {{ event_args['city_name'] }}.</h1>
-      	<br>
-      	<p>
-          Hello, you are receiving this alert because {{ event_args['city_name'] }} is expecting rain on {{ event_args['date'] }}.
-      	</p>
-     	 <p>
-      	  Expect {{ event_args['data_point'] }}mm of rain.
-      	</p>
-    </body>
-</html>
+{% extends 'notif/email_base.html.jinja' %}
+
+{% block weather_event %}rain{% endblock %}
+{% block weather_event_details %}
+    Expect {{ event_args['data_point'] }}mm of rain.
+{% endblock %}
