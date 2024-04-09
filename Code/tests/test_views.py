@@ -82,31 +82,3 @@ def test_get_weather_icon(client):
         response = client.get('/api/weather_icon?cityName=Sydney&date=2024-03-20')
         assert response.status == '200 OK'
 
-# TODO THIS TEST SHOULDN'T BE HERE
-'''
-The whole organization of user settings needs to be addressed in another branch
-'''
-# def test_update_user_settings(client, app):
-#     with client:
-#         # Register a new user with valid data including city_id
-#         response = client.post('/auth/register', data={
-#             'email': 'test@gmail.com',
-#             'password': 'a',
-#             'city_id': '1'  # Assuming city_id is provided in the form data
-#         })
-#         assert response.status_code == 302  # Check if registration is successful and redirects
-
-#         # Log in the registered user
-#         response_login = client.post('/auth/login', data={
-#             'email': 'test@gmail.com',
-#             'password': 'a'
-#         })
-#         assert response_login.status_code == 302  # Check if login is successful and redirects
-
-#         # Update user settings
-#         response_update = client.post('/settings', data={
-#             'emailList': 'on',
-#             'cityId': '2'  # Assuming new city_id
-#         })
-#         assert response_update.status_code == 302  # Check if update is successful and redirects
-
