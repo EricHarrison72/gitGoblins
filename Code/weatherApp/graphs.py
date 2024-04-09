@@ -32,8 +32,9 @@ def get_graph_html(url_args=DEFAULT_url_args):
     '''
     light_graph = _get_graph(url_args)
     dark_graph = _get_graph(url_args)
-    dark_graph.convert_to_darkmode()
 
+    if (isinstance(dark_graph, WeatherGraph)):
+        dark_graph.convert_to_darkmode()
 
     return {
         'light': _get_graph_as_string(light_graph),
