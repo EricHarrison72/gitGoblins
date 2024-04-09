@@ -27,11 +27,12 @@
             </tr>
             <tr>
               <td>
-                <select class="selectpicker" data-live-search="true" id="city" name="city_id">
+                {# <select class="selectpicker" data-live-search="true" id="city" name="city_id">
                   {% for city in cities %}
                   <option value="{{ city.cityId }}">{{ city.cityName }}</option>
                   {% endfor %}
-                </select>
+                </select> #}
+                {{selectors.select_location(cities, "Canberra")}}
               </td>
               <td>
                 <input type="date" id="date" name="date" required min="2008-01-01" max="2017-06-24" value="{{ url_args['date'] }}">
