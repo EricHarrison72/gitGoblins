@@ -30,76 +30,72 @@ def test_template():
 # Expected template for High Temperature
 @pytest.fixture()
 def expected_template_1():
-    return """
-<!DOCTYPE html>
+    return """\n\n<!DOCTYPE html>
 <html lang="en">
 <html>
     <body>
         <h1>Weather alert for Springfield.</h1>
-      	<br>
-      	<p>
+        <br>
+        <p>
           Hello, you are receiving this alert because Springfield is expecting high temperatures on 2023-01-01.
-      	</p>
-     	 <p>
-      	  Expect a temperature high of 10&deg;C.
-      	</p>
+        </p>
+        <p>
+          Expect a temperature high of 10&deg;C.
+        </p>
     </body>
 </html>"""
 
 # Expected Template for Low Temperature
 @pytest.fixture()
 def expected_template_2():
-    return '''
-<!DOCTYPE html>
+    return '''\n\n<!DOCTYPE html>
 <html lang="en">
 <html>
     <body>
         <h1>Weather alert for Springfield.</h1>
-      	<br>
-      	<p>
+        <br>
+        <p>
           Hello, you are receiving this alert because Springfield is expecting low temperatures on 2023-01-01.
-      	</p>
-     	<p>
-      	  Expect a temperature low of -5&deg;C.
-      	</p>
+        </p>
+        <p>
+          Expect a temperature low of -5&deg;C.
+        </p>
     </body>
 </html>'''
 
 # Expected Template for High Winds
 @pytest.fixture()
 def expected_template_3():
-    return '''
-<!DOCTYPE html>
+    return '''\n\n<!DOCTYPE html>
 <html lang="en">
 <html>
     <body>
         <h1>Weather alert for Springfield.</h1>
-      	<br>
-      	<p>
+        <br>
+        <p>
           Hello, you are receiving this alert because Springfield is expecting high wind speeds and gusts on 2023-01-01.
-      	</p>
-     	 <p>
-      	  Expect wind speeds up to 12km/h.
-      	</p>
+        </p>
+        <p>
+          Expect wind speeds up to 12km/h.
+        </p>
     </body>
 </html>'''
 
 # Expected Template for Rain
 @pytest.fixture()
 def expected_template_4():
-    return '''
-<!DOCTYPE html>
+    return '''\n\n<!DOCTYPE html>
 <html lang="en">
 <html>
     <body>
         <h1>Weather alert for Springfield.</h1>
-      	<br>
-      	<p>
+        <br>
+        <p>
           Hello, you are receiving this alert because Springfield is expecting rain on 2023-01-01.
-      	</p>
-     	 <p>
-      	  Expect 0mm of rain.
-      	</p>
+        </p>
+        <p>
+          Expect 0mm of rain.
+        </p>
     </body>
 </html>'''
 
@@ -145,14 +141,14 @@ def test_get_template(app, expected_template_1, expected_template_2, expected_te
 
     # Checks that each data point is correctly obtained from the database and that each corresponding template is grabbed
     with app.app_context():
-          template = get_template(test_dict_1)
-          assert expected_template_1 == template
+        template = get_template(test_dict_1)
+        assert expected_template_1 == template
 
-          template = get_template(test_dict_2)
-          assert expected_template_2 == template
+        template = get_template(test_dict_2)
+        assert expected_template_2 == template
 
-          template = get_template(test_dict_3)
-          assert expected_template_3 == template
+        template = get_template(test_dict_3)
+        assert expected_template_3 == template
 
-          template = get_template(test_dict_4)
-          assert expected_template_4 == template
+        template = get_template(test_dict_4)
+        assert expected_template_4 == template

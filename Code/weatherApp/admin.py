@@ -10,15 +10,15 @@ def admin():
     if request.method == 'POST':
         try:
             datb = db.get_db()
-            city_id = int(request.form['city_id'])
+            city_id = int(request.form['cityId'])
             temp_min = float(request.form['tempMin'])
             temp_max = float(request.form['tempMax'])
             specified_date = request.form['date']  
 
             # Fetch cityName from cityId
-            cursor = datb.execute("SELECT cityName FROM City WHERE cityId = ?", (city_id,))
-            city_name = cursor.fetchone()[0] if cursor.fetchone() else 'Unknown City'
-
+            city_data = datb.execute("SELECT cityName FROM City WHERE cityId = ?", (city_id,)).fetchone()
+            city_name = city_data[0]
+            
             # Update all columns in WeatherInstance table
             datb.execute('''
                 UPDATE WeatherInstance

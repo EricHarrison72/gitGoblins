@@ -4,17 +4,6 @@ This template expects the following parameters:
     - city_name         The name of the city
     - data_point        data point for the weather event
 #}
-<!DOCTYPE html>
-<html lang="en">
-<html>
-    <body>
-        <h1>Weather alert for {{ event_args['city_name'] }}.</h1>
-      	<br>
-      	<p>
-          Hello, you are receiving this alert because {{ event_args['city_name'] }} is expecting high temperatures on {{ event_args['date'] }}.
-      	</p>
-     	 <p>
-      	  Expect a temperature high of {{ event_args['data_point'] }}&deg;C.
-      	</p>
-    </body>
-</html>
+{% extends 'notif/email_base.html.jinja' %}
+{% block weather_event %}high temperatures{% endblock %}
+{% block weather_event_details %}Expect a temperature high of {{ event_args['data_point'] }}&deg;C.{% endblock %}
