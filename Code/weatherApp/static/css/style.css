@@ -48,6 +48,13 @@ nav ul li a, nav ul li span, header .action { display: block; font-size: 1rem; p
 input.danger { color: #cc2f2e; }
 input[type=submit] { align-self: start; min-width: 10em; }
 
+/* MISCELLANEOUS */
+#welcome-message {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 150%;
+}
+
 /* [[[[[[[[[[[[[[[[ TABLES AND WIDGETS ]]]]]]]]]]]]]]]]]]]]]]] */
 /* Select Table */
 .select-table {

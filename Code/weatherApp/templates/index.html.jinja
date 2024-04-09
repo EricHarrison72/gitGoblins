@@ -21,10 +21,10 @@ This template expects the following parameters:
 {% endblock %}
 
 {% block content %}
-<br>
-
   <div class="centered-content">
-    <h1>Welcome, {{ g.user['firstname'] }}!</h1>
+    <p id="welcome-message">
+      <em>Welcome, {{ g.user['firstname'] }}!</em>
+    </p>
   </div>
   
   <div class="centered-content">
