@@ -109,3 +109,4 @@ The whole organization of user settings needs to be addressed in another branch
 #             'cityId': '2'  # Assuming new city_id
 #         })
 #         assert response_update.status_code == 302  # Check if update is successful and redirects
+
