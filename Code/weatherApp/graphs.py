@@ -227,6 +227,7 @@ class TemperatureGraph(WeatherGraph):
             y = ['Low', 'High'],
             barmode = 'group',
             labels = {"value": "Temperature (°C)", "variable": "Type"},
+            width = 1100
         )
 
         self.fig.update_traces(
@@ -257,9 +258,11 @@ class RainGraph(WeatherGraph):
             self.dataframe,
             x = 'Date',
             y = 'Rainfall',
-            labels = {"value": "Rainfall (mm)"},
+            width = 1100
         )
-
+        self.fig.update_layout(
+            yaxis_title = "Rainfall (mm)"
+        )
         self.fig.update_traces(
             marker_line_width=0.1
         )
