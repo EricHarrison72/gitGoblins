@@ -6,6 +6,9 @@ Contains macros for selection menus, including:
 - select_single_location
 - select_weather_event
 
+The violation of the DRY principle breaks my bones but
+it is too late in the project to refactor so ¯\_(ツ)_/¯
+
 Docs:
 - [Jinja2 Docs: Macros](https://jinja.palletsprojects.com/en/3.1.x/templates/#macros)
 -------------------------------------------------- #}
@@ -81,6 +84,15 @@ Docs:
     </div>
 {% endmacro %}
 
+{% macro select_location(cities, user_city_id='Canberra') %}
+    <label for="cityId">Home City:</label>
+    
+    <select id="cityId" name="cityId">
+        {% for city in cities %}
+            <option value="{{ city.cityId }}" {% if user_city_id == city.cityId %} selected {% endif %}>{{ city.cityName }}</option>
+        {% endfor %}
+    </select><br><br>
+{% endmacro %}
 
 {% macro select_single_location(url_arg_city='Canberra') %}
 

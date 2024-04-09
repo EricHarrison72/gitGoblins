@@ -27,7 +27,7 @@ from . import (
     db,
 )
 from .auth import login_required
-from datetime import datetime, timedelta
+from datetime import datetime
 
 views_bp = Blueprint('views', __name__)
 
@@ -81,26 +81,7 @@ def weather_summary():
     weather_dict = queries.get_weather_data( city_name, date)
     weather_icon = icons.determine_icon_based_on_weather(weather_dict)
     rain_prediction = predictions.predict_rain(city_name, date)
-    
-    # prepare graph
-    try:
-        date_arg = datetime.strptime(date, '%Y-%m-%d')
-        start_date = (date_arg - timedelta(days=7)).strftime('%Y-%m-%d')
-        
-        graph_args = {
-            'city_name' : city_name,
-            'start_date' : start_date,
-            'end_date' : date
-        }
-        
-        graph = graphs.TemperatureGraph(graph_args)
-        graph.fig.update_layout(
-            height=300
-        )
-        graph_html = graph.get_html()
-
-    except: 
-        graph_html = "Error generating graph."
+    graph_html = graphs.get_7_day_temp_graph_html(city_name, date)
     
     try:
         # Convert date from YYYY-MM-DD into Month DD, YYYY    
@@ -161,32 +142,3 @@ def get_weather_icon():
     icon_name = icons.determine_icon_based_on_weather(weather_dict)
     
     return jsonify({'icon': icon_name})
-
-# ---------------
-@views_bp.route('/settings', methods=['GET', 'POST'])
-@login_required
-def settings():
-    g.current_page = 'settings'
-    
-    if request.method == 'POST':
-        # Get form data
-        email_list = request.form.get('emailList') == 'on'  # Checkbox value
-        city_id = int(request.form.get('cityId'))
-
-        # Update user settings in the database
-        try:
-            user_id = g.user['userId']  # Get user ID from g.user
-            db.update_user_settings(user_id,  email_list, city_id)
-            # Redirect to index after successful update
-            return redirect(url_for('views.index'))
-        except Exception as e:
-            error_message = 'An error occurred while updating user settings: {}'.format(str(e))
-            return render_template('error.html', error_message=error_message)
-
-    # If method is GET, render the settings page
-    # You need to pass user data and city data to the template
-    user_id = g.user['userId']  # Get user ID from g.user
-    user = db.get_user_settings(user_id)  # Get user data from database
-    cities = db.get_cities()  # Get city data from database
-
-    return render_template('settings.html.jinja', user=user, cities=cities)

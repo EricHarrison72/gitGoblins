@@ -76,7 +76,7 @@
           <td> <input type="date" id="eventDate" name="eventDate" required min="2008-01-01" max="2017-06-24" value="{{ url_args['date'] }}"> </td>
           <td>{{ selectors.select_weather_event( url_args['weather_alert']) }}</td>
           <td>
-            <input type="submit" value="Send Alert" form="alertForm">
+            <button type="submit" form="alertForm">Send Alert</button>
           </td>
         </tr>
       </table>

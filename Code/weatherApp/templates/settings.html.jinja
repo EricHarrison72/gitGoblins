@@ -1,5 +1,5 @@
 {% extends 'base.html.jinja' %}
-
+{% import 'helpers/selectors.html.jinja' as selectors %}
 {% block title %}
   User Settings
 {% endblock %}
@@ -9,21 +9,24 @@
 {% endblock %}
 
 {% block content %}
-  <form id="userSettingsForm" method="post" action="{{ url_for('views.settings') }}">
-    <div style="display: flex; align-items: center;">
-      <label for="emailList">Email List:</label>
-      <input type="checkbox" id="emailList" name="emailList" {% if user.emailList %} checked {% endif %}>
-    </div>
-    <br>
+<div class="centered-content">
+  <form id="userSettingsForm" method="post" action="{{ url_for('settings.settings') }}">
 
-    <label for="cityId">City:</label>
-    <select id="cityId" name="cityId">
-      {% for city in cities %}
-        <option value="{{ city.cityId }}" {% if user.cityId == city.cityId %} selected {% endif %}>{{ city.cityName }}</option>
-      {% endfor %}
-    </select><br><br>
+    <table class='select-table' style="display:flex; padding-top: 10px;">
+          <tr>
+            <td>
+              <label for="emailList">Email List:</label>
+              <input class="themed-checkbox" type="checkbox" id="emailList" name="emailList" {% if user.emailList %} checked {% endif %}>
+            </td>
+            <td>
+              {{ selectors.select_location(cities, user.cityId) }}
+            </td>
+            <td>
+              <button type="submit">Update Settings</button>
+            </td>
+          </tr>
+        </table>
 
-    <button type="submit">Update Settings</button>
   </form>
+</div>
 {% endblock %}
-

@@ -1,3 +1,4 @@
+
 {# -------------------------
 index.html.jinja
 (The home page)
@@ -7,6 +8,7 @@ This template expects the following parameters:
  - weather_icon: str - refers to what type of icon to display
  - rain_prediction: 1 or 0
 -------------------------- #}
+
 {% extends 'base.html.jinja' %}
 {% import 'helpers/data_display.html.jinja' as data_display %}
 
@@ -19,10 +21,10 @@ This template expects the following parameters:
 {% endblock %}
 
 {% block content %}
-<br>
-
   <div class="centered-content">
-    <h1>Welcome, {{ g.user['firstname'] }}!</h1>
+    <p id="welcome-message">
+      <em>Welcome, {{ g.user['firstname'] }}!</em>
+    </p>
   </div>
   
   <div class="centered-content">

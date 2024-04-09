@@ -11,20 +11,27 @@ Resources:
 ----------------------------------------*/
 
 html { font-family: 'Roboto', sans-serif; font-size: 0.9rem; background: #eee }
-body { margin: 0 auto; background: white; }
+body {
+  margin: 0;
+  background: white;
+  min-height: 100vh; /* Change height to min-height */
+  display: flex;
+  flex-direction: column;
+}
 h1 { font-family: 'Rubik', sans-serif; font-weight:700; font-size: 1.5rem; color: #00843D; margin: 0.9rem 0; }
 h2 { font-family: 'Roboto', sans-serif; font-weight:600; font-size: 2.75rem; margin: 1rem 0; }
 a { color: #00843D; }
+a:hover {color: #359251; }
 hr { border: none; border-top: 1px solid rgb(160, 157, 157); }
 nav { background: #FFCD00; display: flex; align-items: center; padding: 0 0.5rem; }
 nav h1 { flex: auto; margin: 0; }
 nav h1 a { text-decoration: none; padding: 0.25rem 0.5rem; }
 nav ul  { display: flex; list-style: none; margin: 0; padding: 0; }
-nav ul li a, nav ul li span, header .action { display: block; font-size: 0.85rem; padding: 0.5rem; }
+nav ul li a, nav ul li span, header .action { display: block; font-size: 1rem; padding: 0.5rem; }
 
 /* CUSTOM CLASSES WE GOT FROM THE FLASKR TUTORIAL (but tweaked ourselves) */
 .content { padding: 0 1rem 1rem;}
-.content > header { border-bottom: 1px solid lightgray; display: flex; align-items: flex-end; text-align: center}
+.content > header { display: flex; align-items: flex-end; text-align: center}
 .content > header h1 { flex: auto; font-size: 2.75rem; margin: 1rem 0 0.25rem 0;}
 .flash { margin: 1em 0; padding: 1em; background: #cae6f6; border: 1px solid #377ba8; }
 .post > header { display: flex; align-items: flex-end; font-size: 0.85em; }
@@ -41,6 +48,17 @@ nav ul li a, nav ul li span, header .action { display: block; font-size: 0.85rem
 .dropdown-style { font-size: 12px; }
 input.danger { color: #cc2f2e; }
 input[type=submit] { align-self: start; min-width: 10em; }
+
+/* MISCELLANEOUS */
+#welcome-message {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 150%;
+}
+
+.themed-checkbox {
+  accent-color: #00843D;
+}
 
 /* [[[[[[[[[[[[[[[[ TABLES AND WIDGETS ]]]]]]]]]]]]]]]]]]]]]]] */
 /* Select Table */
@@ -113,22 +131,47 @@ input[type=submit] { align-self: start; min-width: 10em; }
   margin: auto;
 }
 
-/* Custom Button Stuff */
+/* ooooooooooooooooooooo Buttons ooooooooooooooooooooooooooooo */
+/* Link Buttons */
 .button-style-headers {
   background-color: #00843D;
   color: #FFCD00;
+
+  display: block;
+  border-radius: 6px;
   border: 0px;
-  padding: 6px 10px; /* Adjusts button size */
+  padding: 6px 10px; 
+
   text-align: center;
   text-decoration: none;
-  display: block;
   font-family: 'Roboto', sans-serif;
-  font-size: 10px;
-  margin: 0px 5px; /* Adjusts button spacing */
+  font-size: 12px;
+  font-weight: bold;
+
+  margin: 0px 5px; 
   cursor: pointer;
+}
+.button-style-headers:hover {
+  background-color: #359251;
+}
+
+/* Dark mode toggle button */
+#mode-toggle-button {
+  background-color: #4b6e52;
+  color: #fff;
+  border: 0px;
   border-radius: 6px;
-  width: 80%; /* Sets a specific width for all buttons */
-  max-width: 110px; /* Adjusts maximum width */
+
+  padding: 5px;
+  margin-right: 5px;
+  margin-left: 10px;
+  cursor: pointer;
+
+  font-size: 70%;
+  font-weight: bold;
+}
+#mode-toggle-button:hover {
+  background-color: #161d17;
 }
 
 /* ((((((((((((((((((( FLEXBOXES ))))))))))))))))))) */
@@ -151,6 +194,10 @@ input[type=submit] { align-self: start; min-width: 10em; }
   grid-column: 1 / 2;
   grid-row: 1 / 2;
   justify-self: end;
+}
+#all-except-weather-details .graph-container {
+  display: flex;
+  justify-content: center;
 }
 .weather-summary-grid > #weather-details {
   grid-column: 2 / 3;
@@ -208,10 +255,72 @@ input[type=submit] { align-self: start; min-width: 10em; }
   grid-row: 3 / 4;
   justify-self: stretch;
   padding: 0px 20px 20px 20px;
+
+  display: flex;
+  flex-direction: column;
 }
 
+/* ================= Dark mode ==================== */
+/* https://www.w3schools.com/howto/howto_js_toggle_dark_mode.asp */
 
+body.dark-mode,
+body.darkmode .select-table option, 
+body.darkmode .select-table button {
+  background-color: #424843; 
+  color: #fff;
+}
 
+body.dark-mode nav,
+body.dark-mode .button-style,
+body.dark-mode .select-table {
+  background-color: #161d17;
+  color: #fff; 
+}
 
+body.dark-mode a ,
+body.dark-mode header h1 {
+  color: #6dad7a
+}
+body.dark-mode a:hover {
+  color: #00843D;
+}
 
+body.dark-mode .post .about,
+body.dark-mode input[type="submit"],
+body.dark-mode .button-style {
+  color: #fff; 
+}
 
+body.dark-mode .info-widget {
+  background-color: #5a605b; 
+  color: #fff; 
+}
+body.dark-mode .select-table th,
+body.dark-mode .select-table td {
+  color: #fff; 
+}
+
+body.dark-mode .button-style-headers {
+  background-color: #6dad7a;
+  color: #161d17;
+}
+body.dark-mode .button-style-headers:hover {
+  background-color: #00843D;
+}
+
+body.dark-mode #mode-toggle-button {
+  background-color: #ffe8a3;
+  color: #00843D;
+}
+body.dark-mode #mode-toggle-button:hover {
+  background-color: #FFCD00;
+}
+
+body.darkmode .themed-checkbox {
+  accent-color: #6dad7a;
+}
+
+/* Stuff for making graphs darkmode */
+#light-mode-graph, #dark-mode-graph {
+  display: none; /* this is the default, so that you don't get weird flashing on first page load */
+}

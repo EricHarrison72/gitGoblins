@@ -14,6 +14,8 @@ Resources used:
 import plotly.express as px
 from pandas import DataFrame, crosstab, cut
 from abc import ABC, abstractmethod
+from datetime import datetime, timedelta
+import copy
 from . import queries
 
 DEFAULT_url_args = {
@@ -30,8 +32,16 @@ def get_graph_html(url_args=DEFAULT_url_args):
     USE THIS outside of graphs.py
     Note: this function was written this way to make it easier to test the other get graph functions.
     '''
-    graph = _get_graph(url_args)
-    return _get_graph_as_string(graph)
+    light_graph = _get_graph(url_args)
+    dark_graph = _get_graph(url_args)
+
+    if (isinstance(dark_graph, WeatherGraph)):
+        dark_graph.convert_to_darkmode()
+
+    return {
+        'light': _get_graph_as_string(light_graph),
+        'dark': _get_graph_as_string(dark_graph)
+    }
 
 def _date_range_is_valid(dates: dict):
     if dates['start_date'] < dates['end_date']:
@@ -47,15 +57,16 @@ def _get_graph(url_args=DEFAULT_url_args):
     if not _date_range_is_valid(url_args): 
         return "Date Error"
 
-    match url_args['stat']:
-        case "temperature":
-            graph = TemperatureGraph(url_args)
-        case "wind":
-            graph = WindGraph(url_args)
-        case "rain":
-            graph = RainGraph(url_args)
-        case _:
-            graph = None
+    stat = url_args['stat']
+    
+    if stat == "temperature":
+        graph = TemperatureGraph(url_args)
+    elif stat == "wind":
+        graph = WindGraph(url_args)
+    elif stat == "rain":
+        graph = RainGraph(url_args)
+    else:
+        graph = None
 
     return graph
 
@@ -70,6 +81,41 @@ def _get_graph_as_string(graph):
         return "There was an error generating this graph."
     else:
         return graph.get_html()
+# -------------------------------
+# special function for getting weather summary lil temp graph
+def get_7_day_temp_graph_html( city_name, end_date):
+    try:
+        date_arg = datetime.strptime(end_date, '%Y-%m-%d')
+        start_date = (date_arg - timedelta(days=6)).strftime('%Y-%m-%d')
+        
+        graph_args = {
+            'city_name' : city_name,
+            'start_date' : start_date,
+            'end_date' : end_date
+        }
+        
+        graph = TemperatureGraph(graph_args)
+        graph.fig.update_layout(
+            margin_r = 0,
+            height=285,
+            width=550
+        )
+
+        dark_graph = copy.deepcopy(graph)
+        dark_graph.convert_to_darkmode()
+
+        graph_html = {
+            'light': graph.get_html(),
+            'dark': dark_graph.get_html(),
+        }
+
+    except: 
+        graph_html = {
+            'dark': "Error generating graph.",
+            'light': "Error generating graph."
+        }
+
+    return graph_html
 
 # ==================================
 class WeatherGraph(ABC):
@@ -88,7 +134,7 @@ class WeatherGraph(ABC):
     
     def get_city_name(self):
         return queries.add_space(self.city_and_dates['city_name'])
-   
+
     # DATAFRAME METHODS
     # ----------------
     def _initialize_dataframe(self):
@@ -128,11 +174,43 @@ class WeatherGraph(ABC):
             margin={'t': 20, 'r': 10, 'l': 10, 'b':20},
             plot_bgcolor = '#e1f4ff'
         )
+    
+    def convert_to_darkmode(self):
+        self.fig.update_layout(
+            margin={'t': 20, 'r': 10, 'l': 10, 'b':20},
+            paper_bgcolor = '#424843',
+            plot_bgcolor = '#5a605b',
+            font_color = '#fff',
+            legend_title_font_color = '#fff',
+        )
+        self.fig.update_yaxes(
+            gridcolor = '#424843',
+            zerolinecolor = '#424843'
+        )
+        self.fig.update_polars(
+            bgcolor = '#5a605b',
+            angularaxis_gridcolor = '#424843',
+            radialaxis_gridcolor = '#424843',
+            angularaxis_linecolor = '#424843',
+            radialaxis_linecolor = '#424843'
+        )
+        self.fig.update_traces(
+            marker_line_color = '#424843'
+        )
 
 # =================================
 class TemperatureGraph(WeatherGraph):
     def __init__(self, city_and_dates):
         super().__init__(city_and_dates)
+
+    # extend parent method
+    def convert_to_darkmode(self):
+        super().convert_to_darkmode()
+
+        self.fig.update_traces(
+            marker_color='#a09cfd',
+            selector={'name':'Low'}
+        )
 
     # OVERRIDE: all abstract methods
     # ------------------------------
@@ -158,6 +236,7 @@ class TemperatureGraph(WeatherGraph):
             y = ['Low', 'High'],
             barmode = 'group',
             labels = {"value": "Temperature (°C)", "variable": "Type"},
+            width = 1100
         )
 
         self.fig.update_traces(
@@ -170,6 +249,14 @@ class RainGraph(WeatherGraph):
     def __init__(self, city_and_dates):
         super().__init__(city_and_dates)
         print(self.fig)
+
+    # extend parent method
+    def convert_to_darkmode(self):
+        super().convert_to_darkmode()
+
+        self.fig.update_traces(
+            marker_color='#a09cfd'
+        )
 
     # OVERRIDE: all abstract methods
     # ------------------------------
@@ -188,9 +275,11 @@ class RainGraph(WeatherGraph):
             self.dataframe,
             x = 'Date',
             y = 'Rainfall',
-            labels = {"value": "Rainfall (mm)"},
+            width = 1100
         )
-
+        self.fig.update_layout(
+            yaxis_title = "Rainfall (mm)"
+        )
         self.fig.update_traces(
             marker_line_width=0.1
         )
@@ -202,7 +291,7 @@ class WindGraph(WeatherGraph):
         self.freq_table = None
         super().__init__(city_and_dates)
 
-    # Overide parent method
+    # Overide parent methods
     def _initialize_dataframe(self):
         super()._initialize_dataframe()
         self._initialize_freq_table()

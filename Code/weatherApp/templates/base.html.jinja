@@ -1,8 +1,12 @@
-<!--
+{# ----------------------
+base.html.jinja
 
-FreeCodeCamp "Learn Flask for Python" https://www.youtube.com/watch?v=Z1RJmh_OqeA
+The parent template for all other templates.
+(in fact, our only parent template.)
 
-/-->
+Start code sources:
+- FreeCodeCamp "Learn Flask for Python" https://www.youtube.com/watch?v=Z1RJmh_OqeA
+-----------------------------#}
 
 {% import 'helpers/navbar_display.html.jinja' as navbar_display %}
 
@@ -14,16 +18,25 @@ FreeCodeCamp "Learn Flask for Python" https://www.youtube.com/watch?v=Z1RJmh_Oqe
     <link href='https://fonts.googleapis.com/css?family=Rubik:700' rel='stylesheet'>
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <script src="{{ url_for('static', filename='js/darkmode.js') }}"></script>
+
     {% block head %}{% endblock %}
     
-    <title>{% block title %}{% endblock %} - Weather Australia</title>
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/happy_cloud.png') }}">
+    <title>{% block title %}{% endblock %} - Thunder Down Under
+</title>
+    <link id="favicon" rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/happy_cloud.png') }}">
 </head>
 
-<body>
+<body id="body">
+
+    <script>
+        loadPageWithCorrectMode()
+    </script>
+
     <nav>
         <img src="{{ url_for('static', filename='img/happy_cloud.png') }}" alt="Happy Cloud" height="55" width="65">
-        <h1><a href="{{ url_for('views.index') }}">WEATHER AUSTRALIA</a></h1>
+        <h1><a href="{{ url_for('views.index') }}">THUNDER DOWN UNDER</a></h1>
        
         {{ navbar_display.button_display(g.current_page) }}
         
@@ -35,9 +48,14 @@ FreeCodeCamp "Learn Flask for Python" https://www.youtube.com/watch?v=Z1RJmh_Oqe
                 <li><a href="{{ url_for('auth.register') }}">Register</a></li>
                 <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
             {% endif %}
+            <li>
+                <button onclick="switchAndLoadMode(); updateTextAndGraph();" id="mode-toggle-button"></button>
+                <script>
+                    updateToggleText(); // called here for initial page load
+                </script>
+            </li>
         </ul>
     </nav>
-    
 
     <section class="content">
         <header>
@@ -51,7 +69,8 @@ FreeCodeCamp "Learn Flask for Python" https://www.youtube.com/watch?v=Z1RJmh_Oqe
         {% block content %}{% endblock %}
     </section>
 
-    {% block scripts %}{% endblock %}
+    {% block scripts %}
+    {% endblock %}
 
 </body>
 </html>

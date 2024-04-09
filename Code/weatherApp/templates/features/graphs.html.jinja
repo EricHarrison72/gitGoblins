@@ -1,7 +1,8 @@
 {# 
 This template expects the following parameters: 
- -- figure_html - a plotly figure object in html string form
+ -- graph_html - a dictionary containing 2 graph objects in html string form (light and dark)
  -- url_args - a dictionary with the keys: 
+    - stat
     - city_name
     - start_date
     - end_date
@@ -9,9 +10,6 @@ This template expects the following parameters:
 {% extends "base.html.jinja" %}
 {% import 'helpers/selectors.html.jinja' as selectors %}
 
-
-{% block head %}
-{% endblock %}
 {% block title %}
     Graphs
 {% endblock %}
@@ -59,15 +57,31 @@ This template expects the following parameters:
             <h2>
                 {{ url_args['stat'].capitalize() }} Data for {{ url_args['city_name'] }} over Time
             </h2>
+            {# <p>
+                If the graph is not centered or seems weirdly small, try zooming in and out in your browser or resizing the window. (This is a documented Plotly bug and we can't fix it right now)
+            </p> #}
         {% endif %}
 
         {# embedded graph svg #}
         <div class="visualization"
             {% if url_args['stat'] == 'wind' %}
                 style="justify-self: center; padding-top: 10px"
-            {% endif%}
+            {% else %}
+                style="justify-self: center;"
+            {% endif %}
+         id="vis"
         >
-            {{ graph_html }}
+            {# one of these is hidden and one is shown at all times #}
+            <div id="light-mode-graph">
+                {{ graph_html.light }}
+            </div>
+            <div id="dark-mode-graph">
+                {{ graph_html.dark }}
+            </div>
+
+            <script>
+                updateGraph(); // (called here for initial page load)
+            </script>
         </div>
     </div>
 {% endblock %}
