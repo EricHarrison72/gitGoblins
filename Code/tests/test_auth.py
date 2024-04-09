@@ -1,7 +1,8 @@
 # --------------------------------------------------
 # test_auth.py
 '''
-Unit tests for user registration.
+Unit tests for user registration. Chase can update this
+to use auth_actions if he want.s
 '''
 '''
 Start code sources:
@@ -13,148 +14,98 @@ import bcrypt
 from flask import session
 from weatherApp.db import get_db
 from weatherApp import predictions
+from tests.auth_actions import (
+    register_and_login_test_user,
+    register_test_user,
+    login_test_user,
+    logout_test_user
+)
 
+# =====================================================
+# REGISTRATION TESTS
+# -----------------
+def test_register__normal(client, app):
+    assert client.get('/auth/register').status == '200 OK'
 
-#The register view should render successfully on GET. On POST with valid form data, 
-# it should redirect to the login URL and the user’s data should be in the database.
-def test_register(client, app):
-    assert client.get('/auth/register').status_code == 200
-    
-    # Test registering user
-    response = client.post(
-        '/auth/register',
-        data={
-            'email': 'test@gmail.com',
-            'password': 'a',
-            'city_id': '1'  # Provide a valid city_id in the form data
-        }
-    )
-    
-    # Check if it redirects to login page
-    assert response.headers["Location"] == "/auth/login"
-    
-    # Test registering user with duplicate email
-    response_duplicate_email = client.post(
-        '/auth/register',
-        data={
-            'email': 'test@gmail.com',
-            'password': 'a',
-            'city_id': '1'  # Provide a valid city_id in the form data
-        }
-    )
-    
-    # Check if it redirects to login page
-    assert b'User with email test@gmail.com is already registered.' in response_duplicate_email.data
-
-    # Test register with no email
-    response_no_email = client.post(
-        '/auth/register',
-        data={'email': '', 'password': 'a', 'city_id': '1'}  # Provide a valid city_id
-    )
-    
-    # Check for correct error message
-    assert b'Email is required.' in response_no_email.data
-
-    # Test register with no password
-    response_no_password = client.post(
-        '/auth/register',
-        data={'email': 'test@gmail.com', 'password': '', 'city_id': '1'}  # Provide a valid city_id
-    )
-    
-    # Check for correct error message
-    assert b'Password is required.' in response_no_password.data
+    correct_redirect_location = "/auth/login"
+    registration_response = register_test_user(client)
+    assert registration_response.location == correct_redirect_location
 
     with app.app_context():
-        assert get_db().execute(
+        user_that_should_exist = get_db().execute(
             "SELECT * FROM user WHERE email = 'test@gmail.com'",
-        ).fetchone() is not None
-
-
-def test_login(client, app):
-    # Manually insert user with ID 100 into the database with hashed password
-    with app.app_context():
-        db = get_db()
-        hashed_password = bcrypt.hashpw('password'.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-        db.execute(
-            "INSERT INTO user (userId, email, password) VALUES (?, ?, ?)",
-            (100, 'test_user@gmail.com', hashed_password)
-        )
-        db.commit()
-
-        # Insert a city record with cityId 1 (assuming it exists in your database)
-        db.execute(
-            "INSERT INTO City (cityId, cityName) VALUES (?, ?)",
-            (1, 'Example City')
-        )
-        db.commit()
-
-        # Assign the user (ID 100) to cityId 1
-        db.execute(
-            "UPDATE User SET cityId = ? WHERE userId = ?",
-            (1, 100)
-        )
-        db.commit()
-
-        # MAKE SURE test app has a copy of the prediction model
-        predictions.train_and_save_model()
-        
-    # Test login with no email
-    response_no_email = client.post(
-        '/auth/login', data={'email': '', 'password': 'a'}
-    )
-    # Check for correct error message
-    assert b'Incorrect email.' in response_no_email.data
+        ).fetchone()
     
-    # Test login with incorrect password
-    response_no_password = client.post(
-        '/auth/login', data={'email': 'test_user@gmail.com', 'password': 'wrongpassword'}
-    )
-    # Check for correct error message
-    assert b'Incorrect password.' in response_no_password.data
-    # Test login with user ID 100
-    response = client.post(
-        '/auth/login',
-        data={'email': 'test_user@gmail.com', 'password': 'password'}
-    )
-    # Check if it redirects to the home page
-    assert response.headers["Location"] == "/"
+    assert user_that_should_exist is not None
 
-    # Check if user ID 100 is stored in session
-    with client:
-        response_index = client.get('/')
-        assert response_index.status_code == 200  # Ensure the request is successful
-       
+def test_register__duplicate_email(client):
+    register_test_user(client, email='test@gmail.com')
+    duplicate_email_response = register_test_user(client, email='test@gmail.com')
+    expected_error_message = b'User with email test@gmail.com is already registered.'
 
-        # Print debugging information
-        print(response_index.data)  # Print the response content
+    assert expected_error_message in duplicate_email_response.data
 
+def test_register__no_email(client):
+    no_email_response = register_test_user(client, email='')
+    expected_error_message = b'Email is required.'
+    
+    assert expected_error_message in no_email_response.data
 
-def test_logout(client, app):
-    # Manually insert user with ID 100 into the database with hashed password
+def test_register__no_password(client):
+    no_password_response = register_test_user(client, password='')
+    expected_error_message = b'Password is required.'
+
+    assert expected_error_message in no_password_response.data
+
+# LOGIN TESTS
+# -----------
+def test_login__normal(client, app):
+
+    # Make sure app has a prediction model so loading '/' doesn't fail
     with app.app_context():
-        db = get_db()
-        hashed_password = bcrypt.hashpw('password'.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-        db.execute(
-            "INSERT INTO user (userId, email, password) VALUES (?, ?, ?)",
-            (100, 'test_user@gmail.com', hashed_password)
-        )
-        db.commit()
+        predictions.train_and_save_model()
 
-    # Test login with user ID 100
-    client.post(
-        '/auth/login',
-        data={'email': 'test_user@gmail.com', 'password': 'password'}
-    )
+    register_test_user(client)
+    login_response = login_test_user(client)
+    correct_redirect_location = '/'
 
-    # Test logout with user ID 100 within client context
+    assert login_response.location == correct_redirect_location
+
+    # Ensure that logged in user can actually navigate the website
     with client:
-        client.get('/auth/logout')
-        # Ensure that the user ID is removed from the session
+        index_response = client.get('/')
+        assert index_response.status == '200 OK'
+
+def test_login__missing_or_incorrect_email(client):
+    expected_error_message = b'Incorrect email.'
+
+    no_email_response = login_test_user(client, email='')
+    assert expected_error_message in no_email_response.data
+
+    incorrect_email_response = login_test_user(client)
+    assert expected_error_message in incorrect_email_response.data
+
+def test_login__incorrect_password(client):
+    register_test_user(client, password='correctpassword')
+    incorrect_password_response = login_test_user(client, password='wrongpassword')
+    expected_error_message = b'Incorrect password.'
+
+    assert expected_error_message in incorrect_password_response.data
+
+# LOGOUT TESTS
+# ------------
+def test_logout(client):
+    register_and_login_test_user(client)
+    with client:
+        logout_test_user(client)
         assert 'user_id' not in session
 
-# Test passcode verification
+# ===========================================================
+# ADMIN AUTHENTICATION TESTS
+# ---------------------------
+# TODO: figure out if these need cahnging and work with test_admin.py
 def test_passcode(client, app):
-    assert client.get('/auth/passcode').status_code == 200
+    assert client.get('/auth/passcode').status == '200 OK'
 
     # Test with correct passcode
     with client.session_transaction() as session:
@@ -240,7 +191,4 @@ def test_admin_register_dashboard_and_admin_route(client, app):
     # 5. Simulate submitting a form to update weather data (access admin route)
     response_update_weather = client.post('/admin', data={'cityName': '1', 'tempMin': '10', 'tempMax': '20', 'date': '2014-04-01'})
     assert response_update_weather.status_code == 400  # Redirect status code
-   
 
-       
-       

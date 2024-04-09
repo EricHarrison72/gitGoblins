@@ -87,6 +87,7 @@ INSERT INTO UsersCities (userId, cityId) VALUES
 INSERT INTO WeatherInstance
     (cityId,        date, tempMin, tempMax, sunshine, rainfall, evaporation, cloud9am, cloud3pm, pressure9am, pressure3pm, humidity9am, humidity3pm, windGustSpeed, windGustDir, windSpeed9am, windSpeed3pm, windDir9am, windDir3pm, rainToday, rainTomorrow)
 VALUES
+    (    99, '2017-01-01',    0.0,    9.0,         4,      0.0,         4.5,        1,        3,      1013.5,      1010.5,          80,          50,            12,         'W',           10,           20,        'N',        'S',      'No',        'Yes'), --we need this for testing the graph view, since 2016-2017 is the default range
     (    99, '2023-01-01',   -5.0,    10.0,        8,      0.0,         4.5,        1,        3,      1013.5,      1010.5,          80,          50,            12,         'W',           10,           20,        'N',        'S',      'No',        'Yes'),
     (    99, '2023-01-02',   -3.0,    'NA',        4,      5.0,         3.0,        1,        3,      1013.5,      1010.5,          80,          50,            35,       'NNE',           10,           20,        'N',        'S',     'Yes',        'Yes'),
     (    99, '2023-01-03',   'NA',    30.0,        1,     'NA',         0.1,        1,        3,      1013.5,      1010.5,          80,          50,           123,        'SW',           10,           20,        'N',        'S',     'Yes',         'No'),
