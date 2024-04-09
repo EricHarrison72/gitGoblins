@@ -324,3 +324,6 @@ body.darkmode .themed-checkbox {
 #light-mode-graph, #dark-mode-graph {
   display: none; /* this is the default, so that you don't get weird flashing on first page load */
 }
+
+body.dark-mode .flash { color: #000000; background: #6dad7a; border: 1px solid #6dad7a; }
+body.dark-mode input[type=submit] { color: #000000; }
