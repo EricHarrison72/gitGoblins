@@ -177,6 +177,10 @@ input[type=submit] { align-self: start; min-width: 10em; }
   grid-row: 1 / 2;
   justify-self: end;
 }
+#all-except-weather-details .graph-container {
+  display: flex;
+  justify-content: center;
+}
 .weather-summary-grid > #weather-details {
   grid-column: 2 / 3;
   grid-row: 1 / 2;
@@ -233,6 +237,9 @@ input[type=submit] { align-self: start; min-width: 10em; }
   grid-row: 3 / 4;
   justify-self: stretch;
   padding: 0px 20px 20px 20px;
+
+  display: flex;
+  flex-direction: column;
 }
 
 /* ================= Dark mode ==================== */

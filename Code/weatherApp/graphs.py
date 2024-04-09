@@ -96,7 +96,9 @@ def get_7_day_temp_graph_html( city_name, end_date):
         
         graph = TemperatureGraph(graph_args)
         graph.fig.update_layout(
-            height=300
+            margin_r = 0,
+            height=285,
+            width=550
         )
 
         dark_graph = copy.deepcopy(graph)
