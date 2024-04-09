@@ -1,0 +1,20 @@
+{# 
+This template expects the following parameters: 
+ -- event_args - a dictionary with the keys: 
+    - city_name         The name of the city
+    - data_point    First data point for the weather event
+#}
+<!DOCTYPE html>
+<html lang="en">
+<html>
+    <body>
+        <h1>Weather alert for {{ event_args['city_name'] }}.</h1>
+      	<br>
+      	<p>
+          Hello, you are receiving this alert because {{ event_args['city_name'] }} is expecting high wind speeds and gusts on {{ event_args['date'] }}.
+      	</p>
+     	 <p>
+      	  Expect wind speeds up to {{ event_args['data_point'] }}km/h.
+      	</p>
+    </body>
+</html>

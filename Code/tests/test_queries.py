@@ -10,11 +10,19 @@ from weatherApp.queries import (
     get_weather_data,
     get_data_in_range,
     _generate_column_script,
-    add_space
+    add_space,
+    get_alert_emails
 )
+from tests import auth_actions
 # ==================================
 # SMALLER TESTS
 # -------------
+def test_get_user_city(client):
+    with client.application.test_request_context():
+        auth_actions.register_and_login_test_user(client)
+        user_id = auth_actions.DEFAULT_NEW_USER_ID
+        assert get_user_city(user_id) == 'Springfield'
+
 def test_add_space():
       assert add_space('AliceSprings') == 'Alice Springs'
       assert add_space('NewYorkCity') == 'New York City'
@@ -27,27 +35,6 @@ def test_generate_column_script(app):
     expected_column_script_B = 'Column1,Column4'
     assert (_generate_column_script(['Column1', 'Column4'])
             == expected_column_script_B)
-    
-# =======================================
-# get_user_city TEST
-#--------------------------
-def test_get_user_city(client, app):
-    register_and_login(client)
-    with app.test_request_context():
-        user_id = 3 # (because we only registered 1 extra user in this context)
-        assert get_user_city(user_id) == 'Springfield'
-
-# helper
-def register_and_login(client):
-    client.post('/auth/register', data={
-        'email': 'test@gmail.com',
-        'password': 'a',
-        'city_id': '99'  # for Springfield
-    })
-    client.post('/auth/login', data={
-        'email': 'test@gmail.com',
-        'password': 'a'
-    })
 
 # ======================================
 # get_weather_data FIXTURES
@@ -127,6 +114,21 @@ def expected_weather_dict():
             'rain_tomorrow': '?'
         }
     }
+
+# Expected list for: "Shelbyville"
+@pytest.fixture()
+def expected_list_1():
+     return [
+          'marge@example.com',
+          'bart@example.com'
+     ]
+
+# Expected list for: "Springfield"
+@pytest.fixture()
+def expected_list_2():
+     return [
+          'homer@example.com'
+     ]
 
 # get_weather_data TESTS
 # ----------------------
@@ -229,3 +231,9 @@ def test_get_data_in_range__invalid_query(app):
     yet part of get_data_in_range (this is a TDD reminder to do that tho).
     '''
     pass
+
+def test_get_alert_emails(app, expected_list_1, expected_list_2):
+     
+     with app.app_context():
+          assert expected_list_1 == get_alert_emails('Shelbyville')
+          assert expected_list_2 == get_alert_emails('Springfield')

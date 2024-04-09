@@ -4,6 +4,7 @@ selectors.html.jinja
 Contains macros for selection menus, including:
 - select_date
 - select_single_location
+- select_weather_event
 
 Docs:
 - [Jinja2 Docs: Macros](https://jinja.palletsprojects.com/en/3.1.x/templates/#macros)
@@ -149,11 +150,84 @@ Docs:
     </select>
 {% endmacro %}
 
-{% macro select_location(cities, user_city_id='Canberra') %}
-    <label for="cityId">City:</label>
-    <select id="cityId" name="cityId">
-        {% for city in cities %}
-            <option value="{{ city.cityId }}" {% if user_city_id == city.cityId %} selected {% endif %}>{{ city.cityName }}</option>
+{% macro select_weather_event(url_arg_event='HighTemperature') %}
+    
+    <select id="eventSelect" name="eventSelect">
+        {% set events = [
+            'High Temperature',
+            'Low Temperature',
+            'Wind',
+            'Rain'
+        ] %}
+
+        {% for o in events %}
+            <option value="{{ o }}">
+                {{ o }}
+            </option>
         {% endfor %}
-    </select><br><br>
+    </select>
+    
+{% endmacro %}
+
+{% macro select_event_location(url_arg_city='Canberra') %}
+    <select id="citySelect" name="citySelect">
+        {% set cities = [
+            'Adelaide',
+            'Albany',
+            'Albury',
+            'Alice Springs',
+            'Badgerys Creek',
+            'Ballarat',
+            'Bendigo',
+            'Brisbane',
+            'Cairns',
+            'Canberra',
+            'Cobar',
+            'Coffs Harbour',
+            'Dartmoor',
+            'Darwin',
+            'Gold Coast',
+            'Hobart',
+            'Katherine',
+            'Launceston',
+            'Melbourne',
+            'Melbourne Airport',
+            'Mildura',
+            'Moree',
+            'Mount Gambier',
+            'Mount Ginini',
+            'Newcastle',
+            'Nhil',
+            'Norah Head',
+            'Norfolk Island',
+            'Nuriootpa',
+            'Pearce RAAF',
+            'Penrith',
+            'Perth',
+            'Perth Airport',
+            'Portland',
+            'Richmond',
+            'Sale',
+            'Salmon Gums',
+            'Sydney',
+            'Sydney Airport',
+            'Townsville',
+            'Tuggeranong',
+            'Uluru',
+            'Wagga Wagga',
+            'Walpole',
+            'Watsonia',
+            'Williamtown',
+            'Witchcliffe',
+            'Wollongong',
+            'Woomera',
+        ] %}
+
+        {% for o in cities %}
+            <option value="{{ o }}">
+                {{ o }}
+            </option>
+        {% endfor %}
+
+    </select>
 {% endmacro %}

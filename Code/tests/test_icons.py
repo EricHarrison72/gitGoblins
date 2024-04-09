@@ -1,5 +1,5 @@
 # --------------------------------------------------
-# test_weather.py
+# test_icons.py
 '''
 Unit tests for user registration.
 '''
@@ -10,7 +10,7 @@ import pytest
 from flask import session
 
 # Import map module
-from weatherApp.weather import determine_icon_based_on_weather
+from weatherApp.icons import determine_icon_based_on_weather
 
 @pytest.fixture()
 def expected_error():

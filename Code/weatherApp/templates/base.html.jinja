@@ -1,9 +1,14 @@
-<!--
+{# ----------------------
+base.html.jinja
 
-FreeCodeCamp "Learn Flask for Python" https://www.youtube.com/watch?v=Z1RJmh_OqeA
+The parent template for all other templates.
+(in fact, our only parent template.)
 
-/-->
-<!-- base.html.jinja -->
+Start code sources:
+- FreeCodeCamp "Learn Flask for Python" https://www.youtube.com/watch?v=Z1RJmh_OqeA
+-----------------------------#}
+
+{% import 'helpers/navbar_display.html.jinja' as navbar_display %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -30,14 +35,14 @@ FreeCodeCamp "Learn Flask for Python" https://www.youtube.com/watch?v=Z1RJmh_Oqe
     </script>
 
     <nav>
-        <img src="{{ url_for('static', filename='img/happy_cloud.png') }}" alt="Happy Cloud" height="66" width="76">
-        <h1>
-            <a href="{{ url_for('views.index') }}">THUNDER DOWN UNDER</a>
-        </h1>
+        <img src="{{ url_for('static', filename='img/happy_cloud.png') }}" alt="Happy Cloud" height="55" width="65">
+        <h1><a href="{{ url_for('views.index') }}">THUNDER DOWN UNDER</a></h1>
+       
+        {{ navbar_display.button_display(g.current_page) }}
+        
         <ul>
             {% if g.user %}
                 <li><span>{{ g.user['firstname'] }}</span></li>
-                <li><span> ID: {{ g.user['userid'] }}</span></li>
                 <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
             {% else %}
                 <li><a href="{{ url_for('auth.register') }}">Register</a></li>
