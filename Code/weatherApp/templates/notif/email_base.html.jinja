@@ -1,19 +1,17 @@
 {# --------------------------------------------
 email_base.html.jinja
-
-
 ---------------------------------------------- #}
 <!DOCTYPE html>
 <html lang="en">
 <html>
     <body>
         <h1>Weather alert for {{ event_args['city_name'] }}.</h1>
-      	<br>
-      	<p>
+        <br>
+        <p>
           Hello, you are receiving this alert because {{ event_args['city_name'] }} is expecting {% block weather_event %}{% endblock %} on {{ event_args['date'] }}.
-      	</p>
-     	 <p>
-      	  {% block weather_event_details %}{% endblock %}
-      	</p>
+        </p>
+        <p>
+          {% block weather_event_details %}{% endblock %}
+        </p>
     </body>
 </html>

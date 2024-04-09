@@ -7,6 +7,4 @@ This template expects the following parameters:
 {% extends 'notif/email_base.html.jinja' %}
 
 {% block weather_event %}low temperatures{% endblock %}
-{% block weather_event_details %}
-    Expect a temperature low of {{ event_args['data_point'] }}&deg;C.
-{% endblock %}
+{% block weather_event_details %}Expect a temperature low of {{ event_args['data_point'] }}&deg;C.{% endblock %}

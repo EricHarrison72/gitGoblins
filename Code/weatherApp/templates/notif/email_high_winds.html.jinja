@@ -7,6 +7,4 @@ This template expects the following parameters:
 {% extends 'notif/email_base.html.jinja' %}
 
 {% block weather_event %}high wind speeds and gusts{% endblock %}
-{% block weather_event_details %}
-    Expect wind speeds up to {{ event_args['data_point'] }}km/h.
-{% endblock %}
+{% block weather_event_details %}Expect wind speeds up to {{ event_args['data_point'] }}km/h.{% endblock %}
