@@ -30,11 +30,6 @@
             </tr>
             <tr>
               <td>
-                {# <select class="selectpicker" data-live-search="true" id="city" name="city_id">
-                  {% for city in cities %}
-                  <option value="{{ city.cityId }}">{{ city.cityName }}</option>
-                  {% endfor %}
-                </select> #}
                 {{selectors.select_location(cities, "Canberra")}}
               </td>
               <td>
