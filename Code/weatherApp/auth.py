@@ -70,6 +70,7 @@ def register():
                     "INSERT INTO User (email, password, firstName, lastName, emailList, cityId) VALUES (?, ?, ?, ?, ?, ?)",
                     (email, hashed_password, first_name, last_name, email_list, city_id)
                 )
+                
                 datb.commit()
                 print(city_id)
                 flash("Registration successful. You can now log in.")

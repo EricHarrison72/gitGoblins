@@ -177,3 +177,22 @@ def _generate_column_script(columns: list):
         column_script += f'{column},'
 
     return column_script[:-1] # (sliced to get rid of last comma)
+
+def get_alert_emails(city_name):
+
+    if city_name != None:
+        city_name = city_name.replace(' ', '') # (just in case)
+
+    datb = db.get_db()
+
+    # SQL query to get the list of emails that are signed up for alerts for a specific city
+    alert_emails = datb.execute('''
+        SELECT User.email
+        FROM User JOIN City ON User.cityId = City.cityId
+        WHERE cityName = ? AND User.emailList = true     
+    ''', (city_name,)).fetchall()
+
+    # Convert the list of SQL rows into a list of the element in each row
+    alert_emails = [i[0] for i in alert_emails]
+
+    return alert_emails

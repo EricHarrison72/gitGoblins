@@ -10,7 +10,8 @@ from weatherApp.queries import (
     get_weather_data,
     get_data_in_range,
     _generate_column_script,
-    add_space
+    add_space,
+    get_alert_emails
 )
 from tests import auth_actions
 # ==================================
@@ -114,6 +115,21 @@ def expected_weather_dict():
         }
     }
 
+# Expected list for: "Shelbyville"
+@pytest.fixture()
+def expected_list_1():
+     return [
+          'marge@example.com',
+          'bart@example.com'
+     ]
+
+# Expected list for: "Springfield"
+@pytest.fixture()
+def expected_list_2():
+     return [
+          'homer@example.com'
+     ]
+
 # get_weather_data TESTS
 # ----------------------
 def test_get_weather_data(app, expected_weather_dict):
@@ -215,3 +231,9 @@ def test_get_data_in_range__invalid_query(app):
     yet part of get_data_in_range (this is a TDD reminder to do that tho).
     '''
     pass
+
+def test_get_alert_emails(app, expected_list_1, expected_list_2):
+     
+     with app.app_context():
+          assert expected_list_1 == get_alert_emails('Shelbyville')
+          assert expected_list_2 == get_alert_emails('Springfield')
