@@ -1,7 +1,3 @@
-{% block scripts %}
-  <script src="{{ url_for('static', filename='js/darkmode.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/submit.js') }}"></script>
-{% endblock %}
 {% extends 'base.html.jinja' %}
 {% import 'helpers/selectors.html.jinja' as selectors %}
 {% import 'helpers/data_display.html.jinja' as data_display %}
@@ -16,14 +12,14 @@
 {% endblock %}
 
 {% block content %}
-<!--possible future div -->
+
 <div class="centered-content">
   <div class="weather-summary-grid">
 
     <div id="all-except-weather-details"> <!-- grid item -->
 
       <div class="table-container">
-        <table class='select-table' style="display:flex;"">
+        <table class='select-table' style="display:flex;">
           <tr>
             <th>Location</th>
             <th>Date</th>
@@ -43,7 +39,17 @@
       {{ data_display.weather_overview(weather_dict, weather_icon, rain_prediction)}}
 
       <div class="graph-container">
-        {{ graph_html }}
+        {# one of these is hidden and one is shown at all times #}
+        <div id="light-mode-graph">
+            {{ graph_html.light }}
+        </div>
+        <div id="dark-mode-graph">
+            {{ graph_html.dark }}
+        </div>
+
+        <script>
+            updateGraph(); // (called here for initial page load)
+        </script>
       </div>
 
     </div>
@@ -56,5 +62,9 @@
 
   </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/submit.js') }}"></script>
 {% endblock %}
 

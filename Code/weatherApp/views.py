@@ -27,7 +27,7 @@ from . import (
     db,
 )
 from .auth import login_required
-from datetime import datetime, timedelta
+from datetime import datetime
 
 views_bp = Blueprint('views', __name__)
 
@@ -78,26 +78,7 @@ def weather_summary():
     weather_dict = queries.get_weather_data( city_name, date)
     weather_icon = weather.determine_icon_based_on_weather(weather_dict)
     rain_prediction = predictions.predict_rain(city_name, date)
-    
-    # prepare graph
-    try:
-        date_arg = datetime.strptime(date, '%Y-%m-%d')
-        start_date = (date_arg - timedelta(days=7)).strftime('%Y-%m-%d')
-        
-        graph_args = {
-            'city_name' : city_name,
-            'start_date' : start_date,
-            'end_date' : date
-        }
-        
-        graph = graphs.TemperatureGraph(graph_args)
-        graph.fig.update_layout(
-            height=300
-        )
-        graph_html = graph.get_html()
-
-    except: 
-        graph_html = "Error generatign graph."
+    graph_html = graphs.get_7_day_temp_graph_html(city_name, date)
     
     try:
         # Convert date from YYYY-MM-DD into Month DD, YYYY    

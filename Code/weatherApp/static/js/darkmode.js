@@ -1,35 +1,63 @@
-function toggleDarkMode() {
+// ----------------------------------------------------
+// darkmode.js
+/*
+Functions for controlling website darkmode.
+*/
+// -----------------------------------------------------
+
+function darkModeIsEnabled() {
+    return localStorage.getItem('darkMode') === 'enabled'
+}
+
+function switchMode() {
+    if (darkModeIsEnabled()) {
+        localStorage.setItem('darkMode', 'disabled');
+    }
+    else {
+        localStorage.setItem('darkMode', 'enabled');
+    }
+}
+
+function loadPageWithCorrectMode() {
     const body = document.getElementById('body');
-    const darkModeEnabled = localStorage.getItem('darkMode') === 'enabled';
     
-    if (darkModeEnabled) {
+    if (darkModeIsEnabled()) {
         body.classList.add('dark-mode');
     } else {
         body.classList.remove('dark-mode');
     }
-    
 }
 
-function saveDarkModePreference() {
-    const darkModeToggle = document.getElementById('darkModeToggle');
-    darkModeToggle.addEventListener('change', function() {
-        const darkModeEnabled = this.checked;
-        localStorage.setItem('darkMode', darkModeEnabled ? 'enabled' : 'disabled');
-        toggleDarkMode();
-    });
+function switchAndLoadMode() {
+    switchMode();
+    loadPageWithCorrectMode();
 }
 
-// Call toggleDarkMode on page load
-document.addEventListener('DOMContentLoaded', function() {
-    toggleDarkMode();
-});
-
-// Call toggleDarkMode whenever dark mode preference changes
-window.addEventListener('storage', function(event) {
-    if (event.key === 'darkMode') {
-        toggleDarkMode();
+function updateToggleText() {
+    const button = document.getElementById('mode-toggle-button');
+    if (darkModeIsEnabled()) {
+        button.innerHTML = "LIGHT<br>MODE";
     }
-});
+    else {
+        button.innerHTML = "DARK<br>MODE";
+    }
+}
 
-// Save dark mode preference when toggled
-saveDarkModePreference();
+function updateGraph() {
+    var darkModeGraph = document.getElementById("dark-mode-graph");
+    var lightModeGraph = document.getElementById("light-mode-graph");
+
+    if (darkModeIsEnabled()) {
+        darkModeGraph.style.display = "block";
+        lightModeGraph.style.display = "none";
+    }
+    else {
+        darkModeGraph.style.display = "none";
+        lightModeGraph.style.display = "block";
+    }
+}
+
+function updateTextAndGraph() {
+    updateToggleText();
+    updateGraph();
+}
