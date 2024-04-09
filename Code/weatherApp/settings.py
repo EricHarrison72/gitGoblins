@@ -1,28 +1,25 @@
 from flask import Blueprint, g, redirect, render_template, request, url_for
+from .auth import login_required
 from . import db
+
 set_bp = Blueprint('settings', __name__)
 
 @set_bp.route('/settings', methods=['GET', 'POST'])
+@login_required  
 def settings():
     if request.method == 'POST':
-        # Get form data
-        email_list = request.form.get('emailList') == 'on'  # Checkbox value
+        email_list = request.form.get('emailList') == 'on' 
         city_id = int(request.form.get('cityId'))
 
         # Update user settings in the database
-        try:
-            user_id = g.user['userId']  # Get user ID from g.user
-            db.update_user_settings(user_id,  email_list, city_id)
-            # Redirect to index after successful update
-            return redirect(url_for('views.index'))
-        except Exception as e:
-            error_message = 'An error occurred while updating user settings: {}'.format(str(e))
-            return render_template('error.html', error_message=error_message)
+        user_id = g.user['userId']  
+        db.update_user_settings(user_id,  email_list, city_id)
+       
+        return redirect(url_for('views.index'))
 
-    # If method is GET, render the settings page
-    # You need to pass user data and city data to the template
-    user_id = g.user['userId']  # Get user ID from g.user
-    user = db.get_user_settings(user_id)  # Get user data from database
-    cities = db.get_cities()  # Get city data from database
+    # Pass user data and city data to the template
+    user_id = g.user['userId'] 
+    user = db.get_user_settings(user_id)  
+    cities = db.get_cities()  
 
     return render_template('settings.html.jinja', user=user, cities=cities)
