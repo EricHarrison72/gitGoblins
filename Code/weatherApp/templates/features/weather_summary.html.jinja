@@ -39,7 +39,17 @@
       {{ data_display.weather_overview(weather_dict, weather_icon, rain_prediction)}}
 
       <div class="graph-container">
-        {{ graph_html }}
+        {# one of these is hidden and one is shown at all times #}
+        <div id="light-mode-graph">
+            {{ graph_html.light }}
+        </div>
+        <div id="dark-mode-graph">
+            {{ graph_html.dark }}
+        </div>
+
+        <script>
+            updateGraph(); // (called here for initial page load)
+        </script>
       </div>
 
     </div>
