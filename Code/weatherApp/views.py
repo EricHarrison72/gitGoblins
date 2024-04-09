@@ -34,6 +34,8 @@ views_bp = Blueprint('views', __name__)
 @views_bp.route('/')
 @login_required
 def index():
+    g.current_page = 'home'
+    
     user_id = g.user['userId']
     city_name = queries.get_user_city(user_id)
     specified_date = datetime(2017, 6, 24).strftime('%Y-%m-%d')
@@ -59,8 +61,9 @@ def index():
 @views_bp.route('/weather_summary')
 @login_required
 def weather_summary():
-
-    # might seem unecessary but is passed as param at end of method
+    g.current_page = 'summary'
+    
+    # Might seem unecessary but is passed as param at end of method
     url_args = {
         'city_name' : request.args.get('city_name'),
         'date' : request.args.get('date')
@@ -117,12 +120,14 @@ def weather_summary():
 @views_bp.route('/map')
 @login_required
 def map():
+    g.current_page = 'map'
     return render_template("features/map.html.jinja")
 
 @views_bp.route('/graphs')
 @login_required
 def graph():
-
+    g.current_page = 'graph'
+    
     url_args = {
         'stat' : request.args.get('stat'),
         'city_name' : request.args.get('city_name'),
@@ -161,6 +166,8 @@ def get_weather_icon():
 @views_bp.route('/settings', methods=['GET', 'POST'])
 @login_required
 def settings():
+    g.current_page = 'settings'
+    
     if request.method == 'POST':
         # Get form data
         email_list = request.form.get('emailList') == 'on'  # Checkbox value

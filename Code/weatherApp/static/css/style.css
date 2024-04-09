@@ -114,25 +114,21 @@ input[type=submit] { align-self: start; min-width: 10em; }
 }
 
 /* Custom Button Stuff */
-.button-container {
-  display: flex;
-  flex-direction: row;
-}
-.button-style {
-  background-color: #FFCD00;
-  color: #00843D;
+.button-style-headers {
+  background-color: #00843D;
+  color: #FFCD00;
   border: 0px;
-  padding: 12px 16px; /* Adjusts button size */
+  padding: 6px 10px; /* Adjusts button size */
   text-align: center;
   text-decoration: none;
   display: block;
   font-family: 'Roboto', sans-serif;
-  font-size: 16px;
-  margin: 5px auto; /* Adjusts button spacing */
+  font-size: 10px;
+  margin: 0px 5px; /* Adjusts button spacing */
   cursor: pointer;
   border-radius: 6px;
   width: 80%; /* Sets a specific width for all buttons */
-  max-width: 200px; /* Adjusts maximum width */
+  max-width: 110px; /* Adjusts maximum width */
 }
 
 /* ((((((((((((((((((( FLEXBOXES ))))))))))))))))))) */

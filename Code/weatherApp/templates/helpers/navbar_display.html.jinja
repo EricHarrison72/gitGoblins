@@ -1,0 +1,40 @@
+{# --------------------------------------------------
+    data_display.html.jinja
+    ----------------------
+    Contains macros for displaying the correct buttons on the navbar:
+    - button_display
+    
+    Docs:
+    - [Jinja2 Docs: Macros](https://jinja.palletsprojects.com/en/3.1.x/templates/#macros)
+    -------------------------------------------------- #}
+    {% import 'helpers/icon_display.html.jinja' as icon_display %}
+    {% macro button_display(current_page) %}
+        
+        {% if current_page != 'map' %}
+        <button onclick="window.location.href= '{{ url_for('views.map') }}';" class="button-style-headers">
+            Map
+        </button>
+        {% endif %}
+        {% if current_page != 'summary' %}
+        <button onclick="window.location.href= '{{ url_for('views.weather_summary') }}';" class="button-style-headers">
+            Weather Summary
+        </button>
+        {% endif %}
+        {% if current_page != 'graph' %}
+        <button onclick="window.location.href= '{{ url_for('views.graph') }}';" class="button-style-headers">
+            Graphs
+        </button>
+        {% endif %}
+        {% if current_page != 'settings' %}
+        <button onclick="window.location.href= '{{ url_for('views.settings') }}';" class="button-style-headers">
+        Settings
+        </button>
+        {% endif %}
+        {% if current_page != 'admin' %}
+        <button onclick="window.location.href= '{{ url_for('auth.admin_dashboard') }}';" class="button-style-headers">
+        Admin Dashboard
+        </button>
+        {% endif %}
+    
+    {% endmacro %}
+    

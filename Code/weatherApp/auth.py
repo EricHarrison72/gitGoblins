@@ -206,6 +206,8 @@ from datetime import datetime
 
 @auth_bp.route('/admin_dashboard')
 def admin_dashboard():
+    g.current_page = 'admin'
+    
     if 'user_id' not in session:
         return redirect(url_for('auth.login'))
 
