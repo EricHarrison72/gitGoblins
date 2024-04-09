@@ -86,7 +86,7 @@ def _get_graph_as_string(graph):
 def get_7_day_temp_graph_html( city_name, end_date):
     try:
         date_arg = datetime.strptime(end_date, '%Y-%m-%d')
-        start_date = (date_arg - timedelta(days=7)).strftime('%Y-%m-%d')
+        start_date = (date_arg - timedelta(days=6)).strftime('%Y-%m-%d')
         
         graph_args = {
             'city_name' : city_name,
