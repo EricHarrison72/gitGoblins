@@ -56,6 +56,10 @@ input[type=submit] { align-self: start; min-width: 10em; }
   font-size: 150%;
 }
 
+.themed-checkbox {
+  accent-color: #00843D;
+}
+
 /* [[[[[[[[[[[[[[[[ TABLES AND WIDGETS ]]]]]]]]]]]]]]]]]]]]]]] */
 /* Select Table */
 .select-table {
@@ -310,6 +314,10 @@ body.dark-mode #mode-toggle-button {
 }
 body.dark-mode #mode-toggle-button:hover {
   background-color: #FFCD00;
+}
+
+body.darkmode .themed-checkbox {
+  accent-color: #6dad7a;
 }
 
 /* Stuff for making graphs darkmode */

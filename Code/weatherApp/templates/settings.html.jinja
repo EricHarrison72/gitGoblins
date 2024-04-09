@@ -16,7 +16,7 @@
           <tr>
             <td>
               <label for="emailList">Email List:</label>
-              <input type="checkbox" id="emailList" name="emailList" {% if user.emailList %} checked {% endif %}>
+              <input class="themed-checkbox" type="checkbox" id="emailList" name="emailList" {% if user.emailList %} checked {% endif %}>
             </td>
             <td>
               {{ selectors.select_location(cities, user.cityId) }}
@@ -26,6 +26,7 @@
             </td>
           </tr>
         </table>
+
   </form>
 </div>
 {% endblock %}
