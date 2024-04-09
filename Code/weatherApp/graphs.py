@@ -14,6 +14,8 @@ Resources used:
 import plotly.express as px
 from pandas import DataFrame, crosstab, cut
 from abc import ABC, abstractmethod
+from datetime import datetime, timedelta
+import copy
 from . import queries
 
 DEFAULT_url_args = {
@@ -79,6 +81,39 @@ def _get_graph_as_string(graph):
         return "There was an error generating this graph."
     else:
         return graph.get_html()
+# -------------------------------
+# special function for getting weather summary lil temp graph
+def get_7_day_temp_graph_html( city_name, end_date):
+    try:
+        date_arg = datetime.strptime(end_date, '%Y-%m-%d')
+        start_date = (date_arg - timedelta(days=7)).strftime('%Y-%m-%d')
+        
+        graph_args = {
+            'city_name' : city_name,
+            'start_date' : start_date,
+            'end_date' : end_date
+        }
+        
+        graph = TemperatureGraph(graph_args)
+        graph.fig.update_layout(
+            height=300
+        )
+
+        dark_graph = copy.deepcopy(graph)
+        dark_graph.convert_to_darkmode()
+
+        graph_html = {
+            'light': graph.get_html(),
+            'dark': dark_graph.get_html(),
+        }
+
+    except: 
+        graph_html = {
+            'dark': "Error generating graph.",
+            'light': "Error generating graph."
+        }
+
+    return graph_html
 
 # ==================================
 class WeatherGraph(ABC):
