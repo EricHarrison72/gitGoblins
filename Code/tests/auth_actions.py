@@ -15,7 +15,7 @@ Starter Code sources:
 - [Flask Docs: Testing - Authentication](https://flask.palletsprojects.com/en/3.0.x/tutorial/tests/#authentication)
 '''
 # -------------------------------------------------
-DEFAULT_NEW_USER_ID = 3 # (because in most contexts we only register one new user, and there are two users in test db by default)
+DEFAULT_NEW_USER_ID = 5 # (because in most contexts we only register one new user, and there are two users in test db by default)
 
 def register_and_login_test_user(client):
     '''
