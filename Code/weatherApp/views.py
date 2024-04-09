@@ -100,7 +100,7 @@ def weather_summary():
         graph_html = graph.get_html()
 
     except: 
-        graph_html = "Error generatign graph."
+        graph_html = "Error generating graph."
     
     try:
         # Convert date from YYYY-MM-DD into Month DD, YYYY    
@@ -124,6 +124,7 @@ def map():
     return render_template("features/map.html.jinja")
 
 @views_bp.route('/graphs')
+@login_required
 def graph():
     g.current_page = 'graph'
     
@@ -133,23 +134,21 @@ def graph():
         'start_date' : request.args.get('start_date'),
         'end_date' : request.args.get('end_date')
     }
-    
-    for arg_val in url_args.values():
-        if arg_val == None:
-            graph_html = graphs.get_graph_html()
-            break
-    else:
-        graph_html = graphs.get_graph_html(url_args)
+
+    if None in url_args.values():
+        user_id = g.user['userId']
+        url_args['stat'] = "wind"
+        url_args['city_name'] = queries.get_user_city(user_id)
+
+        url_args['start_date'] = datetime(2016, 6, 24).strftime('%Y-%m-%d')
+        url_args['end_date'] = datetime(2017, 6, 24).strftime('%Y-%m-%d')
+
+    graph_html = graphs.get_graph_html(url_args)
 
     return render_template(
         "features/graphs.html.jinja", 
         graph_html = graph_html,
         url_args = url_args)
-
-@views_bp.route('/location_select')
-@login_required
-def location_select():
-    return render_template("features/location_select.html.jinja")
 
 # -----------------
 #This page is used only to determine which weather icon to use on the map as a marker
@@ -159,12 +158,11 @@ def get_weather_icon():
     date = request.args.get('date')
     
     weather_dict = queries.get_weather_data(city_name, date)
-    
     icon_name = weather.determine_icon_based_on_weather(weather_dict)
     
     return jsonify({'icon': icon_name})
 
-
+# ---------------
 @views_bp.route('/settings', methods=['GET', 'POST'])
 @login_required
 def settings():
