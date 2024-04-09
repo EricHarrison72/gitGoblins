@@ -203,6 +203,15 @@ class TemperatureGraph(WeatherGraph):
     def __init__(self, city_and_dates):
         super().__init__(city_and_dates)
 
+    # extend parent method
+    def convert_to_darkmode(self):
+        super().convert_to_darkmode()
+
+        self.fig.update_traces(
+            marker_color='#a09cfd',
+            selector={'name':'Low'}
+        )
+
     # OVERRIDE: all abstract methods
     # ------------------------------
     def _fetch_and_convert_data(self):
@@ -240,6 +249,14 @@ class RainGraph(WeatherGraph):
     def __init__(self, city_and_dates):
         super().__init__(city_and_dates)
         print(self.fig)
+
+    # extend parent method
+    def convert_to_darkmode(self):
+        super().convert_to_darkmode()
+
+        self.fig.update_traces(
+            marker_color='#a09cfd'
+        )
 
     # OVERRIDE: all abstract methods
     # ------------------------------
