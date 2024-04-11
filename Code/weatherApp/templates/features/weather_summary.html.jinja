@@ -1,3 +1,11 @@
+{# ----------------------------------------------
+weather_summary.html.jinja
+Template for the weather summary page.
+
+Expects the following parameters:
+- graph_html - dictionary that contains light and dark version of plotly fig in html form
+- url_args - dict with 'city_name' and 'date'
+------------------------------------------------ #}
 {% extends 'base.html.jinja' %}
 {% import 'helpers/selectors.html.jinja' as selectors %}
 {% import 'helpers/data_display.html.jinja' as data_display %}

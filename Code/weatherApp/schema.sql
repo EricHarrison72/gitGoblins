@@ -1,3 +1,7 @@
+------------------------------------------------
+-- schema.sql
+-- script for initializing the db.
+---------------------------------------------------
 DROP TABLE IF EXISTS City;
 DROP TABLE IF EXISTS User;
 DROP TABLE IF EXISTS UsersCities;

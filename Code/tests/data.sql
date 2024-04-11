@@ -1,4 +1,7 @@
--- This will be a script for adding fake temporary users to the db
+-- ----------------------------------------
+-- data.sql
+-- An SQL script for creating the test version of our db
+-------------------------------------------
 
 -- Delete existing data from test tables to avoid conflicts
 DELETE FROM WeatherInstance;

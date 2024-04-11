@@ -2,6 +2,8 @@
 //submit.test.js
 /*
 Unit tests for submit.js
+To run these tests, you need to have node.js and Jest installed.
+Terminal command is `npm test`.
 
 Written with some help from ChatGPT 4.
 */

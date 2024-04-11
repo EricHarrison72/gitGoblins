@@ -1,4 +1,8 @@
-'''admin.py'''
+# -------------------------------------------------------------------
+# admin.py
+'''Contains logic for letting the admin send alerts and edit the db,
+as well as the view functions.'''
+# --------------------------------------------------------------------
 
 from flask import Blueprint, request, jsonify, redirect, url_for, flash, render_template
 from . import db, notification, queries

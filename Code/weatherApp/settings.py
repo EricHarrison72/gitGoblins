@@ -1,3 +1,9 @@
+# ------------------------------------------------
+# settings.py
+'''
+Views and logic for updating user settings.
+'''
+# -------------------------------------------------
 from flask import Blueprint, g, redirect, render_template, request, url_for
 from .auth import login_required
 from . import db

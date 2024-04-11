@@ -1,7 +1,7 @@
 # --------------------------------------------------
 # test_icons.py
 '''
-Unit tests for user registration.
+Unit tests for the icons API.
 '''
 # --------------------------------------------------
 

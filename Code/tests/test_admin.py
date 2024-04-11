@@ -1,3 +1,10 @@
+# -------------------------------------------
+# test_admin.py
+'''
+Contains unit tests for admin.py
+'''
+# -------------------------------------------
+
 def test_admin_get_request(client):
     """Test GET request to admin route."""
     response = client.get('/admin')
