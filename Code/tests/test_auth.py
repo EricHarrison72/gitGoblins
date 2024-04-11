@@ -1,8 +1,7 @@
 # --------------------------------------------------
 # test_auth.py
 '''
-Unit tests for user registration. Chase can update this
-to use auth_actions if he want.s
+Unit tests for user registration.
 '''
 '''
 Start code sources:
@@ -103,7 +102,6 @@ def test_logout(client):
 # ===========================================================
 # ADMIN AUTHENTICATION TESTS
 # ---------------------------
-# TODO: figure out if these need cahnging and work with test_admin.py
 def test_passcode(client, app):
     assert client.get('/auth/passcode').status == '200 OK'
 

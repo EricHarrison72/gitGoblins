@@ -145,17 +145,6 @@ def test_get_weather_data(app, expected_weather_dict):
                 == get_weather_data(None, None))
 
 # =======================================
-# TODO
-'''
-nontesting:
-- handle incorrect date range error (in query and graphs)
-
-testing:
-- for multiple columns (temp), for one column (rain):
-    - 1. with valid city and dates - check return vals -- MOST IMPORTANT
-    - 2. without valid city and dates - check error response
-- for invalid column - check error response? maybe
-'''
 # get_data_in_range FIXTURES
 # -------------------------
 class ValidInfo:
@@ -225,13 +214,8 @@ def test_get_data_in_range__valid_query(app, valid_info):
                 == real_single_col_table [row][key]
             )
 
-def test_get_data_in_range__invalid_query(app):
-    '''
-    Test not yet implemented because responding to invalid queries is not
-    yet part of get_data_in_range (this is a TDD reminder to do that tho).
-    '''
-    pass
-
+# get_alert_emails TESTS
+# -----------------------
 def test_get_alert_emails(app, expected_list_1, expected_list_2):
      
      with app.app_context():

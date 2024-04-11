@@ -1,4 +1,11 @@
+// ------------------------------------------
 // initMap.test.js
+/*
+Contains mocks and tests for testing the map js.
+To run these tests, you need to have node.js and Jest installed.
+Terminal command is `npm test`.
+*/
+// ----------------------------------------
 
 // Before your tests, mock fetch globally
 beforeAll(() => {

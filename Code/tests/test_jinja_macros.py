@@ -1,10 +1,10 @@
 # ---------------------------------------------------
 # test_jinja_macros.py
 '''
-Contains unit tests for all jinja macros, which are
-kind of like functions and warrant testing.
-
-Currently all Jinja macros are in 'helpers/selectors.html.jinja'.
+Contains unit tests for jinja macros, which are
+kind of like functions and warrant testing. 
+Specifically tested here are the macros are in 
+'helpers/selectors.html.jinja'.
 '''
 # --------------------------------------------------
 import pytest
